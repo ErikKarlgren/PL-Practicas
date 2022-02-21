@@ -73,6 +73,8 @@ public class AnalizadorLexicoTiny {
 					transita(Estado.REC_PCOMA);
 				else if (hayEOF())
 					transita(Estado.REC_EOF);
+				else if (haySep())
+					transitaIgnorando(Estado.INICIO);
 				else
 					error();
 				break;
@@ -87,6 +89,8 @@ public class AnalizadorLexicoTiny {
 					transita(Estado.REC_EXPON);
 				else if (hayPunto())
 					transita(Estado.REC_PUNTO);
+				else if(hayDigito())
+					transita(Estado.REC_NUM_ENTERO_2);
 				else
 					return unidadNumEntero();
 				break;
@@ -109,6 +113,8 @@ public class AnalizadorLexicoTiny {
 					transita(Estado.REC_CERO_DECIMAL);
 				else if (hayE())
 					transita(Estado.REC_EXPON);
+				else if(hayDigito())
+					transita(Estado.REC_NUM_REAL_1);
 				else
 					return unidadNumReal();
 				break;
@@ -214,7 +220,6 @@ public class AnalizadorLexicoTiny {
 				return unidadDistinto();
 			case REC_EOF:
 				return unidadEof();
-
 			}
 		}
 	}
@@ -328,15 +333,11 @@ public class AnalizadorLexicoTiny {
 	private boolean hayPComa() {
 		return sigCar == ';';
 	}
-	/*
-	 * private boolean haySep() { return sigCar == ' ' || sigCar == '\t' || sigCar
-	 * == '\n'; }
-	 */
-
-	/*
-	 * private boolean hayNL() { return sigCar == '\r' || sigCar == '\b' || sigCar
-	 * == '\n'; }
-	 */
+	
+	private boolean haySep() { return sigCar == ' ' || sigCar == '\t' || sigCar == '\n'; }
+	
+	private boolean hayNL() { return sigCar == '\r' || sigCar == '\b' || sigCar == '\n'; }
+	
 	private boolean hayEOF() {
 		return sigCar == -1;
 	}
