@@ -113,7 +113,7 @@ public class AnalizadorLexicoTiny {
 					transita(Estado.REC_CERO_DECIMAL);
 				else if (hayE())
 					transita(Estado.REC_EXPON);
-				else if(hayDigito())
+				else if(hayDigitoPos())
 					transita(Estado.REC_NUM_REAL_1);
 				else
 					return unidadNumReal();
@@ -438,7 +438,7 @@ public class AnalizadorLexicoTiny {
 	}
 
 	private void error() {
-		System.err.println("(" + filaActual + ',' + columnaActual + "):Caracter inexperado");
+		System.err.println("(" + filaActual + ',' + columnaActual + "): Caracter ineXperado");
 		System.exit(1);
 	}
 
