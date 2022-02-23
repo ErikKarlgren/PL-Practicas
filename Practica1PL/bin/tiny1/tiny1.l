@@ -64,7 +64,7 @@ signo = [\+,\-]
 
 variable = {letra}({letra}|{digito}|_)*
 numeroReal = {numeroEntero}({parteDecimal}|{parteExponencial}|{parteDecimal}{parteExponencial})
-cadena = \"[^ \",\b,\r,\n]* \"
+cadena = \"[^\",\b,\r,\n]*\"
 
 operadorSuma = \+
 operadorResta = \-
@@ -97,8 +97,8 @@ comentario = #[^\n]*
 %%
 {separador}               {}
 {comentario}              {}
-{int}                  {return ops.unidadInt();}
-{real}                  {return ops.unidadReal();}
+{int}                     {return ops.unidadInt();}
+{real}                    {return ops.unidadReal();}
 {bool}                  {return ops.unidadBool();}
 {true}                  {return ops.unidadTrue();}
 {false}                  {return ops.unidadFalse();}
