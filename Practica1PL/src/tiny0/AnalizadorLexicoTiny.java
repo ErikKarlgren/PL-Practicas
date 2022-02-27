@@ -442,7 +442,7 @@ public class AnalizadorLexicoTiny {
 		System.exit(1);
 	}
 
-	public static void main(String arg[]) throws IOException {
+	public static void main(String[] args) throws IOException {
 		Reader input = new InputStreamReader(new FileInputStream("input.txt"));
 		AnalizadorLexicoTiny al = new AnalizadorLexicoTiny(input);
 		UnidadLexica unidad;

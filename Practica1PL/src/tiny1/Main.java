@@ -7,14 +7,20 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 public class Main {
-   public static void main(String[] args) throws FileNotFoundException, IOException {
-     Reader input = new InputStreamReader(new FileInputStream("C:\\Users\\david\\eclipse-workspace\\Practica1PL\\src\\tiny1\\input.txt"));
-     AnalizadorLexicoTiny al = new AnalizadorLexicoTiny(input);
-     UnidadLexica unidad;
-     do {
-       unidad = al.yylex();
-       System.out.println(unidad);
-     }
-     while (unidad.clase() != ClaseLexica.EOF);
-    }        
-} 
+  public static void main(String[] args) throws FileNotFoundException, IOException {
+    String file;
+
+    if (args.length > 0)
+      file = args[0];
+    else
+      file = "./Practica1PL/bin/tiny1/input.txt";
+
+    Reader input = new InputStreamReader(new FileInputStream(file));
+    AnalizadorLexicoTiny al = new AnalizadorLexicoTiny(input);
+    UnidadLexica unidad;
+    do {
+      unidad = al.yylex();
+      System.out.println(unidad);
+    } while (unidad.clase() != ClaseLexica.EOF);
+  }
+}
