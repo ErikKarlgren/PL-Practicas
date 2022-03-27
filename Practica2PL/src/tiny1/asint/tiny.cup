@@ -1,0 +1,129 @@
+package tiny1.asint;
+
+import java_cup.runtime.*;
+import tiny1.alex.AnalizadorLexicoTiny;
+import tiny1.alex.UnidadLexica;
+import tiny1.errors.GestionErroresTiny;
+
+scan with {: return getScanner().next_token(); :};
+parser code {: 
+   private GestionErroresTiny errores;
+   public void syntax_error(Symbol unidadLexica) {
+     errores.errorSintactico((UnidadLexica)unidadLexica);
+   }
+:};
+init with {: 
+   errores = new GestionErroresTiny();
+   AnalizadorLexicoTiny alex = (AnalizadorLexicoTiny)getScanner();
+   alex.fijaGestionErrores(errores);
+:};
+
+
+terminal INT, REAL, BOOL, SEP_SEC, PCOMA, VARIABLE, IGUAL_ASIG, TRUE, FALSE, NUM_ENTERO, NUM_REAL, MAS, MENOS, 
+	      POR, DIV, AND, OR, NOT, MENOR, MAYOR, MENOR_IG, MAYOR_IG, IGUAL_COMP, DISTINTO, PAPERTURA, PCIERRE, 
+	      CADENA, POR_CIENTO, CORAPERTURA, CORCIERRE, LLAVE_APERTURA, LLAVE_CIERRE, PUNTO, FLECHA, AMPERSAND, COMA, 
+	      STRING, NULL, PROC, IF, THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE, CALL, RECORD, ARRAY, OF, POINTER, NEW, DELETE, 
+	      READ, WRITE, NL, VAR, TYPE;
+
+non terminal Programa, Declaraciones, Declaracion, Params, ListaParams,
+             Param, Tipo, Campos, Campo, Instrucciones, Instruccion,
+             InstruccionesOpt, ParamsReal, Expresiones, Bloque, Expresion,
+             ExpresionBasica, E0, E1, E2, E3, E4, E5, E6, E7,
+             OP1, OP2, OP3, OP5;
+
+
+Programa ::= Declaraciones SEP_SEC Instrucciones ;
+Programa ::= Instrucciones ;
+Declaraciones ::= Declaraciones PCOMA Declaracion ;
+Declaraciones ::= Declaracion ;
+Declaracion ::= VAR Tipo VARIABLE ;
+Declaracion ::= TYPE Tipo VARIABLE ;
+Declaracion ::= PROC VARIABLE Params Bloque ;
+Params ::= PAPERTURA ListaParams PCIERRE ;
+Params ::= PAPERTURA PCIERRE ;
+ListaParams ::= ListaParams COMA Param ;
+ListaParams ::= Param ;
+Param ::= Tipo AMPERSAND VARIABLE ;
+Param ::= Tipo VARIABLE ;
+
+Tipo ::= INT ;
+Tipo ::= REAL ;
+Tipo ::= BOOL ;
+Tipo ::= STRING ;
+Tipo ::= VARIABLE ;
+Tipo ::= ARRAY CORAPERTURA NUM_ENTERO CORCIERRE OF Tipo ;
+Tipo ::= POINTER Tipo ;
+Tipo ::= RECORD LLAVE_APERTURA Campos LLAVE_CIERRE ;
+Campos ::= Campos PCOMA Campo ;
+Campos ::= Campo ;
+Campo ::= Tipo VARIABLE  ;
+Instrucciones ::= Instrucciones PCOMA Instruccion ;
+Instrucciones ::= Instruccion ;
+Instruccion ::= Expresion IGUAL_ASIG Expresion  ;
+InstruccionesOpt ::= Instrucciones ;
+InstruccionesOpt ::=  ;
+Instruccion ::= IF Expresion THEN InstruccionesOpt ENDIF ;
+Instruccion ::= IF Expresion THEN InstruccionesOpt ELSE InstruccionesOpt ENDIF ;
+Instruccion ::= WHILE Expresion DO InstruccionesOpt ENDWHILE ;
+Instruccion ::= READ Expresion ;
+Instruccion ::= WRITE Expresion ;
+Instruccion ::= NL ;
+Instruccion ::= NEW Expresion ;
+Instruccion ::= DELETE Expresion ;
+Instruccion ::= CALL VARIABLE ParamsReal ;
+Instruccion ::= Bloque ;
+
+ParamsReal ::= PAPERTURA PCIERRE ;
+ParamsReal ::= PAPERTURA Expresiones PCIERRE ;
+Expresiones ::= Expresiones COMA Expresion ;
+Expresiones ::= Expresion ;
+
+Bloque ::= LLAVE_APERTURA Programa LLAVE_CIERRE ;
+Bloque ::= LLAVE_APERTURA LLAVE_CIERRE ;
+Expresion ::= E0 ;
+ExpresionBasica ::= NUM_ENTERO ;
+ExpresionBasica ::= NUM_REAL ;
+ExpresionBasica ::= VARIABLE ;
+ExpresionBasica ::= TRUE ;
+ExpresionBasica ::= FALSE ;
+ExpresionBasica ::= NULL ;
+ExpresionBasica ::= CADENA ;
+
+E0 ::= E1 MAS E0 ;
+E0 ::= E1 MENOS E1 ;
+E0 ::= E1 ;
+
+E1 ::= E1 OP1 E2 ;
+E1 ::= E2 ;
+
+E2 ::= E2 OP2 E3 ;
+E2 ::= E3 ;
+
+E3 ::= E4 OP3 E4 ;
+E3 ::= E4 ;
+
+E4 ::= NOT E4 ;
+E4 ::= MENOS E5 ;
+E4 ::= E5 ;
+
+E5 ::= E5 CORAPERTURA Expresion CORCIERRE ;
+E5 ::= E5 OP5 ;
+E5 ::= E6 ;
+E6 ::= POR E6 ;
+E6 ::= E7 ;
+
+E7 ::= PAPERTURA Expresion PCIERRE ;
+E7 ::= ExpresionBasica ;
+OP1 ::= AND ;
+OP1 ::= OR ;
+OP2 ::= MAYOR  ;
+OP2 ::= MENOR  ;
+OP2 ::= MAYOR_IG  ;
+OP2 ::= MENOR_IG  ;
+OP2 ::= IGUAL_COMP  ;
+OP2 ::= DISTINTO ;
+OP3 ::= POR ;
+OP3 ::= DIV ;
+OP3 ::= POR_CIENTO ;
+OP5 ::= PUNTO VARIABLE ;
+OP5 ::= FLECHA VARIABLE ;

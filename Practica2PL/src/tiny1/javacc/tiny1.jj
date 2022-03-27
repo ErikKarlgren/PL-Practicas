@@ -1,0 +1,122 @@
+options  {
+  STATIC=false;
+}
+PARSER_BEGIN(AnalizadorSintacticoTiny)
+
+package tiny1.javacc;
+
+public class AnalizadorSintacticoTiny {}
+PARSER_END(AnalizadorSintacticoTiny)
+  TOKEN:{<#letra:["a"-"z","A"-"Z"]>}
+  TOKEN:{<#digitoPositivo:["1"-"9"]>}
+  TOKEN:{<#digito:<digitoPositivo>|"0">} 
+  TOKEN:{<#parteEntera:<digitoPositivo> (<digito>)* |"0">} 
+  TOKEN:{<#parteDecimal: "." (<digito>)* <digitoPositivo> | "0">}
+  TOKEN:{<#parteExponencial: ("E" | "e") <numeroEntero> >}
+  TOKEN:{<#signo: "+" | "-" >}
+
+  SKIP:{<["\t"," ","\r","\b","\n"]>}
+  SKIP:{<"#"(~["\n"])*>}
+
+  TOKEN:{<donde:"donde">}
+  TOKEN:{<evalua:"evalua">}
+  TOKEN:{<numeroEntero: (<signo>)? <parteEntera> >}
+  TOKEN:{<numeroReal: <numeroEntero> (<parteDecimal> | <parteExponencial> | <parteDecimal> <parteExponencial>) >  }
+
+  TOKEN:{<Int: "int">}
+  TOKEN:{<bool: "bool">}
+  TOKEN:{<real: "real">}
+  TOKEN:{<True: "true">}
+  TOKEN:{<False: "false">}
+  TOKEN:{<or: "or">}
+  TOKEN:{<and: "and">}
+  TOKEN:{<not: "not">}
+  TOKEN:{<string: "string">}
+  TOKEN:{<Null: "null">}
+  TOKEN:{<proc: "proc">}
+  TOKEN:{<If: "if">}
+  TOKEN:{<then: "then">}
+  TOKEN:{<Else: "else">}
+  TOKEN:{<endif: "endif">}
+  TOKEN:{<While: "while">}
+  TOKEN:{<Do: "do">}
+  TOKEN:{<endwhile: "endwhile">}
+  TOKEN:{<call: "call">}
+  TOKEN:{<record: "record">}
+  TOKEN:{<array: "array">}
+  TOKEN:{<of: "of">}
+  TOKEN:{<pointer: "pointer">}
+  TOKEN:{<New: "new">}
+  TOKEN:{<delete: "delete">}
+  TOKEN:{<read: "read">}
+  TOKEN:{<write: "write">}
+  TOKEN:{<nl: "nl">}
+  TOKEN:{<var: "var">}
+  TOKEN:{<type: "type">}
+
+  TOKEN:{<identificador: <letra>(<letra>|<digito>|"_")* >}
+  TOKEN:{<cadena: "\"" (~["\"","\b","\r","\n"])* "\"" > }
+  
+
+  void ProgramaP()          : {} {Programa() <EOF>}
+  void Programa()           : {} {Declaraciones() "&&" Instrucciones() | Instrucciones()}
+  void Declaraciones()      : {} {Declaracion() REDeclaraciones() }
+  void REDeclaraciones()    : {} {";" Declaracion() REDeclaraciones() | {}}
+  void Declaracion()        : {} {<var> Tipo() <identificador>
+                                 | <type> Tipo() <identificador>
+                                 | <proc> <identificador> Params() Bloque()}
+  void Params()             : {} {"(" REParams()}
+  void REParams()           : {} {ListaParams() ")" | ")"}
+  void ListaParams()        : {} {Param() REListaParams()}
+  void REListaParams()      : {} {"," Param() REListaParams() | {}}
+  void Param()              : {} {Tipo() AmpersandOp() <identificador>}
+  void AmpersandOp()        : {} {"&" | {}} 
+  void Tipo()               : {} {<Int>|<real>|<bool>|<string>|<identificador>
+                                 | <array> "["<numeroEntero>"]"<of> Tipo() 
+                                 | <pointer> Tipo() 
+                                 | <record> "{"Campos()"}"}
+  void Campos()             : {} {Campo() RECampos()} 
+  void RECampos()           : {} {";" Campo() RECampos() | {}} 
+  void Campo()              : {} {Tipo() <identificador>} 
+  void Instrucciones()      : {} {Instruccion() REInstrucciones()} 
+  void REInstrucciones()    : {} {";" Instruccion() REInstrucciones() | {}} 
+  void InstruccionesOpt()   : {} {Instrucciones() | {}} 
+  void Instruccion()        : {} {Expresion() "=" Expresion() 
+                                 | <If> Expresion() <then> InstruccionesOpt() REInstruccion()
+                                 | <While> Expresion() <Do> InstruccionesOpt() <endwhile>
+                                 | <read> Expresion()
+                                 | <write> Expresion()
+                                 | <nl>
+                                 | <New> Expresion()
+                                 | <delete> Expresion()
+                                 | <call> <identificador> ParamReal()
+                                 | Bloque()} 
+  void REInstruccion()      : {} {<Else> InstruccionesOpt() <endif> | <endif>} 
+  void ParamReal()          : {} {"(" REParamReal() } 
+  void REParamReal()        : {} {")" | Expresiones() ")"} 
+  void Expresiones()        : {} {Expresion() REExpresiones()} 
+  void REExpresiones()      : {} {"," Expresion() REExpresiones() | {}} 
+  void Bloque()             : {} {"{" REBloque()} 
+  void REBloque()           : {} {"}" | Programa() "}"} 
+  void Expresion()          : {} {E0()} 
+  void ExpresionBasica()    : {} {<numeroEntero>|<numeroReal>|<identificador>|<True>|<False>|<Null>|<cadena>} 
+  void E0()                 : {} {E1() RE0()} 
+  void RE0()                : {} {"+" E0() | "-" E1() | {}} 
+  void E1()                 : {} {E2() RE1()} 
+  void RE1()                : {} {OP1() E2() RE1() | {}} 
+  void E2()                 : {} {E3() RE2()} 
+  void RE2()                : {} {OP2() E3() RE2() | {}} 
+  void E3()                 : {} {E4() RE3()} 
+  void RE3()                : {} {OP3() E4() | {}} 
+  void E4()                 : {} {<not> E4() | "-" E5() | E5()} 
+  void E5()                 : {} {E6() RE5p()} 
+  void RE5p()               : {} {RE5() RE5p() | {}} 
+  void RE5()                : {} {"[" Expresion() "]" | OP5()} 
+  void E6()                 : {} {"*" E6() | E7()} 
+  void E7()                 : {} {"(" E0() ")" | ExpresionBasica()} 
+  void OP1()                : {} {<and>|<or>} 
+  void OP2()                : {} {">" | "<" | ">=" | "<=" | "==" | "!="} 
+  void OP3()                : {} {"*" | "/" | "%"} 
+  void OP5()                : {} {"." <identificador> | "->" <identificador>} 
+  
+  
