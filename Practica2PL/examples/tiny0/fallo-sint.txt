@@ -1,5 +1,5 @@
 real peso;
-bool pesado  
+bool pesado;   
 int num
 &&
 peso = (45.0 * 12E-56) / -2.05;
