@@ -6,7 +6,7 @@ import tiny0.procesamientos.Procesador;
 
 public class Not extends ExpresionUnaria {
 
-    protected Not(Expresion arg) { super(arg); }
+    public Not(Expresion arg) { super(arg); }
 
     @Override
     public void procesa(Procesador p) { this.procesa(p); }

@@ -6,7 +6,7 @@ import tiny0.procesamientos.Procesador;
 
 public class Menos extends ExpresionUnaria {
 
-    protected Menos(Expresion arg) { super(arg); }
+    public Menos(Expresion arg) { super(arg); }
 
     @Override
     public int prioridad() { return 4; }

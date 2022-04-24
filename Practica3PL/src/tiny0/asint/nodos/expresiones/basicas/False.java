@@ -6,7 +6,11 @@ import tiny0.procesamientos.Procesador;
 public class False extends ExpresionBasica {
     private StringLocalizado bool;
 
-    public False(int fila, int col) { this.bool = new StringLocalizado("false", fila, col); }
+    public False(StringLocalizado bool) {
+        if (!bool.toString().equals("false"))
+            throw new IllegalArgumentException("El valor de la expresion booleana debe ser 'false', pero fue '" + bool + "'");
+        this.bool = bool;
+    }
 
     public StringLocalizado bool() { return bool; }
 

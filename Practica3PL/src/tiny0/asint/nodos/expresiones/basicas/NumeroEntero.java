@@ -6,7 +6,14 @@ import tiny0.procesamientos.Procesador;
 public class NumeroEntero extends ExpresionBasica {
     private StringLocalizado num;
 
-    public NumeroEntero(StringLocalizado num) { this.num = num; }
+    public NumeroEntero(StringLocalizado num) {
+        try {
+            Integer.parseInt(num.toString());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("El valor de la expresion entera debe ser un numero entero pero fue '" + num + "'");
+        }
+        this.num = num;
+    }
 
     public StringLocalizado num() { return num; }
 

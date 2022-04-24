@@ -1,7 +1,7 @@
 package tiny0.procesamientos;
 
-import tiny0.asint.nodos.expresiones.aritmeticas.*;
 import tiny0.asint.nodos.expresiones.basicas.*;
+import tiny0.asint.nodos.expresiones.aritmeticas.*;
 import tiny0.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny0.asint.nodos.expresiones.booleanas.comparacion.*;
 
