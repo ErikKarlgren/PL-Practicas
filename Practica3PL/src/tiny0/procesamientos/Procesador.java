@@ -1,11 +1,23 @@
 package tiny0.procesamientos;
 
+import tiny0.asint.nodos.*;
 import tiny0.asint.nodos.expresiones.basicas.*;
 import tiny0.asint.nodos.expresiones.aritmeticas.*;
 import tiny0.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny0.asint.nodos.expresiones.booleanas.comparacion.*;
 
 public interface Procesador {
+
+    void procesa(Programa programa);
+
+    void procesa(Declaracion declaracion);
+
+    void procesa(Declaraciones declaraciones);
+
+    void procesa(Instruccion instruccion);
+
+    void procesa(Instrucciones instrucciones);
+
 
     // Expresiones aritméticas
 

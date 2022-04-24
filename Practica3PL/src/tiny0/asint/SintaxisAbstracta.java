@@ -1,8 +1,8 @@
 package tiny0.asint;
 
-import tiny0.asint.nodos.StringLocalizado;
+import tiny0.asint.nodos.*;
 import tiny0.asint.nodos.expresiones.basicas.*;
-import tiny0.asint.nodos.expresiones.Expresion;
+import tiny0.asint.nodos.expresiones.*;
 import tiny0.asint.nodos.expresiones.aritmeticas.*;
 import tiny0.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny0.asint.nodos.expresiones.booleanas.comparacion.*;
@@ -10,13 +10,29 @@ import tiny0.asint.nodos.expresiones.booleanas.comparacion.*;
 public final class SintaxisAbstracta {
 
     // prog: Decs x Instr → Prog
+    Programa prog(Declaraciones decs, Instrucciones instr) { return new Programa(decs, instr); }
+
     // decs_una: Dec → Decs
+    Declaraciones decs_una(Declaracion dec) { return new Declaraciones(dec); }
+
     // decs_muchas: Decs x Dec → Decs
+    Declaraciones decs_muchas(Declaraciones decs, Declaracion dec) { return new Declaraciones(decs, dec); }
+
     // dec: Tipo x string → Dec
+    Declaracion dec(Tipo tipo, StringLocalizado id) { return new Declaracion(tipo, id); }
+
     // tipo: string → Tipo
+    // TODO: ¿String o StringLocalizado?
+    Tipo tipo(String tipo) { return new Tipo(tipo); }
+
     // instr_una: Instr → Instrs
+    Instrucciones instr_una(Instruccion instr) { return new Instrucciones(instr); }
+
     // instr_muchas: Instrs x Instr → Instrs
+    Instrucciones instr_muchas(Instrucciones instrs, Instruccion instr) { return new Instrucciones(instrs, instr); }
+
     // instr: string x Exp → Instr
+    Instruccion instr(StringLocalizado id, Expresion exp) { return new Instruccion(id, exp); }
 
     // expresionbasica: string → Exp
     // TODO: ¿Ponemos algo aquí?
