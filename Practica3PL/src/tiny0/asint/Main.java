@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import tiny0.ast.ConstructorAST;
+
 public class Main {
     public static void main(String[] args) {
         if (args.length == 0) {
@@ -14,8 +16,8 @@ public class Main {
 
         for (String file : args) {
             try (Reader input = new InputStreamReader(new FileInputStream(file))) {
-                AnalizadorSintacticoTiny asint = new AnalizadorSintacticoTiny(input);
-                asint.ProgramaP();
+                ConstructorAST asint = new ConstructorAST(input);
+                asint.programaP();
                 System.out.println("Finished reading " + file);
             } catch (IOException e) {
                 System.err.println("Error while reading file " + file);

@@ -1,9 +1,11 @@
 package tiny0.asint.nodos.expresiones;
 
-public class Tipo {
-    private String tipo;
+import tiny0.asint.nodos.StringLocalizado;
 
-    public Tipo(String tipo) {
+public class Tipo {
+    private StringLocalizado tipo;
+
+    public Tipo(StringLocalizado tipo) {
         this.tipo = tipo;
     }
 }
