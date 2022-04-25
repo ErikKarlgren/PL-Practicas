@@ -12,6 +12,10 @@ public class Instruccion implements Nodo {
         this.expresion = expresion;
     }
 
+    public StringLocalizado string() { return string; }
+
+    public Expresion expresion() { return expresion; }
+
     @Override
     public void procesa(Procesador p) { p.procesa(this); }
 }

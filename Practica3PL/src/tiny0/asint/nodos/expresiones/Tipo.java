@@ -3,9 +3,12 @@ package tiny0.asint.nodos.expresiones;
 import tiny0.asint.nodos.StringLocalizado;
 
 public class Tipo {
-    private StringLocalizado tipo;
+    private StringLocalizado nombre;
 
     public Tipo(StringLocalizado tipo) {
-        this.tipo = tipo;
+        this.nombre = tipo;
     }
+
+    @Override
+    public String toString() { return nombre.toString(); }
 }

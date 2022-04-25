@@ -12,6 +12,10 @@ public class Declaracion implements Nodo {
         this.string = string;
     }
 
+    public Tipo tipo() { return tipo; }
+
+    public StringLocalizado id() { return string; }
+
     @Override
     public void procesa(Procesador p) { p.procesa(this); }
 }

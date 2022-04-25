@@ -13,10 +13,10 @@ public class SintaxisAbstracta {
     public Programa prog(Declaraciones decs, Instrucciones instr) { return new Programa(decs, instr); }
 
     // decs_una: Dec → Decs
-    public Declaraciones decs_una(Declaracion dec) { return new Declaraciones(dec); }
+    public Declaraciones decs_una(Declaracion dec) { return new DecsUna(dec); }
 
     // decs_muchas: Decs x Dec → Decs
-    public Declaraciones decs_muchas(Declaraciones decs, Declaracion dec) { return new Declaraciones(decs, dec); }
+    public Declaraciones decs_muchas(Declaraciones decs, Declaracion dec) { return new DecsMuchas(decs, dec); }
 
     // dec: Tipo x string → Dec
     public Declaracion dec(Tipo tipo, StringLocalizado id) { return new Declaracion(tipo, id); }
@@ -26,10 +26,10 @@ public class SintaxisAbstracta {
     public Tipo tipo(StringLocalizado tipo) { return new Tipo(tipo); }
 
     // instr_una: Instr → Instrs
-    public Instrucciones instr_una(Instruccion instr) { return new Instrucciones(instr); }
+    public Instrucciones instr_una(Instruccion instr) { return new InstrUna(instr); }
 
     // instr_muchas: Instrs x Instr → Instrs
-    public Instrucciones instr_muchas(Instrucciones instrs, Instruccion instr) { return new Instrucciones(instrs, instr); }
+    public Instrucciones instr_muchas(Instrucciones instrs, Instruccion instr) { return new InstrMuchas(instrs, instr); }
 
     // instr: string x Exp → Instr
     public Instruccion instr(StringLocalizado id, Expresion exp) { return new Instruccion(id, exp); }

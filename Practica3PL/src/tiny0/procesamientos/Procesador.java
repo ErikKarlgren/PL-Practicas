@@ -12,12 +12,15 @@ public interface Procesador {
 
     void procesa(Declaracion declaracion);
 
-    void procesa(Declaraciones declaraciones);
+    void procesa(DecsUna declaraciones);
+
+    void procesa(DecsMuchas declaraciones);
 
     void procesa(Instruccion instruccion);
 
-    void procesa(Instrucciones instrucciones);
+    void procesa(InstrUna instrucciones);
 
+    void procesa(InstrMuchas instrucciones);
 
     // Expresiones aritméticas
 
