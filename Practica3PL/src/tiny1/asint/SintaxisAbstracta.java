@@ -1,0 +1,146 @@
+package tiny1.asint;
+
+import tiny1.asint.nodos.*;
+import tiny1.asint.nodos.campos.Campo;
+import tiny1.asint.nodos.campos.Campos;
+import tiny1.asint.nodos.campos.CamposMuchos;
+import tiny1.asint.nodos.campos.CamposUno;
+import tiny1.asint.nodos.declaraciones.Declaracion;
+import tiny1.asint.nodos.declaraciones.Declaraciones;
+import tiny1.asint.nodos.declaraciones.DecsMuchas;
+import tiny1.asint.nodos.declaraciones.DecsUna;
+import tiny1.asint.nodos.expresiones.basicas.*;
+import tiny1.asint.nodos.expresiones.*;
+import tiny1.asint.nodos.expresiones.aritmeticas.*;
+import tiny1.asint.nodos.expresiones.booleanas.logicas.*;
+import tiny1.asint.nodos.expresiones.tipos.Tipo;
+import tiny1.asint.nodos.expresiones.tipos.TipoArray;
+import tiny1.asint.nodos.expresiones.tipos.TipoBasico;
+import tiny1.asint.nodos.expresiones.tipos.TipoPointer;
+import tiny1.asint.nodos.expresiones.tipos.TipoRecord;
+import tiny1.asint.nodos.instrucciones.InstrAsignacion;
+import tiny1.asint.nodos.instrucciones.InstrMuchas;
+import tiny1.asint.nodos.instrucciones.InstrUna;
+import tiny1.asint.nodos.instrucciones.Instruccion;
+import tiny1.asint.nodos.instrucciones.Instrucciones;
+import tiny1.asint.nodos.parametros.ListaParams;
+import tiny1.asint.nodos.parametros.ListaParamsMuchos;
+import tiny1.asint.nodos.parametros.ListaParamsUno;
+import tiny1.asint.nodos.parametros.Parametro;
+import tiny1.asint.nodos.parametros.ParamsCon;
+import tiny1.asint.nodos.parametros.ParamsSin;
+import tiny1.asint.nodos.programa.ProgramaConDecs;
+import tiny1.asint.nodos.programa.ProgramaSinDecs;
+import tiny1.asint.nodos.expresiones.booleanas.comparacion.*;
+
+public class SintaxisAbstracta {
+
+    // prog: Decs x Instr → Prog
+    public ProgramaConDecs prog_con_decs(Declaraciones decs, Instrucciones instr) { return new ProgramaConDecs(decs, instr); }
+
+    public ProgramaSinDecs prog_sin_decs(Instrucciones instr) { return new ProgramaSinDecs(instr); }
+
+    // decs_una: Dec → Decs
+    public Declaraciones decs_una(Declaracion dec) { return new DecsUna(dec); }
+
+    // decs_muchas: Decs x Dec → Decs
+    public Declaraciones decs_muchas(Declaraciones decs, Declaracion dec) { return new DecsMuchas(decs, dec); }
+
+    // dec: Tipo x string → Dec
+    public Declaracion dec(Tipo tipo, StringLocalizado id) { return new Declaracion(tipo, id); }
+
+    public ListaParams params_sin() { return new ParamsSin(); }
+
+    public ListaParams params_con(ListaParams parametros) { return new ParamsCon(parametros); }
+
+    public ListaParams lista_params_uno(Parametro parametro) { return new ListaParamsUno(parametro); }
+
+    public ListaParams lista_params_muchos(ListaParams parametros, Parametro parametro) { return new ListaParamsMuchos(parametros, parametro); }
+
+    // tipo: string → Tipo
+    // TODO: ¿String o StringLocalizado?
+    public Tipo tipo(StringLocalizado tipo) { return new TipoBasico(tipo); }
+
+    public Tipo tipo_array(StringLocalizado longitud, Tipo tipo) { return new TipoArray(longitud, tipo); }
+
+    public Tipo tipo_pointer(Tipo tipo) { return new TipoPointer(tipo); }
+
+    public Tipo tipo_record(Campos campos) { return new TipoRecord(campos); }
+
+    public Campo campo(Tipo tipo, StringLocalizado id) { return new Campo(tipo, id); }
+
+    public Campos campos_uno(Campo campo) { return new CamposUno(campo); }
+
+    public Campos campos_muchos(Campos campos, Campo campo) { return new CamposMuchos(campos, campo); }
+
+    // instr_una: Instr → Instrs
+    public Instrucciones instr_una(Instruccion instr) { return new InstrUna(instr); }
+
+    // instr_muchas: Instrs x Instr → Instrs
+    public Instrucciones instr_muchas(Instrucciones instrs, Instruccion instr) { return new InstrMuchas(instrs, instr); }
+
+    // instr: string x Exp → Instr
+    public Instruccion instr(Expresion izquierda, Expresion derecha) { return new InstrAsignacion(izquierda, derecha); }
+
+    // expresionbasica: string → Exp
+    // TODO: ¿Ponemos algo aquí?
+
+    // num_entero: string → Exp
+    public Expresion num_entero(StringLocalizado s) { return new NumeroEntero(s); }
+
+    // num_real: string → Exp
+    public Expresion num_real(StringLocalizado s) { return new NumeroReal(s); }
+
+    // id: string → Exp
+    public Expresion id(StringLocalizado s) { return new Identificador(s); }
+
+    // true: string → Exp
+    public Expresion true_(StringLocalizado s) { return new True(s); }
+
+    // false: string → Exp
+    public Expresion false_(StringLocalizado s) { return new False(s); }
+
+    // suma: Exp x Exp → Exp
+    public Expresion suma(Expresion e1, Expresion e2) { return new Suma(e1, e2); }
+
+    // resta: Exp x Exp → Exp
+    public Expresion resta(Expresion e1, Expresion e2) { return new Resta(e1, e2); }
+
+    // mul: Exp x Exp → Exp
+    public Expresion mul(Expresion e1, Expresion e2) { return new Multiplicacion(e1, e2); }
+
+    // div: Exp x Exp → Exp
+    public Expresion div(Expresion e1, Expresion e2) { return new Division(e1, e2); }
+
+    // mayor : Exp x Exp → Exp
+    public Expresion mayor(Expresion e1, Expresion e2) { return new Mayor(e1, e2); }
+
+    // menor: Exp x Exp → Exp
+    public Expresion menor(Expresion e1, Expresion e2) { return new Menor(e1, e2); }
+
+    // mayorigual: Exp x Exp → Exp
+    public Expresion mayorigual(Expresion e1, Expresion e2) { return new MayorIgual(e1, e2); }
+
+    // menorigual: Exp x Exp → Exp
+    public Expresion menorigual(Expresion e1, Expresion e2) { return new MenorIgual(e1, e2); }
+
+    // igualcomp: Exp x Exp → Exp
+    public Expresion igualcomp(Expresion e1, Expresion e2) { return new Igual(e1, e2); }
+
+    // distinto: Exp x Exp → Exp
+    public Expresion distinto(Expresion e1, Expresion e2) { return new Distinto(e1, e2); }
+
+    // menos : Exp → Exp
+    public Expresion menos(Expresion e1) { return new Menos(e1); }
+
+    // and : Exp x Exp → Exp
+    public Expresion and(Expresion e1, Expresion e2) { return new And(e1, e2); }
+
+    // or : Exp x Exp → Exp
+    public Expresion or(Expresion e1, Expresion e2) { return new Or(e1, e2); }
+
+    // not : Exp → Exp
+    public Expresion not(Expresion e1) { return new Not(e1); }
+
+    public StringLocalizado str(String s, int fila, int col) { return new StringLocalizado(s, fila, col); }
+}
