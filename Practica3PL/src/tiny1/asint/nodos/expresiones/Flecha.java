@@ -2,10 +2,21 @@ package tiny1.asint.nodos.expresiones;
 
 import tiny1.procesamientos.Procesador;
 
-public class Flecha extends ExpresionBinaria {
-
-    protected Flecha(Expresion arg0, Expresion arg1) {
-        super(arg0, arg1);
+public class Flecha implements Expresion {
+	
+	Expresion arg0;
+	String arg1;
+	
+	public Flecha(Expresion arg0, String arg1) { 
+    	this.arg0=arg0;
+    	this.arg1=arg1;
+    }
+    public Expresion arg0(){
+    	return arg0;
+    }
+    
+    public String arg1() {
+    	return this.arg1;
     }
 
     @Override
