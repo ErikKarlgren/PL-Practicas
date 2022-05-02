@@ -6,6 +6,9 @@ import tiny1.asint.nodos.bloques.BloqueVacio;
 import tiny1.asint.nodos.campos.Campo;
 import tiny1.asint.nodos.campos.CamposMuchos;
 import tiny1.asint.nodos.campos.CamposUno;
+import tiny1.asint.nodos.declaraciones.DecProc;
+import tiny1.asint.nodos.declaraciones.DecType;
+import tiny1.asint.nodos.declaraciones.DecVar;
 import tiny1.asint.nodos.declaraciones.Declaracion;
 import tiny1.asint.nodos.declaraciones.DecsMuchas;
 import tiny1.asint.nodos.declaraciones.DecsUna;
@@ -56,12 +59,18 @@ public interface Procesador {
     void procesa(ProgramaSinDecs programa);
 
     // Declaraciones
-
-    void procesa(Declaracion declaracion);
+    
+   // void procesa(Declaracion declaracion);
 
     void procesa(DecsUna declaraciones);
 
     void procesa(DecsMuchas declaraciones);
+
+	void procesa(DecType decType);
+	
+	void procesa(DecVar decVar);
+	
+	void procesa(DecProc decProc);
 
     // Parametros
 
@@ -171,6 +180,8 @@ public interface Procesador {
 
     void procesa(False booleanoFalse);
 
+	void procesa(Null nulo);
+	
     void procesa(Cadena cadena);
 
     // Expresiones lógicas
@@ -202,4 +213,8 @@ public interface Procesador {
     void procesa(Punto punto);
 
     void procesa(Flecha flecha);
+
+
+
+
 }

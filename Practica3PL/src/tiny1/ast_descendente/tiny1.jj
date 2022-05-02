@@ -1,0 +1,226 @@
+options  {
+  STATIC=false;
+}
+PARSER_BEGIN(ConstructorAST)
+
+package tiny1.ast_descendente;
+import tiny1.asint.nodos.*;
+import tiny1.asint.nodos.bloques.*;
+import tiny1.asint.nodos.campos.*;
+import tiny1.asint.nodos.declaraciones.*;
+import tiny1.asint.nodos.expresiones.basicas.*;
+import tiny1.asint.nodos.expresiones.*;
+import tiny1.asint.nodos.expresiones.aritmeticas.*;
+import tiny1.asint.nodos.expresiones.booleanas.logicas.*;
+import tiny1.asint.nodos.expresiones.booleanas.comparacion.*;
+import tiny1.asint.nodos.expresiones.tipos.*;
+import tiny1.asint.nodos.instrucciones.*;
+import tiny1.asint.nodos.parametros.*;
+import tiny1.asint.nodos.programa.*;
+import tiny1.semops.SemOps;
+
+public class ConstructorAST {
+     private SemOps sem = new SemOps();
+
+}
+PARSER_END(ConstructorAST)
+  TOKEN:{<#letra:["a"-"z","A"-"Z"]>}
+  TOKEN:{<#digitoPositivo:["1"-"9"]>}
+  TOKEN:{<#digito:<digitoPositivo>|"0">} 
+  TOKEN:{<#parteEntera:<digitoPositivo> (<digito>)* |"0">} 
+  TOKEN:{<#parteDecimal: "." (<digito>)* <digitoPositivo> | "0">}
+  TOKEN:{<#parteExponencial: ("E" | "e") <numeroEntero> >}
+  TOKEN:{<#signo: "+" | "-" >}
+
+  SKIP:{<["\t"," ","\r","\b","\n"]>}
+  SKIP:{<"#"(~["\n"])*>}
+
+  TOKEN:{<donde:"donde">}
+  TOKEN:{<evalua:"evalua">}
+  TOKEN:{<numeroEntero: (<signo>)? <parteEntera> >}
+  TOKEN:{<numeroReal: <numeroEntero> (<parteDecimal> | <parteExponencial> | <parteDecimal> <parteExponencial>) >  }
+
+  TOKEN:{<Int: "int">}
+  TOKEN:{<bool: "bool">}
+  TOKEN:{<real: "real">}
+  TOKEN:{<True: "true">}
+  TOKEN:{<False: "false">}
+  TOKEN:{<or: "or">}
+  TOKEN:{<and: "and">}
+  TOKEN:{<not: "not">}
+  TOKEN:{<string: "string">}
+  TOKEN:{<Null: "null">}
+  TOKEN:{<proc: "proc">}
+  TOKEN:{<If: "if">}
+  TOKEN:{<then: "then">}
+  TOKEN:{<Else: "else">}
+  TOKEN:{<endif: "endif">}
+  TOKEN:{<While: "while">}
+  TOKEN:{<Do: "do">}
+  TOKEN:{<endwhile: "endwhile">}
+  TOKEN:{<call: "call">}
+  TOKEN:{<record: "record">}
+  TOKEN:{<array: "array">}
+  TOKEN:{<of: "of">}
+  TOKEN:{<pointer: "pointer">}
+  TOKEN:{<New: "new">}
+  TOKEN:{<delete: "delete">}
+  TOKEN:{<read: "read">}
+  TOKEN:{<write: "write">}
+  TOKEN:{<nl: "nl">}
+  TOKEN:{<var: "var">}
+  TOKEN:{<type: "type">}
+
+  TOKEN:{<identificador: <letra>(<letra>|<digito>|"_")* >}
+  TOKEN:{<cadena: "\"" (~["\"","\b","\r","\n"])* "\"" > }
+  
+
+  Programa ProgramaP()          : {Programa prog;}
+                                  {prog= Programa() <EOF> {return prog;}}
+  Programa Programa()           : {Declaraciones decs; Instrucciones inst;} 
+                                  {decs=Declaraciones() "&&" inst=Instrucciones() {return sem.prog_con_decs(decs,inst);} 
+                                  | inst=Instrucciones() {return sem.prog_sin_decs(inst);}}
+  Declaraciones Declaraciones()      : {Declaracion dec; Declaraciones decs;}
+                                        {dec=Declaracion() decs=REDeclaraciones(sem.decs_una(dec)) {return decs;} }
+  Declaraciones REDeclaraciones(Declaraciones decsh)    : {Declaracion dec; Declaraciones decs;} 
+                                    {";" dec=Declaracion() decs=REDeclaraciones(sem.decs_muchas(decsh,dec)) {return decs;} 
+                                    | {return decsh;}}
+  Declaracion Declaracion()        : {Tipo tipo; Token t;ListaParams params; Bloque bloque;}
+                                {<var> tipo=Tipo() t=<identificador>{return sem.dec_var(tipo,sem.str(t.image,t.beginLine,t.beginColumn));}
+                                | <type> tipo=Tipo() t=<identificador> {return sem.dec_type(tipo,sem.str(t.image,t.beginLine,t.beginColumn));}
+                                | <proc> t=<identificador> params=Params() bloque=Bloque() {return sem.dec_proc(sem.str(t.image,t.beginLine,t.beginColumn),params,bloque);}}
+  ListaParams Params()        : {ListaParams lp;} 
+                                {"(" lp=REParams() {return lp;}}
+  ListaParams REParams()           : {ListaParams lp;} 
+                                  {lp=ListaParams() ")" {return sem.params_con(lp);} 
+                                  | ")" {
+                                    return sem.params_sin();}}
+  ListaParams ListaParams()        : {Parametro p; ListaParams lp;}
+                                   {p=Param() lp=REListaParams(sem.lista_params_uno(p)) {return lp;}}
+  ListaParams REListaParams(ListaParams lph)      : {Parametro p; ListaParams lp;}
+                                    {"," p=Param() lp=REListaParams(sem.lista_params_muchos(lph,p)) {return lp;}
+                                    | {} {return lph;}}
+  Parametro Param()              : {Tipo tipo;Parametro p;} 
+                                  {tipo=Tipo() p=AmpersandOp(tipo) {return p;}}
+  Parametro AmpersandOp(Tipo tipoh)        : {Token t;} 
+                                  {"&" t=<identificador> {return sem.param_ref(tipoh,t.image);}
+                                  | t=<identificador>{return sem.param_valor(tipoh,t.image);}} 
+  Tipo Tipo()               : {Token t; Tipo tipo; Campos campos;} 
+                                { t=<Int> {return sem.tipo(sem.str(t.image,t.beginLine,t.beginColumn));}
+                                | t= <real> {return sem.tipo(sem.str(t.image,t.beginLine,t.beginColumn));}
+                                | t=<bool>  {return sem.tipo(sem.str(t.image,t.beginLine,t.beginColumn));}
+                                | t=<string> {return sem.tipo(sem.str(t.image,t.beginLine,t.beginColumn));}
+                                | t=<identificador> {return sem.tipo(sem.str(t.image,t.beginLine,t.beginColumn));}
+                                | <array> "["t=<numeroEntero>"]"<of> tipo=Tipo() {return sem.tipo_array(sem.str(t.image,t.beginLine,t.beginColumn),tipo);}
+                                | <pointer> tipo=Tipo() {return sem.tipo_pointer(tipo);} 
+                                | <record> "{" campos=Campos()"}"{return sem.tipo_record(campos);}}
+  Campos Campos()             : {Campo c; Campos campos;}
+                                 {c=Campo() campos=RECampos(sem.campos_uno(c)){return campos;}} 
+  Campos RECampos(Campos camposh)           : {Campo c; Campos campos;} {";" c=Campo() campos=RECampos(sem.campos_muchos(camposh,c)) {return campos;} 
+                                | {}{return camposh;}} 
+  Campo Campo()              : {Tipo tipo; Token t;} 
+                                {tipo=Tipo() t=<identificador> {return sem.campo(tipo,sem.str(t.image,t.beginLine,t.beginColumn));}} 
+  Instrucciones Instrucciones()      : {Instruccion inst; Instrucciones instrs;} {inst=Instruccion() instrs=REInstrucciones(sem.instr_una(inst)) {return instrs;}} 
+  Instrucciones REInstrucciones(Instrucciones instrsh)    : {Instruccion inst; Instrucciones instrs;} 
+                                  {";" inst=Instruccion() instrs=REInstrucciones(sem.instr_muchas(instrsh,inst)) {return instrs;}
+                                   | {} {return instrsh;}} 
+  InstruccionesOpt InstruccionesOpt()   : {Instrucciones instrs;} 
+                                          {instrs=Instrucciones() { return sem.instr_opt_muchas(instrs);}
+                                          | {} {return sem.instr_opt_ninguna();}} 
+  Instruccion Instruccion()        : {Expresion e1,e2; InstruccionesOpt instrsOpt; Instruccion inst; Token t; ParamsReal params;Bloque bloque;} 
+                                  {e1=Expresion() "=" e2=Expresion() {return sem.instr(e1,e2);}
+                                 | <If> e1=Expresion() <then> instrsOpt=InstruccionesOpt() inst=REInstruccion(e1,instrsOpt) {return inst;}
+                                 | <While> e1=Expresion() <Do> instrsOpt=InstruccionesOpt() <endwhile> {return sem.instr_while(e1,instrsOpt);}
+                                 | <read> e1=Expresion() {return sem.instr_read(e1);}
+                                 | <write> e1=Expresion() {return sem.instr_write(e1);}
+                                 | <nl> {return sem.instr_nl();}
+                                 | <New> e1=Expresion() {return sem.instr_new(e1);}
+                                 | <delete> e1=Expresion() {return sem.instr_delete(e1);}
+                                 | <call> t=<identificador> params=ParamReal() {return sem.instr_call(sem.str(t.image,t.beginLine,t.beginColumn),params);}
+                                 | bloque=Bloque(){return sem.instr_bloque(bloque);}} 
+  Instruccion REInstruccion(Expresion eh,InstruccionesOpt instrsOpth)      : {InstruccionesOpt instrsOpt;} 
+                                {<Else> instrsOpt=InstruccionesOpt() <endif> {return sem.instr_if_else(eh,instrsOpth,instrsOpt);}
+                                | <endif>{return sem.instr_if(eh,instrsOpth);}} 
+  ParamsReal ParamReal()          : {ParamsReal params;} 
+                                {"(" params=REParamReal() {return params;} } 
+  ParamsReal REParamReal()        : {Expresiones e;} 
+                                  {")" {return sem.params_real_ninguna();}
+                                  | e=Expresiones() ")" {return sem.params_real_muchas(e);}} 
+  Expresiones Expresiones()        : {Expresion e; Expresiones exprs;} 
+                                    {e=Expresion() exprs=REExpresiones(sem.expresiones_una(e)) {return exprs;}} 
+  Expresiones REExpresiones(Expresiones exprh)      : {Expresion e; Expresiones exprs;} 
+                                {"," e=Expresion() exprs=REExpresiones(sem.expresiones_muchas(exprh,e)) {return exprs;}  
+                                | {} { return exprh;}} 
+  Bloque Bloque()             : {Bloque bloque;} 
+                                {"{" bloque=REBloque() {return bloque;}} 
+  Bloque REBloque()           : {Programa p;} 
+                                {"}" {return sem.bloque_vacio();} 
+                                | p=Programa() "}"{ return sem.bloque_lleno(p);}} 
+  Expresion Expresion()          : {Expresion e;}
+                                 {e=E0() {return e;}} 
+  Expresion ExpresionBasica()    : {Token t;} 
+                                  {t=<numeroEntero> {return sem.num_entero(sem.str(t.image,t.beginLine,t.beginColumn)); }
+                                  |t=<numeroReal> {return sem.num_real(sem.str(t.image,t.beginLine,t.beginColumn)); }
+                                  |t=<identificador>  {return sem.id(sem.str(t.image,t.beginLine,t.beginColumn)); }
+                                  |t=<True> {return sem.true_(sem.str(t.image,t.beginLine,t.beginColumn)); }
+                                  |t=<False> {return sem.false_(sem.str(t.image,t.beginLine,t.beginColumn)); }
+                                  |t=<Null> {return sem.nulo(sem.str(t.image,t.beginLine,t.beginColumn)); }
+                                  |t=<cadena> {return sem.cadena(sem.str(t.image,t.beginLine,t.beginColumn)); }}  
+  Expresion E0()                 : {Expresion e1,e2;}
+                                    {e1=E1() e2=RE0(e1){return e2;}} 
+  Expresion RE0(Expresion eh)    : {Expresion e;}
+                                     {"+" e=E0() {return sem.suma(eh,e);} 
+                                    | "-" e=E1() {return sem.resta(eh,e);}
+                                    | {} {return eh;}} 
+  Expresion E1()                 : {Expresion e1,e2;} 
+                                    {e1=E2() e2=RE1(e1) {return e2;}} 
+  Expresion RE1(Expresion eh)                : {String op; Expresion e1,e2;}
+                                   {op=OP1() e1=E2() e2=RE1(sem.exp(op,eh,e1)) {return e2;} 
+                                   | {} {return eh;}} 
+  Expresion E2()                 : {Expresion e1,e2;}
+                                  {e1=E3() e2=RE2(e1) {return e2;}} 
+  Expresion RE2(Expresion eh)    : {String op;Expresion e1,e2;}
+                                   {op=OP2() e1=E3() e2=RE2(sem.exp(op,eh,e1)) {return e2;} 
+                                   | {}{return eh;}} 
+  Expresion E3()                 : {Expresion e1,e2;} 
+                                    {e1=E4() e2=RE3(e1){return e2;}} 
+  Expresion RE3(Expresion eh)     : {String op;Expresion e;}
+                                     {op=OP3() e=E4() {return sem.exp(op,eh,e);} 
+                                    | {} {return eh;}} 
+  Expresion E4()                 : {Expresion e;} 
+                                  {<not> e=E4() {return sem.not(e);} 
+                                  | "-" e=E5() {return sem.menos(e);} 
+                                  | e=E5() {return e;}} 
+  Expresion E5()                 : {Expresion e1,e2;}
+                                    {e1=E6() e2=RE5p(e1) {return e2;}} 
+  Expresion RE5p(Expresion eh)               : {Expresion e1,e2;} 
+                                  {e1=RE5(eh) e2=RE5p(e1) {return e2;}
+                                  | {} {return eh;}} 
+  Expresion RE5(Expresion eh)     : {Expresion e;String op; Token t;} 
+                                  {"[" e=Expresion() "]" {return sem.acceso_array(eh,e);} 
+                                  | op=OP5() t=<identificador> {return sem.exp(op,eh,t.image);}} 
+  Expresion E6()                 : {Expresion e;} 
+                                  {"*" e=E6() {return sem.valor_puntero(e);}
+                                   | e=E7() {return e;}} 
+  Expresion E7()                 : {Expresion e;} 
+                                  {"(" e=E0() ")" {return e;} 
+                                  | e=ExpresionBasica() {return e;}} 
+  String OP1()                : {Token t;} 
+                                {t=<and> {return t.image;}
+                                |t=<or> {return t.image;}} 
+  String OP2()                : {}
+                                {">" {return ">";} 
+                                | "<" {return "<";}
+                                | ">=" {return ">=";}
+                                | "<=" {return "<=";}
+                                | "==" {return "==";}
+                                | "!=" {return "!=";}} 
+  String OP3()                : {} 
+                                {"*" {return "*";}
+                                | "/" {return "/";}
+                                | "%"{return "%";}} 
+  String OP5()                : {}
+                                 {"." {return ".";} 
+                                 | "->" {return "->";} } 
+  
+  

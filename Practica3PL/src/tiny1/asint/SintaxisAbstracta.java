@@ -36,6 +36,7 @@ import tiny1.asint.nodos.instrucciones.InstruccionDelete;
 import tiny1.asint.nodos.instrucciones.InstruccionIf;
 import tiny1.asint.nodos.instrucciones.InstruccionIfElse;
 import tiny1.asint.nodos.instrucciones.InstruccionNL;
+import tiny1.asint.nodos.instrucciones.InstruccionNew;
 import tiny1.asint.nodos.instrucciones.InstruccionRead;
 import tiny1.asint.nodos.instrucciones.InstruccionWhile;
 import tiny1.asint.nodos.instrucciones.InstruccionWrite;
@@ -133,6 +134,8 @@ public class SintaxisAbstracta {
     
     public Instruccion instr_nl() { return new InstruccionNL(); }
     
+    public Instruccion instr_new(Expresion exp) { return new InstruccionNew(exp); }
+
     public Instruccion instr_delete(Expresion exp) { return new InstruccionDelete(exp); }
     
     public Instruccion instr_call(StringLocalizado str,ParamsReal p) { return new InstruccionCall(str,p); }
@@ -169,6 +172,11 @@ public class SintaxisAbstracta {
 
     // false: string → Exp
     public Expresion false_(StringLocalizado s) { return new False(s); }
+    
+    public Expresion nulo(StringLocalizado s) { return new Null(s); }
+    
+    public Expresion cadena(StringLocalizado s) { return new Cadena(s); }
+
 
     // suma: Exp x Exp → Exp
     public Expresion suma(Expresion e1, Expresion e2) { return new Suma(e1, e2); }
@@ -220,6 +228,10 @@ public class SintaxisAbstracta {
 
     //flecha : Exp x String -> Exp
     public Expresion flecha(Expresion e1, String e2) { return new Flecha(e1, e2); }    
+    
+    public Expresion acceso_array(Expresion e1, Expresion e2) { return new AccesoArray(e1, e2); }    
+
+    public Expresion valor_puntero(Expresion e1) { return new ValorPuntero(e1); }    
 
     
     public StringLocalizado str(String s, int fila, int col) { return new StringLocalizado(s, fila, col); }

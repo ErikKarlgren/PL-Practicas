@@ -37,12 +37,12 @@ public class SemOps extends SintaxisAbstracta {
 		}
 	}
 
-	public Expresion exp(String op, Expresion arg0, String arg1) {
+	public Expresion exp(String op, Expresion arg0, String id) {
 		switch (op) {
 		case "->":
-			return flecha(arg0, arg1);
+			return flecha(arg0, id);
 		case ".":
-			return punto(arg0, arg1);
+			return punto(arg0, id);
 		default:
 			throw new UnsupportedOperationException("exp " + op);
 

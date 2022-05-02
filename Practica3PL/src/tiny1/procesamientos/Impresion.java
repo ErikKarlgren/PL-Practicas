@@ -7,6 +7,9 @@ import tiny1.asint.nodos.bloques.BloqueVacio;
 import tiny1.asint.nodos.campos.Campo;
 import tiny1.asint.nodos.campos.CamposMuchos;
 import tiny1.asint.nodos.campos.CamposUno;
+import tiny1.asint.nodos.declaraciones.DecProc;
+import tiny1.asint.nodos.declaraciones.DecType;
+import tiny1.asint.nodos.declaraciones.DecVar;
 import tiny1.asint.nodos.declaraciones.Declaracion;
 import tiny1.asint.nodos.declaraciones.DecsMuchas;
 import tiny1.asint.nodos.declaraciones.DecsUna;
@@ -25,6 +28,7 @@ import tiny1.asint.nodos.expresiones.aritmeticas.Suma;
 import tiny1.asint.nodos.expresiones.basicas.Cadena;
 import tiny1.asint.nodos.expresiones.basicas.False;
 import tiny1.asint.nodos.expresiones.basicas.Identificador;
+import tiny1.asint.nodos.expresiones.basicas.Null;
 import tiny1.asint.nodos.expresiones.basicas.NumeroEntero;
 import tiny1.asint.nodos.expresiones.basicas.NumeroReal;
 import tiny1.asint.nodos.expresiones.basicas.True;
@@ -83,10 +87,6 @@ public class Impresion implements Procesador {
         programa.instrucciones().procesa(this);
     }
 
-    @Override
-    public void procesa(Declaracion declaracion) {
-        out.print(declaracion.tipo() + " " + declaracion.id());
-    }
 
     @Override
     public void procesa(DecsUna declaraciones) {
@@ -99,12 +99,30 @@ public class Impresion implements Procesador {
         out.println(";");
         declaraciones.declaracion().procesa(this);
     }
+	@Override
+	public void procesa(DecType decType) {
+		// TODO Auto-generated method stub
+		out.print("type ");
+		decType.tipo().procesa(this);
+		out.print(" "+ decType.id());
 
-    @Override
-    public void procesa(Instruccion instruccion) {
-        out.print(instruccion.string() + " = ");
-        instruccion.expresion().procesa(this);
-    }
+	}
+
+	@Override
+	public void procesa(DecVar decVar) {
+		// TODO Auto-generated method stub
+		out.print("var ");
+		decVar.tipo().procesa(this);
+		out.print(" "+ decVar.id());
+	}
+
+	@Override
+	public void procesa(DecProc decProc) {
+		// TODO Auto-generated method stub
+		out.print("proc "+ decProc.id());
+		decProc.listaParams().procesa(this);
+		decProc.bloque().procesa(this);
+	}
 
     @Override
     public void procesa(InstrUna instrucciones) {
@@ -252,91 +270,117 @@ public class Impresion implements Procesador {
 	@Override
 	public void procesa(ProgramaSinDecs programa) {
 		// TODO Auto-generated method stub
+		programa.instrucciones().procesa(this);
 		
 	}
 
 	@Override
 	public void procesa(ParamsSin parametros) {
 		// TODO Auto-generated method stub
+		out.print("()");
 		
 	}
 
 	@Override
 	public void procesa(ParamsCon parametros) {
 		// TODO Auto-generated method stub
-		
+		out.print("(");
+		parametros.listaParams().procesa(this);
+		out.print(")");
+
 	}
 
 	@Override
 	public void procesa(ParamValor parametro) {
 		// TODO Auto-generated method stub
-		
+		parametro.tipo().procesa(this);
+		out.print(parametro.nombre());
+
 	}
 
 	@Override
 	public void procesa(ParamRef parametro) {
 		// TODO Auto-generated method stub
+		parametro.tipo().procesa(this);
+		out.print(" & " + parametro.nombre());
 		
 	}
 
 	@Override
 	public void procesa(ListaParamsUno listaParametros) {
 		// TODO Auto-generated method stub
-		
+		listaParametros.parametro().procesa(this);
 	}
 
 	@Override
 	public void procesa(ListaParamsMuchos listaParametros) {
 		// TODO Auto-generated method stub
-		
+		listaParametros.listaParametros().procesa(this);
+		out.print(", ");
+		listaParametros.parametro().procesa(this);
 	}
 
 	@Override
 	public void procesa(TipoBasico tipo) {
 		// TODO Auto-generated method stub
-		
+		out.print(tipo.nombre());
 	}
 
 	@Override
 	public void procesa(TipoArray tipo) {
 		// TODO Auto-generated method stub
-		
+		out.print("array ["+tipo.longitud()+"] of ");
+		tipo.tipoBase().procesa(this);
+
 	}
 
 	@Override
 	public void procesa(TipoPointer tipo) {
 		// TODO Auto-generated method stub
-		
+		out.print("pointer ");
+		tipo.tipoBase().procesa(this);
 	}
 
 	@Override
 	public void procesa(TipoRecord tipo) {
 		// TODO Auto-generated method stub
-		
+		out.println("record {");
+		tipo.campos().procesa(this);
+		out.println();
+		out.print("}");
+
 	}
 
 	@Override
 	public void procesa(Campo campo) {
 		// TODO Auto-generated method stub
+		campo.tipo().procesa(this);
+		out.print(" "+ campo.nombre());
 		
 	}
 
 	@Override
 	public void procesa(CamposUno campos) {
 		// TODO Auto-generated method stub
+		campos.campo().procesa(this);
 		
 	}
 
 	@Override
 	public void procesa(CamposMuchos campos) {
 		// TODO Auto-generated method stub
+		campos.campos().procesa(this);
+		out.println(";");
+		campos.campo().procesa(this);
 		
 	}
 
 	@Override
 	public void procesa(InstrAsignacion instruccion) {
 		// TODO Auto-generated method stub
-		
+		instruccion.expresionIzquierda().procesa(this);
+		out.print(" = ");
+		instruccion.expresionDerecha().procesa(this);
 	}
 
 	@Override
@@ -348,133 +392,179 @@ public class Impresion implements Procesador {
 	@Override
 	public void procesa(InstrOptMuchas instruccionesOpt) {
 		// TODO Auto-generated method stub
-		
+		instruccionesOpt.instrucciones().procesa(this);
 	}
 
 	@Override
 	public void procesa(InstruccionIf instruccion) {
 		// TODO Auto-generated method stub
+		out.print("if ");
+		instruccion.expresion().procesa(this);
+		out.print(" then ");
+		instruccion.instruccionesOpt().procesa(this);
+		out.print(" endif");
 		
 	}
 
 	@Override
 	public void procesa(InstruccionIfElse instruccion) {
 		// TODO Auto-generated method stub
-		
+		out.print("if ");
+		instruccion.expresion().procesa(this);
+		out.print(" then ");
+		instruccion.instruccionesOptIf().procesa(this);
+		out.print(" else ");
+		instruccion.instruccionesOptElse().procesa(this);
+		out.print(" endif");
 	}
 
 	@Override
 	public void procesa(InstruccionWhile instruccion) {
 		// TODO Auto-generated method stub
-		
+		out.print("while ");
+		instruccion.expresion().procesa(this);
+		out.print(" do ");
+		instruccion.instruccionesOpt().procesa(this);
+		out.print(" endwhile ");
 	}
 
 	@Override
 	public void procesa(InstruccionRead instruccion) {
 		// TODO Auto-generated method stub
-		
+		out.print("read ");
+		instruccion.expresion().procesa(this);
 	}
 
 	@Override
 	public void procesa(InstruccionWrite instruccion) {
 		// TODO Auto-generated method stub
-		
+		out.print("write ");
+		instruccion.expresion().procesa(this);
 	}
 
 	@Override
 	public void procesa(InstruccionNL instruccion) {
 		// TODO Auto-generated method stub
+		out.print("nl");
 		
 	}
 
 	@Override
 	public void procesa(InstruccionNew instruccion) {
 		// TODO Auto-generated method stub
-		
+		out.print("new ");
+		instruccion.expresion().procesa(this);
+
 	}
 
 	@Override
 	public void procesa(InstruccionDelete instruccion) {
 		// TODO Auto-generated method stub
-		
+		out.print("delete ");
+		instruccion.expresion().procesa(this);
 	}
 
 	@Override
 	public void procesa(InstruccionCall instruccion) {
 		// TODO Auto-generated method stub
-		
+		out.print("call "+instruccion.funcion());
+		instruccion.parametros().procesa(this);
 	}
 
 	@Override
 	public void procesa(InstruccionBloque instrucciones) {
 		// TODO Auto-generated method stub
-		
+		instrucciones.bloque().procesa(this);
 	}
 
 	@Override
 	public void procesa(ParamsRealNinguna parametrosReal) {
 		// TODO Auto-generated method stub
-		
+		out.print("()");
 	}
 
 	@Override
 	public void procesa(ParamsRealMuchas parametrosReal) {
 		// TODO Auto-generated method stub
-		
+		out.print("( ");
+		parametrosReal.expresiones().procesa(this);
+		out.print(")");
 	}
 
 	@Override
 	public void procesa(BloqueVacio bloque) {
 		// TODO Auto-generated method stub
-		
+		out.print("{}");
 	}
 
 	@Override
 	public void procesa(BloqueLleno bloques) {
 		// TODO Auto-generated method stub
-		
+		out.print("{");
+		bloques.programa().procesa(this);
+		out.print("}");
 	}
 
 	@Override
 	public void procesa(ExpresionesUna expresiones) {
 		// TODO Auto-generated method stub
-		
+		expresiones.expresion().procesa(this);
 	}
 
 	@Override
 	public void procesa(ExpresionesMuchas expresiones) {
 		// TODO Auto-generated method stub
-		
+		expresiones.expresiones().procesa(this);
+		out.print(" , ");
+		expresiones.expresion().procesa(this);
 	}
 
 	@Override
 	public void procesa(PorCiento porCiento) {
 		// TODO Auto-generated method stub
-		
+		imprimeArgumento(porCiento.arg0(),4);
+		out.print("%");
+		imprimeArgumento(porCiento.arg1(),4);
 	}
 
 	@Override
 	public void procesa(Cadena cadena) {
 		// TODO Auto-generated method stub
-		
+		out.print("\""+ cadena.cadena()+"\"");
 	}
 
 	@Override
 	public void procesa(AccesoArray accesoArray) {
 		// TODO Auto-generated method stub
-		
-	}
+		imprimeArgumento(accesoArray.arg0(),5);
+		out.print("[");
+		accesoArray.arg1().procesa(this);
+		out.print("]");
+		}
 
 	@Override
 	public void procesa(Punto punto) {
 		// TODO Auto-generated method stub
-		
+		imprimeArgumento(punto.arg0(),5);
+		out.print(".");
+		out.print(punto.arg1());
+
 	}
 
 	@Override
 	public void procesa(Flecha flecha) {
 		// TODO Auto-generated method stub
-		
+		imprimeArgumento(flecha.arg0(),5);
+		out.print("->");
+		out.print(flecha.arg1());
 	}
+
+	@Override
+	public void procesa(Null nulo) {
+		// TODO Auto-generated method stub
+		out.print("null");
+	}
+
+
 
 }
