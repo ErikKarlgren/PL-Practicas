@@ -1,5 +1,7 @@
 package tiny0.asint.nodos;
 
+import tiny0.asint.nodos.declaraciones.Declaraciones;
+import tiny0.asint.nodos.instrucciones.Instrucciones;
 import tiny0.procesamientos.Procesador;
 
 public class Programa implements Nodo {

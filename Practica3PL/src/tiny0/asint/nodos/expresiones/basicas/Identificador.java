@@ -1,6 +1,6 @@
 package tiny0.asint.nodos.expresiones.basicas;
 
-import tiny0.asint.nodos.StringLocalizado;
+import tiny0.asint.StringLocalizado;
 import tiny0.procesamientos.Procesador;
 
 public class Identificador extends ExpresionBasica {

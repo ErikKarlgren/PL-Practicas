@@ -1,5 +1,7 @@
-package tiny0.asint.nodos;
+package tiny0.asint.nodos.instrucciones;
 
+import tiny0.asint.StringLocalizado;
+import tiny0.asint.nodos.Nodo;
 import tiny0.asint.nodos.expresiones.Expresion;
 import tiny0.procesamientos.Procesador;
 

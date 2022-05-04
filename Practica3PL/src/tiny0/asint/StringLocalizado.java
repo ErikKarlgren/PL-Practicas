@@ -1,4 +1,4 @@
-package tiny0.asint.nodos;
+package tiny0.asint;
 
 public class StringLocalizado {
     private String s;

@@ -2,7 +2,7 @@ package tiny0.semops;
 
 import tiny0.asint.SintaxisAbstracta;
 import tiny0.asint.nodos.expresiones.Expresion;
-import tiny0.asint.nodos.expresiones.Tipo;
+import tiny0.asint.nodos.tipos.Tipo;
 
 public class SemOps extends SintaxisAbstracta {
     public Expresion exp(String op, Expresion arg0, Expresion arg1) {

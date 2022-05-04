@@ -1,20 +1,27 @@
 package tiny0.procesamientos;
 
 import tiny0.asint.nodos.*;
+import tiny0.asint.nodos.declaraciones.*;
 import tiny0.asint.nodos.expresiones.basicas.*;
 import tiny0.asint.nodos.expresiones.aritmeticas.*;
 import tiny0.asint.nodos.expresiones.booleanas.logicas.*;
+import tiny0.asint.nodos.instrucciones.*;
+import tiny0.asint.nodos.tipos.*;
 import tiny0.asint.nodos.expresiones.booleanas.comparacion.*;
 
 public interface Procesador {
 
     void procesa(Programa programa);
 
+    // Declaraciones
+
     void procesa(Declaracion declaracion);
 
     void procesa(DecsUna declaraciones);
 
     void procesa(DecsMuchas declaraciones);
+
+    // Instrucciones
 
     void procesa(Instruccion instruccion);
 
@@ -68,4 +75,11 @@ public interface Procesador {
 
     void procesa(Distinto distinto);
 
+    // Tipos
+
+    void procesa(Int entero);
+
+    void procesa(Real real);
+
+    void procesa(Bool bool);
 }

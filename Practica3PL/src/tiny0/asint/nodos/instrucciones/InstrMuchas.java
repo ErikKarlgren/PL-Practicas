@@ -1,4 +1,4 @@
-package tiny0.asint.nodos;
+package tiny0.asint.nodos.instrucciones;
 
 import tiny0.procesamientos.Procesador;
 

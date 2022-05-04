@@ -5,17 +5,17 @@
 package tiny0.ast;
 
 import tiny0.alex.UnidadLexica;
+import tiny0.asint.StringLocalizado;
 import tiny0.asint.nodos.Programa;
-import tiny0.asint.nodos.StringLocalizado;
+import tiny0.asint.nodos.declaraciones.Declaracion;
+import tiny0.asint.nodos.declaraciones.Declaraciones;
 import tiny0.asint.nodos.expresiones.Expresion;
-import tiny0.asint.nodos.expresiones.Tipo;
+import tiny0.asint.nodos.instrucciones.Instruccion;
+import tiny0.asint.nodos.instrucciones.Instrucciones;
+import tiny0.asint.nodos.tipos.Tipo;
 import tiny0.errors.GestionErroresTiny;
 import tiny0.semops.SemOps;
 import tiny0.alex.AnalizadorLexicoTiny;
-import tiny0.asint.nodos.Declaracion;
-import tiny0.asint.nodos.Declaraciones;
-import tiny0.asint.nodos.Instruccion;
-import tiny0.asint.nodos.Instrucciones;
 import tiny0.alex.ClaseLexica;
 import java.io.IOException;
 import java.io.Reader;
@@ -97,7 +97,7 @@ public class ConstructorAST {
 		case REAL:
 			Tipo t = tipo();
 			UnidadLexica id = anticipo;
-			empareja(ClaseLexica.VARIABLE);// Id();
+			empareja(ClaseLexica.VARIABLE);
 			return sem.dec(t, sem.str(id.lexema(), id.fila(), id.columna()));
 		default:
 			errores.errorSintactico(anticipo.fila(), anticipo.columna(), anticipo.clase(), ClaseLexica.BOOL,
@@ -107,22 +107,16 @@ public class ConstructorAST {
 	}
 
 	private Tipo tipo() {
-		UnidadLexica tipo = anticipo;
 		switch (anticipo.clase()) {
 		case BOOL:
 			empareja(ClaseLexica.BOOL);
 			return sem.bool_();
-			break;
 		case INT:
 			empareja(ClaseLexica.INT);
 			return sem.int_();
-
-			break;
 		case REAL:
 			empareja(ClaseLexica.REAL);
 			return sem.real_();
-
-			break;
 		default:
 			errores.errorSintactico(anticipo.fila(), anticipo.columna(), anticipo.clase(), ClaseLexica.BOOL,
 					ClaseLexica.INT, ClaseLexica.REAL);
@@ -160,8 +154,8 @@ public class ConstructorAST {
 		switch (anticipo.clase()) {
 		case VARIABLE:
 			UnidadLexica id = anticipo;
-			empareja(ClaseLexica.VARIABLE);// Id();
-			empareja(ClaseLexica.IGUAL_ASIG); // =
+			empareja(ClaseLexica.VARIABLE);
+			empareja(ClaseLexica.IGUAL_ASIG);
 			Expresion exp = expresion();
 			return sem.instr(sem.str(id.lexema(), id.fila(), id.columna()), exp);
 		default:
@@ -195,7 +189,7 @@ public class ConstructorAST {
 		switch (anticipo.clase()) {
 		case FALSE:
 			empareja(ClaseLexica.FALSE);
-			return sem.false_(str);
+			return sem.false_();
 		case VARIABLE:
 			empareja(ClaseLexica.VARIABLE);
 			return sem.id(str);
@@ -207,7 +201,7 @@ public class ConstructorAST {
 			return sem.num_real(str);
 		case TRUE:
 			empareja(ClaseLexica.TRUE);
-			return sem.false_(str);
+			return sem.true_();
 		default:
 			errores.errorSintactico(anticipo.fila(), anticipo.columna(), anticipo.clase(), ClaseLexica.NUM_ENTERO,
 					ClaseLexica.NUM_REAL, ClaseLexica.TRUE, ClaseLexica.VARIABLE, ClaseLexica.FALSE);
@@ -502,7 +496,6 @@ public class ConstructorAST {
 
 	private void sigToken() {
 		try {
-			// anticipo = alex.yylex();
 			anticipo = alex.sigToken();
 		} catch (IOException e) {
 			errores.errorFatal(e);

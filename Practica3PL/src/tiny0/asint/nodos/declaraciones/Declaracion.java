@@ -1,6 +1,8 @@
-package tiny0.asint.nodos;
+package tiny0.asint.nodos.declaraciones;
 
-import tiny0.asint.nodos.expresiones.Tipo;
+import tiny0.asint.StringLocalizado;
+import tiny0.asint.nodos.Nodo;
+import tiny0.asint.nodos.tipos.Tipo;
 import tiny0.procesamientos.Procesador;
 
 public class Declaracion implements Nodo {

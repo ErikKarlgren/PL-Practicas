@@ -2,14 +2,11 @@ package tiny0.procesamientos;
 
 import java.util.HashMap;
 
-import tiny0.asint.nodos.Declaracion;
-import tiny0.asint.nodos.DecsMuchas;
-import tiny0.asint.nodos.DecsUna;
-import tiny0.asint.nodos.InstrMuchas;
-import tiny0.asint.nodos.InstrUna;
-import tiny0.asint.nodos.Instruccion;
+import tiny0.asint.StringLocalizado;
 import tiny0.asint.nodos.Programa;
-import tiny0.asint.nodos.StringLocalizado;
+import tiny0.asint.nodos.declaraciones.Declaracion;
+import tiny0.asint.nodos.declaraciones.DecsMuchas;
+import tiny0.asint.nodos.declaraciones.DecsUna;
 import tiny0.asint.nodos.expresiones.Expresion;
 import tiny0.asint.nodos.expresiones.aritmeticas.Division;
 import tiny0.asint.nodos.expresiones.aritmeticas.Menos;
@@ -30,6 +27,12 @@ import tiny0.asint.nodos.expresiones.booleanas.comparacion.MenorIgual;
 import tiny0.asint.nodos.expresiones.booleanas.logicas.And;
 import tiny0.asint.nodos.expresiones.booleanas.logicas.Not;
 import tiny0.asint.nodos.expresiones.booleanas.logicas.Or;
+import tiny0.asint.nodos.instrucciones.InstrMuchas;
+import tiny0.asint.nodos.instrucciones.InstrUna;
+import tiny0.asint.nodos.instrucciones.Instruccion;
+import tiny0.asint.nodos.tipos.Bool;
+import tiny0.asint.nodos.tipos.Int;
+import tiny0.asint.nodos.tipos.Real;
 
 class Valores<T> extends HashMap<StringLocalizado, T> {}
 
@@ -203,5 +206,17 @@ public class Evaluacion implements Procesador {
     @Override
     public void procesa(Distinto distinto) {
     }
+
+    @Override
+    public void procesa(Int entero) { // TODO Auto-generated method stub
+     }
+
+    @Override
+    public void procesa(Real real) { // TODO Auto-generated method stub
+     }
+
+    @Override
+    public void procesa(Bool bool) { // TODO Auto-generated method stub
+     }
 
 }

@@ -2,40 +2,20 @@ package tiny0.procesamientos;
 
 import java.io.PrintStream;
 
-import tiny0.asint.nodos.Declaracion;
-import tiny0.asint.nodos.DecsMuchas;
-import tiny0.asint.nodos.DecsUna;
-import tiny0.asint.nodos.InstrMuchas;
-import tiny0.asint.nodos.InstrUna;
-import tiny0.asint.nodos.Instruccion;
-import tiny0.asint.nodos.Programa;
-import tiny0.asint.nodos.expresiones.Expresion;
-import tiny0.asint.nodos.expresiones.aritmeticas.Division;
-import tiny0.asint.nodos.expresiones.aritmeticas.Menos;
-import tiny0.asint.nodos.expresiones.aritmeticas.Multiplicacion;
-import tiny0.asint.nodos.expresiones.aritmeticas.Resta;
-import tiny0.asint.nodos.expresiones.aritmeticas.Suma;
-import tiny0.asint.nodos.expresiones.basicas.False;
-import tiny0.asint.nodos.expresiones.basicas.Identificador;
-import tiny0.asint.nodos.expresiones.basicas.NumeroEntero;
-import tiny0.asint.nodos.expresiones.basicas.NumeroReal;
-import tiny0.asint.nodos.expresiones.basicas.True;
-import tiny0.asint.nodos.expresiones.booleanas.comparacion.Distinto;
-import tiny0.asint.nodos.expresiones.booleanas.comparacion.Igual;
-import tiny0.asint.nodos.expresiones.booleanas.comparacion.Mayor;
-import tiny0.asint.nodos.expresiones.booleanas.comparacion.MayorIgual;
-import tiny0.asint.nodos.expresiones.booleanas.comparacion.Menor;
-import tiny0.asint.nodos.expresiones.booleanas.comparacion.MenorIgual;
-import tiny0.asint.nodos.expresiones.booleanas.logicas.And;
-import tiny0.asint.nodos.expresiones.booleanas.logicas.Not;
-import tiny0.asint.nodos.expresiones.booleanas.logicas.Or;
+import tiny0.asint.nodos.*;
+import tiny0.asint.nodos.declaraciones.*;
+import tiny0.asint.nodos.expresiones.*;
+import tiny0.asint.nodos.expresiones.basicas.*;
+import tiny0.asint.nodos.expresiones.aritmeticas.*;
+import tiny0.asint.nodos.expresiones.booleanas.logicas.*;
+import tiny0.asint.nodos.instrucciones.*;
+import tiny0.asint.nodos.tipos.*;
+import tiny0.asint.nodos.expresiones.booleanas.comparacion.*;
 
 public class Impresion implements Procesador {
-    private PrintStream out;
+    private final PrintStream out;
 
-    public Impresion(PrintStream out) {
-        this.out = out;
-    }
+    public Impresion(PrintStream out) { this.out = out; }
 
     @Override
     public void procesa(Programa programa) {
@@ -47,7 +27,8 @@ public class Impresion implements Procesador {
 
     @Override
     public void procesa(Declaracion declaracion) {
-        out.print(declaracion.tipo() + " " + declaracion.id());
+        declaracion.tipo().procesa(this);
+        out.print(" " + declaracion.id());
     }
 
     @Override
@@ -141,12 +122,12 @@ public class Impresion implements Procesador {
 
     @Override
     public void procesa(True booleanoTrue) {
-        out.print(booleanoTrue.bool());
+        out.print("true");
     }
 
     @Override
     public void procesa(False booleanoFalse) {
-        out.print(booleanoFalse.bool());
+        out.print("false");
     }
 
     @Override
@@ -209,6 +190,21 @@ public class Impresion implements Procesador {
         imprimeArgumento(distinto.arg0(), 2);
         out.print(" != ");
         imprimeArgumento(distinto.arg1(), 3);
+    }
+
+    @Override
+    public void procesa(Int entero) {
+        out.print("int");
+    }
+
+    @Override
+    public void procesa(Real real) {
+        out.print("real");
+    }
+
+    @Override
+    public void procesa(Bool bool) {
+        out.print("bool");
     }
 
 }
