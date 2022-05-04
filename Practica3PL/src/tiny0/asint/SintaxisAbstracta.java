@@ -24,6 +24,12 @@ public class SintaxisAbstracta {
     // tipo: string → Tipo
     // TODO: ¿String o StringLocalizado?
     public Tipo tipo(StringLocalizado tipo) { return new Tipo(tipo); }
+    
+    public Tipo int_() { return new Int(); }
+    
+    public Tipo real_() { return new Real(); }
+    
+    public Tipo bool_() { return new Bool(); }
 
     // instr_una: Instr → Instrs
     public Instrucciones instr_una(Instruccion instr) { return new InstrUna(instr); }
@@ -47,10 +53,10 @@ public class SintaxisAbstracta {
     public Expresion id(StringLocalizado s) { return new Identificador(s); }
 
     // true: string → Exp
-    public Expresion true_(StringLocalizado s) { return new True(s); }
+    public Expresion true_() { return new True(); }
 
     // false: string → Exp
-    public Expresion false_(StringLocalizado s) { return new False(s); }
+    public Expresion false_() { return new False(); }
 
     // suma: Exp x Exp → Exp
     public Expresion suma(Expresion e1, Expresion e2) { return new Suma(e1, e2); }

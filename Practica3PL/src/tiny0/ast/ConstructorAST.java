@@ -108,26 +108,27 @@ public class ConstructorAST {
 
 	private Tipo tipo() {
 		UnidadLexica tipo = anticipo;
-		String nombre;
 		switch (anticipo.clase()) {
 		case BOOL:
 			empareja(ClaseLexica.BOOL);
-			nombre = "bool";
+			return sem.bool_();
 			break;
 		case INT:
 			empareja(ClaseLexica.INT);
-			nombre = "int";
+			return sem.int_();
+
 			break;
 		case REAL:
 			empareja(ClaseLexica.REAL);
-			nombre = "real";
+			return sem.real_();
+
 			break;
 		default:
 			errores.errorSintactico(anticipo.fila(), anticipo.columna(), anticipo.clase(), ClaseLexica.BOOL,
 					ClaseLexica.INT, ClaseLexica.REAL);
 			return null;
 		}
-		return sem.tipo(sem.str(nombre, tipo.fila(), tipo.columna()));
+		
 	}
 
 	private Instrucciones instrucciones() {

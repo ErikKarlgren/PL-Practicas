@@ -2,6 +2,7 @@ package tiny0.semops;
 
 import tiny0.asint.SintaxisAbstracta;
 import tiny0.asint.nodos.expresiones.Expresion;
+import tiny0.asint.nodos.expresiones.Tipo;
 
 public class SemOps extends SintaxisAbstracta {
     public Expresion exp(String op, Expresion arg0, Expresion arg1) {
@@ -30,5 +31,6 @@ public class SemOps extends SintaxisAbstracta {
             throw new UnsupportedOperationException("exp " + op);
         }
     }
+
 
 }
