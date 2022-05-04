@@ -9,7 +9,7 @@ public class Not extends ExpresionUnaria {
     public Not(Expresion arg) { super(arg); }
 
     @Override
-    public void procesa(Procesador p) { this.procesa(p); }
+    public void procesa(Procesador p) { p.procesa(this); }
 
     @Override
     public int prioridad() { return 4; }

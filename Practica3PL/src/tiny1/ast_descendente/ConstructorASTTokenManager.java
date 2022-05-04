@@ -9,10 +9,10 @@ import tiny1.asint.nodos.expresiones.*;
 import tiny1.asint.nodos.expresiones.aritmeticas.*;
 import tiny1.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny1.asint.nodos.expresiones.booleanas.comparacion.*;
-import tiny1.asint.nodos.expresiones.tipos.*;
 import tiny1.asint.nodos.instrucciones.*;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
+import tiny1.asint.nodos.tipos.*;
 import tiny1.semops.SemOps;
 
 public class ConstructorASTTokenManager implements ConstructorASTConstants

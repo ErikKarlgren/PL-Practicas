@@ -5,7 +5,7 @@ import tiny1.asint.nodos.StringLocalizado;
 import tiny1.asint.nodos.declaraciones.DecVar;
 import tiny1.asint.nodos.declaraciones.Declaracion;
 import tiny1.asint.nodos.expresiones.Expresion;
-import tiny1.asint.nodos.expresiones.tipos.Tipo;
+import tiny1.asint.nodos.tipos.Tipo;
 
 public class SemOps extends SintaxisAbstracta {
 	public Expresion exp(String op, Expresion arg0, Expresion arg1) {
@@ -37,7 +37,7 @@ public class SemOps extends SintaxisAbstracta {
 		}
 	}
 
-	public Expresion exp(String op, Expresion arg0, String id) {
+	public Expresion acceso_registro(String op, Expresion arg0, String id) {
 		switch (op) {
 		case "->":
 			return flecha(arg0, id);
@@ -45,7 +45,6 @@ public class SemOps extends SintaxisAbstracta {
 			return punto(arg0, id);
 		default:
 			throw new UnsupportedOperationException("exp " + op);
-
 		}
 	}
 	

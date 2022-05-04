@@ -2,7 +2,7 @@ package tiny1.asint.nodos.campos;
 
 import tiny1.asint.nodos.Nodo;
 import tiny1.asint.nodos.StringLocalizado;
-import tiny1.asint.nodos.expresiones.tipos.Tipo;
+import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Procesador;
 
 public class Campo implements Nodo {

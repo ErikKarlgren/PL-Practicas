@@ -1,4 +1,4 @@
-package tiny1.asint.nodos.expresiones.tipos;
+package tiny1.asint.nodos.tipos;
 
 import tiny1.asint.nodos.StringLocalizado;
 import tiny1.procesamientos.Procesador;

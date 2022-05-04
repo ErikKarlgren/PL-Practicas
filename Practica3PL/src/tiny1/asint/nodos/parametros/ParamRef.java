@@ -1,6 +1,6 @@
 package tiny1.asint.nodos.parametros;
 
-import tiny1.asint.nodos.expresiones.tipos.Tipo;
+import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Procesador;
 
 public class ParamRef extends Parametro {

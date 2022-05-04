@@ -9,10 +9,10 @@ import tiny1.asint.nodos.expresiones.*;
 import tiny1.asint.nodos.expresiones.aritmeticas.*;
 import tiny1.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny1.asint.nodos.expresiones.booleanas.comparacion.*;
-import tiny1.asint.nodos.expresiones.tipos.*;
 import tiny1.asint.nodos.instrucciones.*;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
+import tiny1.asint.nodos.tipos.*;
 import tiny1.semops.SemOps;
 
 public class ConstructorAST implements ConstructorASTConstants {
@@ -215,23 +215,23 @@ public class ConstructorAST implements ConstructorASTConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case Int:
       t = jj_consume_token(Int);
-                                           {if (true) return sem.tipo(sem.str(t.image,t.beginLine,t.beginColumn));}
+                                           {if (true) return sem.tipo_nuevo(sem.str(t.image,t.beginLine,t.beginColumn));}
       break;
     case real:
       t = jj_consume_token(real);
-                                             {if (true) return sem.tipo(sem.str(t.image,t.beginLine,t.beginColumn));}
+                                             {if (true) return sem.tipo_nuevo(sem.str(t.image,t.beginLine,t.beginColumn));}
       break;
     case bool:
       t = jj_consume_token(bool);
-                                             {if (true) return sem.tipo(sem.str(t.image,t.beginLine,t.beginColumn));}
+                                             {if (true) return sem.tipo_nuevo(sem.str(t.image,t.beginLine,t.beginColumn));}
       break;
     case string:
       t = jj_consume_token(string);
-                                              {if (true) return sem.tipo(sem.str(t.image,t.beginLine,t.beginColumn));}
+                                              {if (true) return sem.tipo_nuevo(sem.str(t.image,t.beginLine,t.beginColumn));}
       break;
     case identificador:
       t = jj_consume_token(identificador);
-                                                     {if (true) return sem.tipo(sem.str(t.image,t.beginLine,t.beginColumn));}
+                                                     {if (true) return sem.tipo_nuevo(sem.str(t.image,t.beginLine,t.beginColumn));}
       break;
     case array:
       jj_consume_token(array);
@@ -371,7 +371,7 @@ public class ConstructorAST implements ConstructorASTConstants {
       e1 = Expresion();
       jj_consume_token(56);
       e2 = Expresion();
-                                                                      {if (true) return sem.instr(e1,e2);}
+                                                                      {if (true) return sem.instr_asig(e1,e2);}
       break;
     case If:
       jj_consume_token(If);
@@ -794,7 +794,7 @@ public class ConstructorAST implements ConstructorASTConstants {
     case 69:
       op = OP5();
       t = jj_consume_token(identificador);
-                                                                {if (true) return sem.exp(op,eh,t.image);}
+                                                                {if (true) return sem.acceso_registro(op,eh,t.image);}
       break;
     default:
       jj_la1[22] = jj_gen;
