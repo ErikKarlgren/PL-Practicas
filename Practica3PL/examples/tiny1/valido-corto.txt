@@ -1,0 +1,15 @@
+type record {
+    string nombre
+} tPersona;
+
+type pointer tPersona tPtr;
+
+var tPersona pers;
+var tPtr ptr
+
+&&
+
+*ptr = pers;
+
+write ptr;
+write pers.nombre
