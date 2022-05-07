@@ -1,11 +1,7 @@
 package tiny1.semops;
 
 import tiny1.asint.SintaxisAbstracta;
-import tiny1.asint.nodos.StringLocalizado;
-import tiny1.asint.nodos.declaraciones.DecVar;
-import tiny1.asint.nodos.declaraciones.Declaracion;
 import tiny1.asint.nodos.expresiones.Expresion;
-import tiny1.asint.nodos.tipos.Tipo;
 
 public class SemOps extends SintaxisAbstracta {
 	public Expresion exp(String op, Expresion arg0, Expresion arg1) {
