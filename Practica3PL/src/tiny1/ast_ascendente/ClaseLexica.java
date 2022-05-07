@@ -4,7 +4,7 @@
 // Wed Mar 23 20:22:21 CET 2022
 //----------------------------------------------------
 
-package tiny1.asint;
+package tiny1.ast_ascendente;
 
 /** CUP generated class containing symbol constants. */
 public class ClaseLexica {

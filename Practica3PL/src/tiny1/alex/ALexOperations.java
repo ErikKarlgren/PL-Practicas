@@ -1,6 +1,6 @@
 package tiny1.alex;
 
-import tiny1.asint.ClaseLexica;
+import tiny1.ast_ascendente.ClaseLexica;
 
 public class ALexOperations {
 	private AnalizadorLexicoTiny alex;

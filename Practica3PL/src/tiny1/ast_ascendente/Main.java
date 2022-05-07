@@ -1,4 +1,4 @@
-package tiny1.asint;
+package tiny1.ast_ascendente;
 
 import java.io.FileInputStream;
 import java.io.IOException;
