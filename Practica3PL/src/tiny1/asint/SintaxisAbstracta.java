@@ -6,6 +6,7 @@ import tiny1.asint.nodos.campos.*;
 import tiny1.asint.nodos.declaraciones.*;
 import tiny1.asint.nodos.expresiones.basicas.*;
 import tiny1.asint.nodos.expresiones.*;
+import tiny1.asint.nodos.expresiones.acceso_campo.*;
 import tiny1.asint.nodos.expresiones.aritmeticas.*;
 import tiny1.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny1.asint.nodos.expresiones.booleanas.comparacion.*;
@@ -51,7 +52,7 @@ public class SintaxisAbstracta {
     // Tipos
 
     // TODO: comentar con David
-    public Tipo tipo_nuevo(StringLocalizado id) { return new TipoNuevo(id); }
+    public Tipo tipo_nuevo(StringLocalizado nombre) { return new TipoNuevo(nombre); }
 
     public Tipo int_() { return new Int(); }
 
@@ -109,14 +110,9 @@ public class SintaxisAbstracta {
 
     public Instruccion instr_delete(Expresion exp) { return new InstruccionDelete(exp); }
 
-    public Instruccion instr_call(StringLocalizado str, ParamsReal p) { return new InstruccionCall(str, p); }
+    public Instruccion instr_call(StringLocalizado str, Expresiones p) { return new InstruccionCall(str, p); }
 
     public Instruccion instr_bloque(Bloque b) { return new InstruccionBloque(b); }
-
-    // public ParamsReal params_real_ninguna() { return new ParamsRealNinguna(); }
-
-    // public ParamsReal params_real_muchas(Expresiones exps) { return new
-    // ParamsRealMuchas(exps); }
 
     // Expresiones
 
@@ -144,7 +140,7 @@ public class SintaxisAbstracta {
 
     public Expresion false_() { return new False(); }
 
-    public Expresion nulo(StringLocalizado s) { return new Null(s); }
+    public Expresion nulo() { return new Null(); }
 
     public Expresion cadena(StringLocalizado s) { return new Cadena(s); }
 
@@ -160,6 +156,8 @@ public class SintaxisAbstracta {
 
     public Expresion porciento(Expresion e1, Expresion e2) { return new PorCiento(e1, e2); }
 
+    public Expresion menos(Expresion e1) { return new Menos(e1); }
+
     // Expresiones booleanas
 
     public Expresion mayor(Expresion e1, Expresion e2) { return new Mayor(e1, e2); }
@@ -173,8 +171,6 @@ public class SintaxisAbstracta {
     public Expresion igualcomp(Expresion e1, Expresion e2) { return new Igual(e1, e2); }
 
     public Expresion distinto(Expresion e1, Expresion e2) { return new Distinto(e1, e2); }
-
-    public Expresion menos(Expresion e1) { return new Menos(e1); }
 
     public Expresion and(Expresion e1, Expresion e2) { return new And(e1, e2); }
 

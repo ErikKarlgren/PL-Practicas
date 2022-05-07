@@ -7,6 +7,10 @@ import tiny1.asint.nodos.campos.*;
 import tiny1.asint.nodos.declaraciones.*;
 import tiny1.asint.nodos.expresiones.basicas.*;
 import tiny1.asint.nodos.expresiones.*;
+import tiny1.asint.nodos.expresiones.acceso_campo.AccesoArray;
+import tiny1.asint.nodos.expresiones.acceso_campo.Flecha;
+import tiny1.asint.nodos.expresiones.acceso_campo.Punto;
+import tiny1.asint.nodos.expresiones.acceso_campo.ValorPuntero;
 import tiny1.asint.nodos.expresiones.aritmeticas.*;
 import tiny1.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny1.asint.nodos.expresiones.booleanas.comparacion.*;
@@ -18,8 +22,11 @@ import tiny1.asint.nodos.tipos.*;
 public class Impresion implements Procesador {
 	private final PrintStream out;
 
+	private int indentLevel;
+
 	public Impresion(PrintStream out) {
 		this.out = out;
+		this.indentLevel = 0;
 	}
 
 	@Override
@@ -58,8 +65,9 @@ public class Impresion implements Procesador {
 
 	@Override
 	public void procesa(DecProc decProc) {
-		out.print("proc " + decProc.id());
+		out.print("proc " + decProc.id() + " (");
 		decProc.listaParams().procesa(this);
+		out.print(") ");
 		decProc.bloque().procesa(this);
 	}
 
@@ -213,19 +221,13 @@ public class Impresion implements Procesador {
 
 	@Override
 	public void procesa(ParamsSin parametros) {
-		out.print("()");
-	}
-
-	@Override
-	public void procesa(ParamsCon parametros) {
-		out.print("(");
-		parametros.listaParams().procesa(this);
-		out.print(")");
+		// no hacer nada
 	}
 
 	@Override
 	public void procesa(ParamValor parametro) {
 		parametro.tipo().procesa(this);
+		out.print(" ");
 		out.print(parametro.nombre());
 	}
 
@@ -288,6 +290,11 @@ public class Impresion implements Procesador {
 	}
 
 	@Override
+	public void procesa(TipoNuevo tipoNuevo) {
+		out.print(tipoNuevo.nombre());
+	}
+
+	@Override
 	public void procesa(Campo campo) {
 		campo.tipo().procesa(this);
 		out.print(" " + campo.nombre());
@@ -325,29 +332,33 @@ public class Impresion implements Procesador {
 	public void procesa(InstruccionIf instruccion) {
 		out.print("if ");
 		instruccion.expresion().procesa(this);
-		out.print(" then ");
+		out.println(" then");
 		instruccion.instruccionesOpt().procesa(this);
-		out.print(" endif");
+		out.println();
+		out.print("endif");
 	}
 
 	@Override
 	public void procesa(InstruccionIfElse instruccion) {
 		out.print("if ");
 		instruccion.expresion().procesa(this);
-		out.print(" then ");
+		out.println(" then");
 		instruccion.instruccionesOptIf().procesa(this);
-		out.print(" else ");
+		out.println();
+		out.print("else ");
 		instruccion.instruccionesOptElse().procesa(this);
-		out.print(" endif");
+		out.println();
+		out.print("endif");
 	}
 
 	@Override
 	public void procesa(InstruccionWhile instruccion) {
 		out.print("while ");
 		instruccion.expresion().procesa(this);
-		out.print(" do ");
+		out.println(" do");
 		instruccion.instruccionesOpt().procesa(this);
-		out.print(" endwhile ");
+		out.println();
+		out.print("endwhile");
 	}
 
 	@Override
@@ -381,25 +392,14 @@ public class Impresion implements Procesador {
 
 	@Override
 	public void procesa(InstruccionCall instruccion) {
-		out.print("call " + instruccion.funcion());
+		out.print("call " + instruccion.funcion() + "(");
 		instruccion.parametros().procesa(this);
+		out.print(")");
 	}
 
 	@Override
 	public void procesa(InstruccionBloque instrucciones) {
 		instrucciones.bloque().procesa(this);
-	}
-
-	@Override
-	public void procesa(ParamsRealNinguna parametrosReal) {
-		out.print("()");
-	}
-
-	@Override
-	public void procesa(ParamsRealMuchas parametrosReal) {
-		out.print("( ");
-		parametrosReal.expresiones().procesa(this);
-		out.print(")");
 	}
 
 	@Override
@@ -409,9 +409,15 @@ public class Impresion implements Procesador {
 
 	@Override
 	public void procesa(BloqueLleno bloques) {
-		out.print("{");
+		out.println("{");
 		bloques.programa().procesa(this);
+		out.println();
 		out.print("}");
+	}
+
+	@Override
+	public void procesa(ExpresionesNinguna expresiones) {
+		// no hace nada
 	}
 
 	@Override
@@ -435,7 +441,7 @@ public class Impresion implements Procesador {
 
 	@Override
 	public void procesa(Cadena cadena) {
-		out.print("\"" + cadena.cadena() + "\"");
+		out.print(cadena.cadena());
 	}
 
 	@Override

@@ -5,6 +5,10 @@ import tiny1.asint.nodos.campos.*;
 import tiny1.asint.nodos.declaraciones.*;
 import tiny1.asint.nodos.expresiones.basicas.*;
 import tiny1.asint.nodos.expresiones.*;
+import tiny1.asint.nodos.expresiones.acceso_campo.AccesoArray;
+import tiny1.asint.nodos.expresiones.acceso_campo.Flecha;
+import tiny1.asint.nodos.expresiones.acceso_campo.Punto;
+import tiny1.asint.nodos.expresiones.acceso_campo.ValorPuntero;
 import tiny1.asint.nodos.expresiones.aritmeticas.*;
 import tiny1.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny1.asint.nodos.expresiones.booleanas.comparacion.*;
@@ -34,8 +38,6 @@ public interface Procesador {
     // Parametros
 
     void procesa(ParamsSin parametros);
-
-    void procesa(ParamsCon parametros);
 
     void procesa(ParamValor parametro);
 
@@ -103,12 +105,6 @@ public interface Procesador {
 
     void procesa(InstruccionBloque instrucciones);
 
-    // Params Real
-
-    void procesa(ParamsRealNinguna parametrosReal);
-
-    void procesa(ParamsRealMuchas parametrosReal);
-
     // Bloques
 
     void procesa(BloqueVacio bloque);
@@ -116,6 +112,8 @@ public interface Procesador {
     void procesa(BloqueLleno bloques);
 
     // Expresiones
+
+    void procesa(ExpresionesNinguna expresiones);
 
     void procesa(ExpresionesUna expresiones);
 

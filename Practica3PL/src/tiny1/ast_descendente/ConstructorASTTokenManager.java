@@ -6,6 +6,7 @@ import tiny1.asint.nodos.campos.*;
 import tiny1.asint.nodos.declaraciones.*;
 import tiny1.asint.nodos.expresiones.basicas.*;
 import tiny1.asint.nodos.expresiones.*;
+import tiny1.asint.nodos.expresiones.acceso_campo.*;
 import tiny1.asint.nodos.expresiones.aritmeticas.*;
 import tiny1.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny1.asint.nodos.expresiones.booleanas.comparacion.*;

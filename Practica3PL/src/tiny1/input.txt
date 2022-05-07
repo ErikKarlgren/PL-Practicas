@@ -99,11 +99,12 @@ endwhile
 # Por tanto, los nombres se listan ordenados alfabéticamente,
 # y sin duplicados
 proc escribe_nombres(tArbol arbol) {
-if arbol != null then
-call escribe_nombres(arbol->izq);
-write arbol->nombre; nl;
-call escribe_nombres(arbol->der)
-endif
+    if arbol != null then
+        call escribe_nombres(arbol->izq);
+        write arbol->nombre;
+        nl;
+        call escribe_nombres(arbol->der)
+    endif
 } # Fin de procedimiento escribe_nombres
 &&
 # Programa principal

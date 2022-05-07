@@ -1,5 +1,7 @@
-package tiny1.asint.nodos.expresiones;
+package tiny1.asint.nodos.expresiones.acceso_campo;
 
+import tiny1.asint.nodos.expresiones.Expresion;
+import tiny1.asint.nodos.expresiones.ExpresionBinaria;
 import tiny1.procesamientos.Procesador;
 
 public class AccesoArray extends ExpresionBinaria {
