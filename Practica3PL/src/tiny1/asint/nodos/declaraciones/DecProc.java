@@ -1,6 +1,6 @@
 package tiny1.asint.nodos.declaraciones;
 
-import tiny1.asint.nodos.StringLocalizado;
+import tiny1.asint.StringLocalizado;
 import tiny1.asint.nodos.bloques.Bloque;
 import tiny1.asint.nodos.parametros.ListaParams;
 import tiny1.procesamientos.Procesador;

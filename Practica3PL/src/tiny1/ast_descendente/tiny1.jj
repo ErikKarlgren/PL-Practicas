@@ -216,9 +216,9 @@ Expresion ExpresionBasica()
   { t=<numeroEntero> { return sem.num_entero(sem.str(t.image,t.beginLine,t.beginColumn)); }
   | t=<numeroReal> { return sem.num_real(sem.str(t.image,t.beginLine,t.beginColumn)); }
   | t=<identificador>  { return sem.id(sem.str(t.image,t.beginLine,t.beginColumn)); }
-  | t=<True> { return sem.true_(); }
-  | t=<False> { return sem.false_(); }
-  | t=<Null> { return sem.nulo(); }
+  | <True> { return sem.true_(); }
+  | <False> { return sem.false_(); }
+  | <Null> { return sem.nulo(); }
   | t=<cadena> { return sem.cadena(sem.str(t.image,t.beginLine,t.beginColumn)); }}
 
 Expresion E0()

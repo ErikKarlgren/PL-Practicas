@@ -1,6 +1,6 @@
 package tiny1.alex;
 
-import errors.GestionErroresTiny;
+import tiny1.errors.GestionErroresTiny;
 
 %%
 %cup
