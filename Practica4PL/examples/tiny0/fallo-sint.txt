@@ -1,9 +1,0 @@
-real peso;
-bool pesado;   
-int num
-&&
-peso = (45.0 * 12E-56) / -2.05;
-pesado = (peso > 10.0) or (peso / 2 <= +0.0)
-true and (not false) 
-2 >= 1 < 65
-num 34
