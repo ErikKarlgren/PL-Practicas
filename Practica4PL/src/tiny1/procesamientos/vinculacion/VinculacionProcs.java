@@ -13,15 +13,19 @@ import tiny1.asint.nodos.instrucciones.*;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
+import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
 public class VinculacionProcs implements Procesador {
+    private final GestionErroresTiny err;
     private final TablaSimbolos tablaSimbolos;
     private final Vinculacion vinculacion;
     private final VinculacionDecs1 vinculacionDecs1;
     private final VinculacionDecs2 vinculacionDecs2;
 
-    public VinculacionProcs(TablaSimbolos tablaSimbolos, Vinculacion vinculacion, VinculacionDecs1 vinculacionDecs1, VinculacionDecs2 vinculacionDecs2) {
+    public VinculacionProcs(GestionErroresTiny err, TablaSimbolos tablaSimbolos,
+        Vinculacion vinculacion, VinculacionDecs1 vinculacionDecs1, VinculacionDecs2 vinculacionDecs2) {
+        this.err = err;
         this.tablaSimbolos = tablaSimbolos;
         this.vinculacion = vinculacion;
         this.vinculacionDecs1 = vinculacionDecs1;

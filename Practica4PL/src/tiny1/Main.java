@@ -9,12 +9,14 @@ import tiny1.alex.AnalizadorLexicoTiny;
 import tiny1.asint.nodos.programa.Programa;
 import tiny1.ast_descendente.ParseException;
 import tiny1.procesamientos.Impresion;
+import tiny1.procesamientos.vinculacion.Vinculacion;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
 		try {
 			Programa prog = crearPrograma(args);
 			prog.procesa(new Impresion(System.out));
+			prog.procesa(new Vinculacion());
 		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 			e.printStackTrace();

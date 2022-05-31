@@ -13,20 +13,22 @@ import tiny1.asint.nodos.instrucciones.*;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
+import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
 public class Vinculacion implements Procesador {
-
+    private final GestionErroresTiny err;
     private final TablaSimbolos tablaSimbolos;
     private final VinculacionDecs1 vinculacionDecs1;
     private final VinculacionDecs2 vinculacionDecs2;
     private final VinculacionProcs vinculacionProcs;
 
     public Vinculacion() {
+        this.err = new GestionErroresTiny();
         tablaSimbolos = new TablaSimbolos();
-        vinculacionDecs1 = new VinculacionDecs1(tablaSimbolos);
-        vinculacionDecs2 = new VinculacionDecs2(tablaSimbolos);
-        vinculacionProcs = new VinculacionProcs(tablaSimbolos, this, vinculacionDecs1, vinculacionDecs2);
+        vinculacionDecs1 = new VinculacionDecs1(err, tablaSimbolos);
+        vinculacionDecs2 = new VinculacionDecs2(err, tablaSimbolos);
+        vinculacionProcs = new VinculacionProcs(err, tablaSimbolos, this, vinculacionDecs1, vinculacionDecs2);
     }
 
     @Override
@@ -224,7 +226,9 @@ public class Vinculacion implements Procesador {
         if (tablaSimbolos.containsKey(nombreFuncion)) {
             instruccion.setVinculo(tablaSimbolos.get(nombreFuncion));
         } else {
-            throw new IllegalStateException("No se encontró la función " + nombreFuncion);
+            int fila = instruccion.funcion().fila();
+            int col = instruccion.funcion().col();
+            err.errorProcesamiento(String.format("(Fila %d, Col %d) La función %s no está definida\n", fila, col, nombreFuncion));
         }
         instruccion.parametros().procesa(this);
     }

@@ -14,18 +14,21 @@ import tiny1.asint.nodos.instrucciones.*;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
+import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
 public class VinculacionDecs1 implements Procesador {
+    private final GestionErroresTiny err;
     private final TablaSimbolos tablaSimbolos;
 
-    public VinculacionDecs1(TablaSimbolos tablaSimbolos) {
+    public VinculacionDecs1(GestionErroresTiny err, TablaSimbolos tablaSimbolos) {
+        this.err = err;
         this.tablaSimbolos = tablaSimbolos;
     }
 
     private void recolecta(String id, Nodo nodo) {
-        if (tablaSimbolos.containsKey(id)) {
-            throw new IllegalArgumentException("El identificador " + id + " ya está definido");
+        if (tablaSimbolos.declaracionDuplicada(id)) {
+            err.errorProcesamiento(String.format("El identificador %s ya está definido\n", id));
         }
         tablaSimbolos.put(id, nodo);
     }
@@ -48,6 +51,7 @@ public class VinculacionDecs1 implements Procesador {
     @Override
     public void procesa(DecsMuchas declaraciones) {
         declaraciones.declaraciones().procesa(this);
+        declaraciones.declaracion().procesa(this);
     }
 
     @Override
@@ -139,7 +143,7 @@ public class VinculacionDecs1 implements Procesador {
             tipoNuevo.setVinculo(nodo);
             // TODO: comprobar que nodo es un tipo
         } else {
-            throw new IllegalArgumentException("El tipo '" + tipoNuevo.nombre() + "' no está declarado");
+            err.errorProcesamiento(String.format("El tipo %s no está definido\n", tipoNuevo.nombre()));
         }
     }
 

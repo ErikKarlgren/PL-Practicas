@@ -13,12 +13,15 @@ import tiny1.asint.nodos.instrucciones.*;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
+import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
 public class VinculacionDecs2 implements Procesador {
+    private final GestionErroresTiny err;
     private final TablaSimbolos tablaSimbolos;
 
-    public VinculacionDecs2(TablaSimbolos tablaSimbolos) {
+    public VinculacionDecs2(GestionErroresTiny err, TablaSimbolos tablaSimbolos) {
+        this.err = err;
         this.tablaSimbolos = tablaSimbolos;
     }
 
@@ -117,7 +120,7 @@ public class VinculacionDecs2 implements Procesador {
             if (tablaSimbolos.containsKey(nombreTipo)) {
                 tipoNuevo.setVinculo(tablaSimbolos.get(nombreTipo));
             } else {
-                throw new IllegalArgumentException("El tipo " + nombreTipo + " no está declarado");
+                err.errorProcesamiento(String.format("El tipo %s no está definido", nombreTipo));
             }
         } else {
             tipo.tipoBase().procesa(this);

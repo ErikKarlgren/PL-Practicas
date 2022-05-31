@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import tiny1.asint.nodos.Nodo;
 
@@ -24,64 +25,82 @@ class TablaSimbolos implements Map<String, Nodo> {
         pila.pop();
     }
 
+    public boolean declaracionDuplicada(String id) {
+        return pila.peek().containsKey(id);
+    }
+
     @Override
     public Nodo get(Object key) {
-        return pila.peek().get(key);
+        return pila.stream()
+            .map(map -> map.get(key))
+            .filter(n -> n != null)
+            .findFirst()
+            .orElse(null);
     }
 
     @Override
     public boolean containsKey(Object key) {
-        return pila.peek().containsKey(key);
+        return pila.stream().anyMatch(map -> map.containsKey(key));
     }
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException();
+        pila.peek().clear();
     }
 
     @Override
     public boolean containsValue(Object arg0) {
-        throw new UnsupportedOperationException();
+        return pila.stream().anyMatch(map -> map.containsValue(arg0));
     }
 
     @Override
     public Set<Entry<String, Nodo>> entrySet() {
-        throw new UnsupportedOperationException();
+        return pila.stream()
+            .flatMap(map -> map.entrySet().stream())
+            .collect(Collectors.toSet());
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException();
+        return pila.stream().allMatch(map -> map.isEmpty());
     }
 
     @Override
     public Set<String> keySet() {
-        throw new UnsupportedOperationException();
+        return pila.stream()
+            .flatMap(map -> map.keySet().stream())
+            .collect(Collectors.toSet());
     }
 
     @Override
     public Nodo put(String arg0, Nodo arg1) {
-        throw new UnsupportedOperationException();
+        return pila.peek().put(arg0, arg1);
     }
 
     @Override
     public void putAll(Map<? extends String, ? extends Nodo> arg0) {
-        throw new UnsupportedOperationException();
+        pila.peek().putAll(arg0);
     }
 
     @Override
     public Nodo remove(Object arg0) {
-        throw new UnsupportedOperationException();
+        return pila.stream()
+            .map(map -> map.remove(arg0))
+            .filter(n -> n != null)
+            .findFirst()
+            .orElse(null);
     }
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return pila.stream().mapToInt(map -> map.size()).sum();
     }
 
     @Override
     public Collection<Nodo> values() {
-        throw new UnsupportedOperationException();
+        return pila.stream()
+            .flatMap(map -> map.values().stream())
+            .collect(Collectors.toSet());
     }
 
 }

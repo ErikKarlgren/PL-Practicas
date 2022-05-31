@@ -71,6 +71,8 @@ public class Impresion implements Procesador {
 		println();
 		println("&&");
 		programa.instrucciones().procesa(this);
+		if (indentLevel == 0)
+			println();
 	}
 
 	@Override
@@ -246,6 +248,8 @@ public class Impresion implements Procesador {
 	@Override
 	public void procesa(ProgramaSinDecs programa) {
 		programa.instrucciones().procesa(this);
+		if (indentLevel == 0)
+			println();
 	}
 
 	@Override
