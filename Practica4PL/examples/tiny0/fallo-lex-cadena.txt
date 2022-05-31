@@ -1,0 +1,4 @@
+real peso;
+bool pesado 
+
+"hola"
