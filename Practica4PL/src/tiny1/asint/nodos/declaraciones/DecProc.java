@@ -6,11 +6,11 @@ import tiny1.asint.nodos.parametros.ListaParams;
 import tiny1.procesamientos.Procesador;
 
 public class DecProc implements Declaracion {
-	
     private StringLocalizado string;
     private ListaParams listaParametros;
     private Bloque bloque;
-    public DecProc( StringLocalizado string, ListaParams lp, Bloque bloque) {
+
+    public DecProc(StringLocalizado string, ListaParams lp, Bloque bloque) {
         this.string = string;
         this.listaParametros=lp;
         this.bloque=bloque;

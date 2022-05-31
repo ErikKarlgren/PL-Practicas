@@ -1,12 +1,14 @@
 package tiny1.asint.nodos.instrucciones;
 
 import tiny1.asint.StringLocalizado;
+import tiny1.asint.nodos.Nodo;
 import tiny1.asint.nodos.expresiones.Expresiones;
 import tiny1.procesamientos.Procesador;
 
 public class InstruccionCall implements Instruccion {
     private StringLocalizado funcion;
     private Expresiones parametros;
+    private Nodo vinculo;
 
     public InstruccionCall(StringLocalizado funcion, Expresiones parametros) {
         this.funcion = funcion;
@@ -19,4 +21,10 @@ public class InstruccionCall implements Instruccion {
 
     @Override
     public void procesa(Procesador p) { p.procesa(this); }
+
+    @Override
+    public Nodo vinculo() { return vinculo; }
+
+    @Override
+    public void setVinculo(Nodo vinculo) { this.vinculo = vinculo; }
 }

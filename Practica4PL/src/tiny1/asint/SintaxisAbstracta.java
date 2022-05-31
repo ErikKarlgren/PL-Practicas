@@ -1,6 +1,5 @@
 package tiny1.asint;
 
-import tiny1.asint.nodos.*;
 import tiny1.asint.nodos.bloques.*;
 import tiny1.asint.nodos.campos.*;
 import tiny1.asint.nodos.declaraciones.*;
@@ -51,7 +50,6 @@ public class SintaxisAbstracta {
 
     // Tipos
 
-    // TODO: comentar con David
     public Tipo tipo_nuevo(StringLocalizado nombre) { return new TipoNuevo(nombre); }
 
     public Tipo int_() { return new Int(); }
