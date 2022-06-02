@@ -58,5 +58,4 @@ class RefExc implements ProcesadorConRetorno<Tipo> {
     public void procesa(TipoNuevo tipoNuevo) {
         tipoNuevo.vinculo().procesa(this);
     }
-
 }

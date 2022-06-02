@@ -1124,6 +1124,4 @@ public class AnalizadorLexicoTiny implements java_cup.runtime.Scanner {
       }
     }
   }
-
-
 }

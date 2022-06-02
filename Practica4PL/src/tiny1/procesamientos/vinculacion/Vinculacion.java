@@ -304,5 +304,4 @@ public class Vinculacion implements Procesador {
     public void procesa(ValorPuntero valorPuntero) {
         valorPuntero.arg().procesa(this);
     }
-
 }

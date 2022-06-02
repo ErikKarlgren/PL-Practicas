@@ -102,5 +102,4 @@ class TablaSimbolos implements Map<String, Nodo> {
                 .flatMap(map -> map.values().stream())
                 .collect(Collectors.toSet());
     }
-
 }

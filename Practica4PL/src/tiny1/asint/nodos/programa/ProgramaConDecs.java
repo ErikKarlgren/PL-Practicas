@@ -12,9 +12,12 @@ public class ProgramaConDecs extends Programa {
         this.declaraciones = declaraciones;
     }
 
-    public Declaraciones declaraciones() { return declaraciones; }
+    public Declaraciones declaraciones() {
+        return declaraciones;
+    }
 
     @Override
-    public void procesa(Procesador p) { p.procesa(this); }
-
+    public void procesa(Procesador p) {
+        p.procesa(this);
+    }
 }

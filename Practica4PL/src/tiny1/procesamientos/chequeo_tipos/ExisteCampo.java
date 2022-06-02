@@ -33,5 +33,4 @@ class ExisteCampo implements ProcesadorConRetorno<Boolean> {
         campos.campos().procesa(this);
         campos.campo().procesa(this);
     }
-
 }

@@ -9,5 +9,4 @@ class TipoOk extends Tipo {
     public void procesa(Procesador p) {
         throw new UnsupportedOperationException("No procesable");
     }
-
 }

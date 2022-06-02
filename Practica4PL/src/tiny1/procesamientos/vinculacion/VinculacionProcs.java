@@ -52,5 +52,4 @@ public class VinculacionProcs implements Procesador {
 
         tablaSimbolos.cerrarNivel();
     }
-
 }

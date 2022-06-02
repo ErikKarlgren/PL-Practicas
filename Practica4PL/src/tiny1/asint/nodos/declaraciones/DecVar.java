@@ -26,5 +26,4 @@ public class DecVar extends Declaracion {
     public void procesa(Procesador p) {
         p.procesa(this);
     }
-
 }

@@ -492,7 +492,6 @@ public class AnalizadorSintacticoTiny extends java_cup.runtime.lr_parser {
    public void syntax_error(Symbol unidadLexica) {
      errores.errorSintactico((UnidadLexica)unidadLexica);
    }
-
 }
 
 /** Cup generated class to encapsulate user supplied action code.*/

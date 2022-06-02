@@ -49,5 +49,4 @@ public class Main {
 		tiny1.ast_descendente.ConstructorAST constructorast = new tiny1.ast_descendente.ConstructorAST(input);
 		return constructorast.ProgramaP();
 	}
-
 }

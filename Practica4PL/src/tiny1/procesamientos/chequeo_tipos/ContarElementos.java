@@ -90,5 +90,4 @@ class ContarElementos implements ProcesadorConRetorno<Integer> {
         expresiones.expresiones().procesa(this);
         contador++;
     }
-
 }

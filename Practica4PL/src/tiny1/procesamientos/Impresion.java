@@ -524,5 +524,4 @@ public class Impresion implements Procesador {
 		print("*");
 		valorPuntero.arg().procesa(this);
 	}
-
 }

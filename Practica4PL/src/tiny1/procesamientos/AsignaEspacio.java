@@ -360,5 +360,4 @@ public class AsignaEspacio implements Procesador {
     public void procesa(ValorPuntero valorPuntero) {
         throw new UnsupportedOperationException();
     }
-
 }

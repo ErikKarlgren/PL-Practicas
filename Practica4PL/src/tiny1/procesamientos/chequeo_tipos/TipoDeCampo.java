@@ -35,5 +35,4 @@ class TipoDeCampo implements ProcesadorConRetorno<Tipo> {
         campos.campos().procesa(this);
         campos.campo().procesa(this);
     }
-
 }

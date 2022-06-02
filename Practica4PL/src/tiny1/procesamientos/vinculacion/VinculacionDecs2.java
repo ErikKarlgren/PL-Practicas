@@ -133,5 +133,4 @@ public class VinculacionDecs2 implements Procesador {
         campos.campos().procesa(this);
         campos.campo().procesa(this);
     }
-
 }

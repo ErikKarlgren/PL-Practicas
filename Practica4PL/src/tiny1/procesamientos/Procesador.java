@@ -315,5 +315,4 @@ public interface Procesador {
     default void procesa(ValorPuntero valorPuntero) {
         throw new UnsupportedOperationException();
     }
-
 }
