@@ -24,6 +24,9 @@ public class ChequeoTipos implements Procesador {
         this.err = err;
     }
 
+    public boolean foundErrors() {
+        return err.foundError();
+    }
 
     /* Métodos privados */
 
@@ -56,7 +59,6 @@ public class ChequeoTipos implements Procesador {
     private boolean sonCompatibles(Tipo tipo1, Tipo tipo2) {
         throw new UnsupportedOperationException("son compatibles");
     }
-
 
     /* Métodos del procesador */
 

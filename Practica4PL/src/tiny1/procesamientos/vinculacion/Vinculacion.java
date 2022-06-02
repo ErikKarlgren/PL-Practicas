@@ -27,6 +27,10 @@ public class Vinculacion implements Procesador {
         vinculacionProcs = new VinculacionProcs(err, tablaSimbolos, this, vinculacionDecs1, vinculacionDecs2);
     }
 
+    public boolean foundErrors() {
+        return err.foundError();
+    }
+
     @Override
     public void procesa(ProgramaConDecs programa) {
         programa.declaraciones().procesa(vinculacionDecs1);
