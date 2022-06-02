@@ -17,4 +17,8 @@ public interface Nodo {
     public void setTipo(Tipo tipo);
 
     public Tipo getTipo();
+
+    default public boolean esTipo() {
+        return false;
+    }
 }

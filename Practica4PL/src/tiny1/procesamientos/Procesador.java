@@ -16,166 +16,304 @@ import tiny1.asint.nodos.tipos.*;
 
 public interface Procesador {
 
-    void procesa(ProgramaConDecs programa);
+    default void procesa(ProgramaConDecs programa) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(ProgramaSinDecs programa);
+    default void procesa(ProgramaSinDecs programa) {
+        throw new UnsupportedOperationException();
+    }
 
     // Declaraciones
 
-    void procesa(DecsUna declaraciones);
+    default void procesa(DecsUna declaraciones) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(DecsMuchas declaraciones);
+    default void procesa(DecsMuchas declaraciones) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(DecType decType);
+    default void procesa(DecType decType) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(DecVar decVar);
+    default void procesa(DecVar decVar) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(DecProc decProc);
+    default void procesa(DecProc decProc) {
+        throw new UnsupportedOperationException();
+    }
 
     // Parametros
 
-    void procesa(ParamsSin parametros);
+    default void procesa(ParamsSin parametros) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(ParamValor parametro);
+    default void procesa(ParamValor parametro) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(ParamRef parametro);
+    default void procesa(ParamRef parametro) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(ListaParamsUno listaParametros);
+    default void procesa(ListaParamsUno listaParametros) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(ListaParamsMuchos listaParametros);
+    default void procesa(ListaParamsMuchos listaParametros) {
+        throw new UnsupportedOperationException();
+    }
 
     // Tipos
 
-    void procesa(TInt tipo);
+    default void procesa(TInt tipo) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(TReal tipo);
+    default void procesa(TReal tipo) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(TString tipo);
+    default void procesa(TString tipo) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(TBool tipo);
+    default void procesa(TBool tipo) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(TipoArray tipo);
+    default void procesa(TipoArray tipo) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(TipoPointer tipo);
+    default void procesa(TipoPointer tipo) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(TipoRecord tipo);
+    default void procesa(TipoRecord tipo) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(TipoNuevo tipoNuevo);
+    default void procesa(TipoNuevo tipoNuevo) {
+        throw new UnsupportedOperationException();
+    }
 
     // Campos
 
-    void procesa(Campo campo);
+    default void procesa(Campo campo) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(CamposUno campos);
+    default void procesa(CamposUno campos) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(CamposMuchos campos);
+    default void procesa(CamposMuchos campos) {
+        throw new UnsupportedOperationException();
+    }
 
     // instrucciones
 
-    void procesa(InstrUna instrucciones);
+    default void procesa(InstrUna instrucciones) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstrMuchas instrucciones);
+    default void procesa(InstrMuchas instrucciones) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstrAsignacion instruccion);
+    default void procesa(InstrAsignacion instruccion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstrOptNinguna instruccionOpt);
+    default void procesa(InstrOptNinguna instruccionOpt) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstrOptMuchas instruccionesOpt);
+    default void procesa(InstrOptMuchas instruccionesOpt) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstruccionIf instruccion);
+    default void procesa(InstruccionIf instruccion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstruccionIfElse instruccion);
+    default void procesa(InstruccionIfElse instruccion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstruccionWhile instruccion);
+    default void procesa(InstruccionWhile instruccion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstruccionRead instruccion);
+    default void procesa(InstruccionRead instruccion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstruccionWrite instruccion);
+    default void procesa(InstruccionWrite instruccion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstruccionNL instruccion);
+    default void procesa(InstruccionNL instruccion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstruccionNew instruccion);
+    default void procesa(InstruccionNew instruccion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstruccionDelete instruccion);
+    default void procesa(InstruccionDelete instruccion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstruccionCall instruccion);
+    default void procesa(InstruccionCall instruccion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(InstruccionBloque instrucciones);
+    default void procesa(InstruccionBloque instrucciones) {
+        throw new UnsupportedOperationException();
+    }
 
     // Bloques
 
-    void procesa(BloqueVacio bloque);
+    default void procesa(BloqueVacio bloque) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(BloqueLleno bloques);
+    default void procesa(BloqueLleno bloques) {
+        throw new UnsupportedOperationException();
+    }
 
     // Expresiones
 
-    void procesa(ExpresionesNinguna expresiones);
+    default void procesa(ExpresionesNinguna expresiones) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(ExpresionesUna expresiones);
+    default void procesa(ExpresionesUna expresiones) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(ExpresionesMuchas expresiones);
+    default void procesa(ExpresionesMuchas expresiones) {
+        throw new UnsupportedOperationException();
+    }
 
     // Expresiones aritméticas
 
-    void procesa(Suma suma);
+    default void procesa(Suma suma) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Resta resta);
+    default void procesa(Resta resta) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Multiplicacion multiplicacion);
+    default void procesa(Multiplicacion multiplicacion) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Division division);
+    default void procesa(Division division) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(PorCiento porCiento);
+    default void procesa(PorCiento porCiento) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Menos menos);
+    default void procesa(Menos menos) {
+        throw new UnsupportedOperationException();
+    }
 
     // Expresiones básicas
 
-    void procesa(NumeroEntero numero);
+    default void procesa(NumeroEntero numero) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(NumeroReal numero);
+    default void procesa(NumeroReal numero) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Identificador identificador);
+    default void procesa(Identificador identificador) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(True booleanoTrue);
+    default void procesa(True booleanoTrue) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(False booleanoFalse);
+    default void procesa(False booleanoFalse) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Null nulo);
+    default void procesa(Null nulo) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Cadena cadena);
+    default void procesa(Cadena cadena) {
+        throw new UnsupportedOperationException();
+    }
 
     // Expresiones lógicas
 
-    void procesa(And and);
+    default void procesa(And and) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Or or);
+    default void procesa(Or or) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Not not);
+    default void procesa(Not not) {
+        throw new UnsupportedOperationException();
+    }
 
     // Expresiones comparativas
 
-    void procesa(Menor menor);
+    default void procesa(Menor menor) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(MenorIgual menorIgual);
+    default void procesa(MenorIgual menorIgual) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Mayor mayor);
+    default void procesa(Mayor mayor) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(MayorIgual mayorIgual);
+    default void procesa(MayorIgual mayorIgual) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Igual igual);
+    default void procesa(Igual igual) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Distinto distinto);
+    default void procesa(Distinto distinto) {
+        throw new UnsupportedOperationException();
+    }
 
     // Expresiones de acceso a campos
 
-    void procesa(AccesoArray accesoArray);
+    default void procesa(AccesoArray accesoArray) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Punto punto);
+    default void procesa(Punto punto) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(Flecha flecha);
+    default void procesa(Flecha flecha) {
+        throw new UnsupportedOperationException();
+    }
 
-    void procesa(ValorPuntero valorPuntero);
+    default void procesa(ValorPuntero valorPuntero) {
+        throw new UnsupportedOperationException();
+    }
 
 }

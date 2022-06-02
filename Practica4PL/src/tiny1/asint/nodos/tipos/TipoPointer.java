@@ -11,4 +11,12 @@ public class TipoPointer implements Tipo {
 
     @Override
     public void procesa(Procesador p) { p.procesa(this); }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!this.getClass().equals(obj.getClass()))
+            return false;
+        TipoPointer otro = (TipoPointer) obj;
+        return this.tipoBase.equals(otro.tipoBase);
+    }
 }

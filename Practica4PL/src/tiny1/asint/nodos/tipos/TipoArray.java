@@ -23,4 +23,17 @@ public class TipoArray implements Tipo {
 
     @Override
     public void procesa(Procesador p) { p.procesa(this); }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!this.getClass().equals(obj.getClass()))
+            return false;
+        TipoArray otro = (TipoArray) obj;
+        return this.tipoBase.equals(otro.tipoBase) && this.longitud == otro.longitud;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("array [%d] of %s", longitud, tipoBase);
+    }
 }

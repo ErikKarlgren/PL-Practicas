@@ -12,4 +12,16 @@ public class TipoRecord implements Tipo {
 
     @Override
     public void procesa(Procesador p) { p.procesa(this); }
+
+    public boolean equals(Object obj) {
+        if (!this.getClass().equals(obj.getClass()))
+            return false;
+        TipoRecord otro = (TipoRecord) obj;
+        return this.campos == otro.campos;
+    }
+
+    @Override
+    public String toString() {
+        return "record (y campos)";
+    }
 }

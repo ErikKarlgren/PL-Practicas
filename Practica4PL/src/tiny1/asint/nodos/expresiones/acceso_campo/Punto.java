@@ -22,4 +22,9 @@ public class Punto implements Expresion {
 
     @Override
     public void procesa(Procesador p) { p.procesa(this); }
+
+    @Override
+    public boolean esDesignador() {
+        return true;
+    }
 }

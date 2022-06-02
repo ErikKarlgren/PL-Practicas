@@ -235,7 +235,9 @@ public class Vinculacion implements Procesador {
 
     @Override
     public void procesa(InstruccionBloque instrucciones) {
+        tablaSimbolos.abrirNivel();
         instrucciones.bloque().procesa(this);
+        tablaSimbolos.cerrarNivel();
     }
 
     @Override
@@ -245,9 +247,7 @@ public class Vinculacion implements Procesador {
 
     @Override
     public void procesa(BloqueLleno bloque) {
-        tablaSimbolos.abrirNivel();
         bloque.programa().procesa(this);
-        tablaSimbolos.cerrarNivel();
     }
 
     @Override
