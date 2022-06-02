@@ -10,13 +10,18 @@ public class NumeroEntero extends ExpresionBasica {
         try {
             Integer.parseInt(num.toString());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("El valor de la expresion entera debe ser un numero entero pero fue '" + num + "'");
+            throw new IllegalArgumentException(
+                    "El valor de la expresion entera debe ser un numero entero pero fue '" + num + "'");
         }
         this.num = num;
     }
 
-    public StringLocalizado num() { return num; }
+    public StringLocalizado num() {
+        return num;
+    }
 
     @Override
-    public void procesa(Procesador p) { p.procesa(this); }
+    public void procesa(Procesador p) {
+        p.procesa(this);
+    }
 }

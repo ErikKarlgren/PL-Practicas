@@ -4,21 +4,26 @@ import tiny1.asint.StringLocalizado;
 import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Procesador;
 
-public class DecType implements Declaracion{
+public class DecType extends Declaracion {
 
-    private Tipo tipo;
-    private StringLocalizado string;
+    private final Tipo tipo;
+    private final StringLocalizado string;
 
     public DecType(Tipo tipo, StringLocalizado string) {
         this.tipo = tipo;
         this.string = string;
     }
 
-    public Tipo tipo() { return tipo; }
+    public Tipo tipo() {
+        return tipo;
+    }
 
-    public StringLocalizado id() { return string; }
+    public StringLocalizado id() {
+        return string;
+    }
 
     @Override
-    public void procesa(Procesador p) { p.procesa(this); }
-
+    public void procesa(Procesador p) {
+        p.procesa(this);
+    }
 }

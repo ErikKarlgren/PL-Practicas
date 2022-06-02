@@ -3,7 +3,7 @@ package tiny1.asint.nodos.parametros;
 import tiny1.asint.nodos.Nodo;
 import tiny1.asint.nodos.tipos.Tipo;
 
-public abstract class Parametro implements Nodo {
+public abstract class Parametro extends Nodo {
     protected Tipo tipo;
     protected String nombre;
 

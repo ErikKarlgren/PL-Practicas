@@ -17,8 +17,9 @@ import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
 
 public class Impresion implements Procesador {
-	private final PrintStream out;
+	private static final int INDENT_SIZE = 4;
 
+	private final PrintStream out;
 	private int indentLevel;
 
 	public Impresion(PrintStream out) {
@@ -37,7 +38,7 @@ public class Impresion implements Procesador {
 	}
 
 	private String indentacion() {
-		return " ".repeat(4 * indentLevel);
+		return " ".repeat(INDENT_SIZE * indentLevel);
 	}
 
 	private void indentar() {

@@ -4,7 +4,7 @@ import tiny1.asint.StringLocalizado;
 import tiny1.asint.nodos.Nodo;
 import tiny1.procesamientos.Procesador;
 
-public class TipoNuevo implements Tipo {
+public class TipoNuevo extends Tipo {
     private StringLocalizado nombre;
     private Nodo vinculo;
 

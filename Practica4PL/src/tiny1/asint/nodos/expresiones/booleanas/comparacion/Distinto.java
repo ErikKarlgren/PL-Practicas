@@ -9,5 +9,7 @@ public class Distinto extends ExpresionComparativa {
     }
 
     @Override
-    public void procesa(Procesador p) { p.procesa(this); }
+    public void procesa(Procesador p) {
+        p.procesa(this);
+    }
 }

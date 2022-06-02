@@ -2,7 +2,7 @@ package tiny1.asint.nodos.parametros;
 
 import tiny1.procesamientos.Procesador;
 
-public class ListaParamsMuchos implements ListaParams {
+public class ListaParamsMuchos extends ListaParams {
     private ListaParams listaParametros;
     private Parametro parametro;
 

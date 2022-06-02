@@ -4,8 +4,12 @@ import tiny1.asint.nodos.expresiones.Expresion;
 import tiny1.procesamientos.Procesador;
 
 public class MenorIgual extends ExpresionComparativa {
-    public MenorIgual(Expresion arg0, Expresion arg1) { super(arg0, arg1); }
+    public MenorIgual(Expresion arg0, Expresion arg1) {
+        super(arg0, arg1);
+    }
 
     @Override
-    public void procesa(Procesador p) { p.procesa(this); }
+    public void procesa(Procesador p) {
+        p.procesa(this);
+    }
 }

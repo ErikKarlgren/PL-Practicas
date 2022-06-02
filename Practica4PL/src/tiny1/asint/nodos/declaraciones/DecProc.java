@@ -2,14 +2,14 @@ package tiny1.asint.nodos.declaraciones;
 
 import tiny1.asint.StringLocalizado;
 import tiny1.asint.nodos.bloques.Bloque;
-import tiny1.asint.nodos.instrucciones.Instrucciones;
 import tiny1.asint.nodos.parametros.ListaParams;
 import tiny1.procesamientos.Procesador;
 
-public class DecProc implements Declaracion {
-    private StringLocalizado string;
-    private ListaParams listaParametros;
-    private Bloque bloque;
+public class DecProc extends Declaracion {
+
+    private final StringLocalizado string;
+    private final ListaParams listaParametros;
+    private final Bloque bloque;
 
     public DecProc(StringLocalizado string, ListaParams lp, Bloque bloque) {
         this.string = string;

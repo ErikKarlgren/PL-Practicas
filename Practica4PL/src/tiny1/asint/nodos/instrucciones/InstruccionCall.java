@@ -5,9 +5,10 @@ import tiny1.asint.nodos.Nodo;
 import tiny1.asint.nodos.expresiones.Expresiones;
 import tiny1.procesamientos.Procesador;
 
-public class InstruccionCall implements Instruccion {
-    private StringLocalizado funcion;
-    private Expresiones parametros;
+public class InstruccionCall extends Instruccion {
+
+    private final StringLocalizado funcion;
+    private final Expresiones parametros;
     private Nodo vinculo;
 
     public InstruccionCall(StringLocalizado funcion, Expresiones parametros) {
@@ -15,16 +16,26 @@ public class InstruccionCall implements Instruccion {
         this.parametros = parametros;
     }
 
-    public StringLocalizado funcion() { return funcion; }
+    public StringLocalizado funcion() {
+        return funcion;
+    }
 
-    public Expresiones parametros() { return parametros; }
-
-    @Override
-    public void procesa(Procesador p) { p.procesa(this); }
-
-    @Override
-    public Nodo vinculo() { return vinculo; }
+    public Expresiones parametros() {
+        return parametros;
+    }
 
     @Override
-    public void setVinculo(Nodo vinculo) { this.vinculo = vinculo; }
+    public void procesa(Procesador p) {
+        p.procesa(this);
+    }
+
+    @Override
+    public Nodo vinculo() {
+        return vinculo;
+    }
+
+    @Override
+    public void setVinculo(Nodo vinculo) {
+        this.vinculo = vinculo;
+    }
 }

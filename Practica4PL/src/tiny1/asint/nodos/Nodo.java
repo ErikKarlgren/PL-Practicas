@@ -3,22 +3,31 @@ package tiny1.asint.nodos;
 import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Procesador;
 
-public interface Nodo {
-    public void procesa(Procesador p);
+public abstract class Nodo {
+    private Tipo tipo;
 
-    default public Nodo vinculo() {
-        throw new UnsupportedOperationException();
+    public abstract void procesa(Procesador p);
+
+    public Nodo vinculo() {
+        throw new UnsupportedOperationException("Este nodo no puede tener un vínculo");
     }
 
-    default public void setVinculo(Nodo nodo) {
-        throw new UnsupportedOperationException();
+    public void setVinculo(Nodo nodo) {
+        throw new UnsupportedOperationException("Este nodo no puede tener un vínculo");
     }
 
-    public void setTipo(Tipo tipo);
+    public void setTipo(Tipo tipo) {
+        if (tipo != null) {
+            throw new IllegalStateException("No se puede cambiar el tipo de un nodo que ya tiene tipo");
+        }
+        this.tipo = tipo;
+    }
 
-    public Tipo getTipo();
+    final public Tipo getTipo() {
+        return tipo;
+    }
 
-    default public boolean esTipo() {
+    public boolean esTipo() {
         return false;
     }
 }

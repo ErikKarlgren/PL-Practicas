@@ -4,14 +4,18 @@ import tiny1.asint.StringLocalizado;
 import tiny1.procesamientos.Procesador;
 
 public class Cadena extends ExpresionBasica {
-    private StringLocalizado string;
+    private final StringLocalizado string;
 
     public Cadena(StringLocalizado cadena) {
         this.string = cadena;
     }
 
-    public StringLocalizado cadena() { return string; }
+    public StringLocalizado cadena() {
+        return string;
+    }
 
     @Override
-    public void procesa(Procesador p) { p.procesa(this); }
+    public void procesa(Procesador p) {
+        p.procesa(this);
+    }
 }

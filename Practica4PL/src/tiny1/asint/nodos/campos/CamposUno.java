@@ -2,13 +2,20 @@ package tiny1.asint.nodos.campos;
 
 import tiny1.procesamientos.Procesador;
 
-public class CamposUno implements Campos {
-    private Campo campo;
+public class CamposUno extends Campos {
 
-    public CamposUno(Campo campo) { this.campo = campo; }
+    private final Campo campo;
 
-    public Campo campo() { return campo; }
+    public CamposUno(Campo campo) {
+        this.campo = campo;
+    }
+
+    public Campo campo() {
+        return campo;
+    }
 
     @Override
-    public void procesa(Procesador p) { p.procesa(this); }
+    public void procesa(Procesador p) {
+        p.procesa(this);
+    }
 }

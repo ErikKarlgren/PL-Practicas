@@ -6,11 +6,12 @@ import tiny1.procesamientos.Procesador;
 
 public class Not extends ExpresionUnaria {
 
-    public Not(Expresion arg) { super(arg); }
+    public Not(Expresion arg) {
+        super(4, arg);
+    }
 
     @Override
-    public void procesa(Procesador p) { p.procesa(this); }
-
-    @Override
-    public int prioridad() { return 4; }
+    public void procesa(Procesador p) {
+        p.procesa(this);
+    }
 }

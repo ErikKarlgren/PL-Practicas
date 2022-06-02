@@ -3,7 +3,7 @@ package tiny1.asint.nodos.tipos;
 import tiny1.asint.nodos.campos.Campos;
 import tiny1.procesamientos.Procesador;
 
-public class TipoRecord implements Tipo {
+public class TipoRecord extends Tipo {
     private Campos campos;
 
     public TipoRecord(Campos campos) { this.campos = campos; }

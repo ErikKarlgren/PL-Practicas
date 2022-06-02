@@ -2,7 +2,7 @@ package tiny1.asint.nodos.tipos;
 
 import tiny1.procesamientos.Procesador;
 
-public class TNull implements Tipo {
+public class TNull extends Tipo {
     @Override
     public void procesa(Procesador p) {
         throw new UnsupportedOperationException("No se puede procesar TNull");

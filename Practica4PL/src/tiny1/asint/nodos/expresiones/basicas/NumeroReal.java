@@ -10,13 +10,18 @@ public class NumeroReal extends ExpresionBasica {
         try {
             Double.parseDouble(num.toString());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("El valor de la expresion real debe ser un numero real pero fue '" + num + "'");
+            throw new IllegalArgumentException(
+                    "El valor de la expresion real debe ser un numero real pero fue '" + num + "'");
         }
         this.num = num;
     }
 
-    public StringLocalizado num() { return num; }
+    public StringLocalizado num() {
+        return num;
+    }
 
     @Override
-    public void procesa(Procesador p) { p.procesa(this); }
+    public void procesa(Procesador p) {
+        p.procesa(this);
+    }
 }
