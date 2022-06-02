@@ -15,304 +15,305 @@ import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
 
 public interface Procesador {
+    static final RuntimeException NO_IMPLEMENTADA = new UnsupportedOperationException("Procesamiento no implementado");
 
     default void procesa(ProgramaConDecs programa) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(ProgramaSinDecs programa) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Declaraciones
 
     default void procesa(DecsUna declaraciones) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(DecsMuchas declaraciones) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(DecType decType) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(DecVar decVar) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(DecProc decProc) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Parametros
 
     default void procesa(ParamsSin parametros) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(ParamValor parametro) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(ParamRef parametro) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(ListaParamsUno listaParametros) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(ListaParamsMuchos listaParametros) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Tipos
 
     default void procesa(TInt tipo) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(TReal tipo) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(TString tipo) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(TBool tipo) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(TipoArray tipo) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(TipoPointer tipo) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(TipoRecord tipo) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(TipoNuevo tipoNuevo) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Campos
 
     default void procesa(Campo campo) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(CamposUno campos) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(CamposMuchos campos) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // instrucciones
 
     default void procesa(InstrUna instrucciones) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstrMuchas instrucciones) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstrAsignacion instruccion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstrOptNinguna instruccionOpt) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstrOptMuchas instruccionesOpt) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstruccionIf instruccion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstruccionIfElse instruccion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstruccionWhile instruccion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstruccionRead instruccion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstruccionWrite instruccion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstruccionNL instruccion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstruccionNew instruccion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstruccionDelete instruccion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstruccionCall instruccion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(InstruccionBloque instrucciones) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Bloques
 
     default void procesa(BloqueVacio bloque) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(BloqueLleno bloques) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Expresiones
 
     default void procesa(ExpresionesNinguna expresiones) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(ExpresionesUna expresiones) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(ExpresionesMuchas expresiones) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Expresiones aritméticas
 
     default void procesa(Suma suma) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Resta resta) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Multiplicacion multiplicacion) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Division division) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(PorCiento porCiento) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Menos menos) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Expresiones básicas
 
     default void procesa(NumeroEntero numero) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(NumeroReal numero) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Identificador identificador) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(True booleanoTrue) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(False booleanoFalse) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Null nulo) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Cadena cadena) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Expresiones lógicas
 
     default void procesa(And and) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Or or) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Not not) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Expresiones comparativas
 
     default void procesa(Menor menor) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(MenorIgual menorIgual) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Mayor mayor) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(MayorIgual mayorIgual) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Igual igual) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Distinto distinto) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     // Expresiones de acceso a campos
 
     default void procesa(AccesoArray accesoArray) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Punto punto) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(Flecha flecha) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 
     default void procesa(ValorPuntero valorPuntero) {
-        throw new UnsupportedOperationException();
+        throw NO_IMPLEMENTADA;
     }
 }
