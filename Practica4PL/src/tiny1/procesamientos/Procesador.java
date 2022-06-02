@@ -46,13 +46,13 @@ public interface Procesador {
 
     // Tipos
 
-    void procesa(Int tipo);
+    void procesa(TInt tipo);
 
-    void procesa(Real tipo);
+    void procesa(TReal tipo);
 
     void procesa(TString tipo);
 
-    void procesa(Bool tipo);
+    void procesa(TBool tipo);
 
     void procesa(TipoArray tipo);
 

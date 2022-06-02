@@ -1,5 +1,6 @@
 package tiny1.asint.nodos;
 
+import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Procesador;
 
 public interface Nodo {
@@ -12,4 +13,8 @@ public interface Nodo {
     default public void setVinculo(Nodo nodo) {
         throw new UnsupportedOperationException();
     }
+
+    public void setTipo(Tipo tipo);
+
+    public Tipo getTipo();
 }

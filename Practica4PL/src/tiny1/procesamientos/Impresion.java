@@ -283,12 +283,12 @@ public class Impresion implements Procesador {
 	}
 
 	@Override
-	public void procesa(Int tipo) {
+	public void procesa(TInt tipo) {
 		print("int");
 	}
 
 	@Override
-	public void procesa(Real tipo) {
+	public void procesa(TReal tipo) {
 		print("real");
 	}
 
@@ -298,7 +298,7 @@ public class Impresion implements Procesador {
 	}
 
 	@Override
-	public void procesa(Bool tipo) {
+	public void procesa(TBool tipo) {
 		print("bool");
 	}
 

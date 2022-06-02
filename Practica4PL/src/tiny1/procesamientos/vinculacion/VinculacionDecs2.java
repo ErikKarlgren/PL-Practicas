@@ -88,12 +88,12 @@ public class VinculacionDecs2 implements Procesador {
     }
 
     @Override
-    public void procesa(Int tipo) {
+    public void procesa(TInt tipo) {
         // No hacer nada
     }
 
     @Override
-    public void procesa(Real tipo) {
+    public void procesa(TReal tipo) {
         // No hacer nada
     }
 
@@ -103,7 +103,7 @@ public class VinculacionDecs2 implements Procesador {
     }
 
     @Override
-    public void procesa(Bool tipo) {
+    public void procesa(TBool tipo) {
         // No hacer nada
     }
 

@@ -1,4 +1,4 @@
-package tiny1.procesamientos;
+package tiny1.procesamientos.chequeo_tipos;
 
 import tiny1.asint.nodos.bloques.*;
 import tiny1.asint.nodos.campos.*;
@@ -13,8 +13,9 @@ import tiny1.asint.nodos.instrucciones.*;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
+import tiny1.procesamientos.Procesador;
 
-public class ChequeoTipos implements Procesador {
+public class ChequeoParams implements Procesador {
 
     @Override
     public void procesa(ProgramaConDecs programa) {
@@ -77,12 +78,12 @@ public class ChequeoTipos implements Procesador {
     }
 
     @Override
-    public void procesa(Int tipo) {
+    public void procesa(TInt tipo) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void procesa(Real tipo) {
+    public void procesa(TReal tipo) {
         throw new UnsupportedOperationException();
     }
 
@@ -92,7 +93,7 @@ public class ChequeoTipos implements Procesador {
     }
 
     @Override
-    public void procesa(Bool tipo) {
+    public void procesa(TBool tipo) {
         throw new UnsupportedOperationException();
     }
 

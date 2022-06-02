@@ -77,12 +77,12 @@ public class Etiquetado implements Procesador {
     }
 
     @Override
-    public void procesa(Int tipo) {
+    public void procesa(TInt tipo) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void procesa(Real tipo) {
+    public void procesa(TReal tipo) {
         throw new UnsupportedOperationException();
     }
 
@@ -92,7 +92,7 @@ public class Etiquetado implements Procesador {
     }
 
     @Override
-    public void procesa(Bool tipo) {
+    public void procesa(TBool tipo) {
         throw new UnsupportedOperationException();
     }
 

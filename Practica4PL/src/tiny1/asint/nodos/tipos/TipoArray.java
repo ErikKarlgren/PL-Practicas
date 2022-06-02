@@ -12,6 +12,11 @@ public class TipoArray implements Tipo {
         this.longitud = Integer.parseInt(longitud.toString());
     }
 
+    public TipoArray(int longitud, Tipo tipo) {
+        this.tipoBase = tipo;
+        this.longitud = longitud;
+    }
+
     public Tipo tipoBase() { return tipoBase; }
 
     public int longitud() { return longitud; }

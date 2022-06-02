@@ -4,4 +4,5 @@ import tiny1.asint.nodos.Nodo;
 
 public interface Expresion extends Nodo {
     public int prioridad();
+    public boolean esDesignador();
 }

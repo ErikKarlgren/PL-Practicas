@@ -52,11 +52,11 @@ public class SintaxisAbstracta {
 
     public Tipo tipo_nuevo(StringLocalizado nombre) { return new TipoNuevo(nombre); }
 
-    public Tipo int_() { return new Int(); }
+    public Tipo int_() { return new TInt(); }
 
-    public Tipo real_() { return new Real(); }
+    public Tipo real_() { return new TReal(); }
 
-    public Tipo bool_() { return new Bool(); }
+    public Tipo bool_() { return new TBool(); }
 
     public Tipo string_() { return new TString(); }
 
