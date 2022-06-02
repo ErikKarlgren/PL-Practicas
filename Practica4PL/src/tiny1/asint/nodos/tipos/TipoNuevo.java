@@ -2,17 +2,14 @@ package tiny1.asint.nodos.tipos;
 
 import tiny1.asint.StringLocalizado;
 import tiny1.asint.nodos.Nodo;
-import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
 public class TipoNuevo implements Tipo {
-    private final GestionErroresTiny err;
     private StringLocalizado nombre;
     private Nodo vinculo;
 
     public TipoNuevo(StringLocalizado nombre) {
         this.nombre = nombre;
-        this.err = new GestionErroresTiny();
     }
 
     public StringLocalizado nombre() {

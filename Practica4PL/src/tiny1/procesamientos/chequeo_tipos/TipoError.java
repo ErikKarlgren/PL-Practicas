@@ -3,11 +3,11 @@ package tiny1.procesamientos.chequeo_tipos;
 import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Procesador;
 
-public class TipoError implements Tipo {
+class TipoError implements Tipo {
 
     @Override
     public void procesa(Procesador p) {
         throw new UnsupportedOperationException("No procesable");
     }
-    
+
 }

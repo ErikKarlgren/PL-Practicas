@@ -32,10 +32,10 @@ class TablaSimbolos implements Map<String, Nodo> {
     @Override
     public Nodo get(Object key) {
         return pila.stream()
-            .map(map -> map.get(key))
-            .filter(n -> n != null)
-            .findFirst()
-            .orElse(null);
+                .map(map -> map.get(key))
+                .filter(n -> n != null)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -56,8 +56,8 @@ class TablaSimbolos implements Map<String, Nodo> {
     @Override
     public Set<Entry<String, Nodo>> entrySet() {
         return pila.stream()
-            .flatMap(map -> map.entrySet().stream())
-            .collect(Collectors.toSet());
+                .flatMap(map -> map.entrySet().stream())
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -68,8 +68,8 @@ class TablaSimbolos implements Map<String, Nodo> {
     @Override
     public Set<String> keySet() {
         return pila.stream()
-            .flatMap(map -> map.keySet().stream())
-            .collect(Collectors.toSet());
+                .flatMap(map -> map.keySet().stream())
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -85,10 +85,10 @@ class TablaSimbolos implements Map<String, Nodo> {
     @Override
     public Nodo remove(Object arg0) {
         return pila.stream()
-            .map(map -> map.remove(arg0))
-            .filter(n -> n != null)
-            .findFirst()
-            .orElse(null);
+                .map(map -> map.remove(arg0))
+                .filter(n -> n != null)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -99,8 +99,8 @@ class TablaSimbolos implements Map<String, Nodo> {
     @Override
     public Collection<Nodo> values() {
         return pila.stream()
-            .flatMap(map -> map.values().stream())
-            .collect(Collectors.toSet());
+                .flatMap(map -> map.values().stream())
+                .collect(Collectors.toSet());
     }
 
 }

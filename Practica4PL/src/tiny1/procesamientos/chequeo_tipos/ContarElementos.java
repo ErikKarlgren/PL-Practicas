@@ -12,17 +12,18 @@ import tiny1.asint.nodos.instrucciones.InstrUna;
 import tiny1.asint.nodos.parametros.ListaParamsMuchos;
 import tiny1.asint.nodos.parametros.ListaParamsUno;
 import tiny1.asint.nodos.parametros.ParamsSin;
-import tiny1.procesamientos.Procesador;
+import tiny1.procesamientos.ProcesadorConRetorno;
 
-public class ContarElementos implements Procesador {
+class ContarElementos implements ProcesadorConRetorno<Integer> {
     private int contador;
 
     public ContarElementos() {
         this.contador = 0;
     }
 
-    public int numElementos() {
-        return this.contador;
+    @Override
+    public Integer resultado() {
+        return contador;
     }
 
     @Override

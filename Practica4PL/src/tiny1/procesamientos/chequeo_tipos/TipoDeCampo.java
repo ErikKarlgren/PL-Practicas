@@ -4,9 +4,9 @@ import tiny1.asint.nodos.campos.Campo;
 import tiny1.asint.nodos.campos.CamposMuchos;
 import tiny1.asint.nodos.campos.CamposUno;
 import tiny1.asint.nodos.tipos.Tipo;
-import tiny1.procesamientos.Procesador;
+import tiny1.procesamientos.ProcesadorConRetorno;
 
-class TipoDeCampo implements Procesador {
+class TipoDeCampo implements ProcesadorConRetorno<Tipo> {
     private final String nombreCampo;
     private Tipo tipoDeCampo;
 
@@ -14,8 +14,9 @@ class TipoDeCampo implements Procesador {
         this.nombreCampo = nombreCampo;
     }
 
-    Tipo tipoDeCampo() {
-        return this.tipoDeCampo;
+    @Override
+    public Tipo resultado() {
+        return tipoDeCampo;
     }
 
     @Override

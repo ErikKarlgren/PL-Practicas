@@ -1,8 +1,6 @@
 package tiny1.procesamientos.vinculacion;
 
 import tiny1.asint.nodos.bloques.*;
-import tiny1.asint.nodos.campos.*;
-import tiny1.asint.nodos.declaraciones.*;
 import tiny1.asint.nodos.expresiones.basicas.*;
 import tiny1.asint.nodos.expresiones.*;
 import tiny1.asint.nodos.expresiones.acceso_campo.*;
@@ -10,9 +8,7 @@ import tiny1.asint.nodos.expresiones.aritmeticas.*;
 import tiny1.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny1.asint.nodos.expresiones.booleanas.comparacion.*;
 import tiny1.asint.nodos.instrucciones.*;
-import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
-import tiny1.asint.nodos.tipos.*;
 import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
@@ -42,111 +38,6 @@ public class Vinculacion implements Procesador {
     @Override
     public void procesa(ProgramaSinDecs programa) {
         programa.instrucciones().procesa(this);
-    }
-
-    @Override
-    public void procesa(DecsUna declaraciones) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(DecsMuchas declaraciones) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(DecType decType) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(DecVar decVar) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(DecProc decProc) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(ParamsSin parametros) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(ParamValor parametro) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(ParamRef parametro) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(ListaParamsUno listaParametros) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(ListaParamsMuchos listaParametros) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(TInt tipo) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(TReal tipo) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(TString tipo) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(TBool tipo) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(TipoArray tipo) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(TipoPointer tipo) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(TipoRecord tipo) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(TipoNuevo tipoNuevo) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(Campo campo) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(CamposUno campos) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(CamposMuchos campos) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -228,7 +119,8 @@ public class Vinculacion implements Procesador {
         } else {
             int fila = instruccion.funcion().fila();
             int col = instruccion.funcion().col();
-            err.errorProcesamiento(String.format("(Fila %d, Col %d) La función %s no está definida\n", fila, col, nombreFuncion));
+            err.errorProcesamiento(
+                    String.format("(Fila %d, Col %d) La función %s no está definida\n", fila, col, nombreFuncion));
         }
         instruccion.parametros().procesa(this);
     }

@@ -3,9 +3,9 @@ package tiny1.procesamientos.chequeo_tipos;
 import tiny1.asint.nodos.campos.Campo;
 import tiny1.asint.nodos.campos.CamposMuchos;
 import tiny1.asint.nodos.campos.CamposUno;
-import tiny1.procesamientos.Procesador;
+import tiny1.procesamientos.ProcesadorConRetorno;
 
-class ExisteCampo implements Procesador {
+class ExisteCampo implements ProcesadorConRetorno<Boolean> {
     private final String nombreCampo;
     private boolean existe;
 
@@ -13,7 +13,8 @@ class ExisteCampo implements Procesador {
         this.nombreCampo = nombreCampo;
     }
 
-    boolean existeCampo() {
+    @Override
+    public Boolean resultado() {
         return existe;
     }
 

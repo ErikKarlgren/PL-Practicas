@@ -9,12 +9,13 @@ import tiny1.asint.nodos.tipos.TipoArray;
 import tiny1.asint.nodos.tipos.TipoNuevo;
 import tiny1.asint.nodos.tipos.TipoPointer;
 import tiny1.asint.nodos.tipos.TipoRecord;
-import tiny1.procesamientos.Procesador;
+import tiny1.procesamientos.ProcesadorConRetorno;
 
-public class RefExc implements Procesador {
+class RefExc implements ProcesadorConRetorno<Tipo> {
     private Tipo tipoReferido;
 
-    public Tipo ref() {
+    @Override
+    public Tipo resultado() {
         return tipoReferido;
     }
 

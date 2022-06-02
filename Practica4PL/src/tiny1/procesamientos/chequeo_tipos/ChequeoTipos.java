@@ -24,10 +24,23 @@ public class ChequeoTipos implements Procesador {
         this.err = err;
     }
 
-    private Tipo refExc(Tipo nodo) {
-        RefExc ref = new RefExc();
-        nodo.procesa(ref);
-        return ref.ref();
+
+    /* Métodos privados */
+
+    private Tipo refExc(Tipo tipo) {
+        return new RefExc().procesar(tipo);
+    }
+
+    private int numElementos(Nodo nodo) {
+        return new ContarElementos().procesar(nodo);
+    }
+
+    private Tipo tipoDeCampo(Campos campos, String nombre) {
+        return new TipoDeCampo(nombre).procesar(campos);
+    }
+
+    private boolean existeCampo(Campos campos, String nombre) {
+        return new ExisteCampo(nombre).procesar(campos);
     }
 
     private Tipo ambosOk(Tipo tipo1, Tipo tipo2) {
@@ -43,6 +56,9 @@ public class ChequeoTipos implements Procesador {
     private boolean sonCompatibles(Tipo tipo1, Tipo tipo2) {
         throw new UnsupportedOperationException("son compatibles");
     }
+
+
+    /* Métodos del procesador */
 
     @Override
     public void procesa(ProgramaConDecs programa) {
@@ -371,12 +387,6 @@ public class ChequeoTipos implements Procesador {
             err.errorProcesamiento("El vínculo de la llamada no es un procedimiento");
             instruccion.setTipo(new TipoError());
         }
-    }
-
-    private int numElementos(Nodo nodo) {
-        ContarElementos contar = new ContarElementos();
-        nodo.procesa(contar);
-        return contar.numElementos();
     }
 
     private Tipo chequeoParametros(Expresiones exps, ListaParams params) {
@@ -845,18 +855,6 @@ public class ChequeoTipos implements Procesador {
                             t, campo));
             punto.setTipo(new TipoError());
         }
-    }
-
-    private boolean existeCampo(Campos campos, String nombre) {
-        ExisteCampo existeCampoProc = new ExisteCampo(nombre);
-        campos.procesa(existeCampoProc);
-        return existeCampoProc.existeCampo();
-    }
-
-    private Tipo tipoDeCampo(Campos campos, String nombre) {
-        TipoDeCampo tipoDeCampoProc = new TipoDeCampo(nombre);
-        campos.procesa(tipoDeCampoProc);
-        return tipoDeCampoProc.tipoDeCampo();
     }
 
     @Override
