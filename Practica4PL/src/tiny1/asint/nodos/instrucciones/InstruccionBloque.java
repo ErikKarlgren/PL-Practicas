@@ -1,11 +1,12 @@
 package tiny1.asint.nodos.instrucciones;
 
+import tiny1.asint.nodos.TieneTamanio;
 import tiny1.asint.nodos.bloques.Bloque;
 import tiny1.procesamientos.Procesador;
 
 import java.util.Objects;
 
-public class InstruccionBloque extends Instruccion {
+public class InstruccionBloque extends Instruccion implements TieneTamanio {
 
     private final Bloque bloque;
 
@@ -26,17 +27,24 @@ public class InstruccionBloque extends Instruccion {
         p.procesa(this);
     }
 
+    @Override
     public void setTamanio(int tamanio) {
-        if (tamanio == -1) {
+        if (!tamanioAsignado()) {
             this.tamanio = tamanio;
         } else {
             throw new IllegalStateException("El tamaño ya ha sido asignado");
         }
     }
 
+    @Override
     public int tamanio() {
-        if (tamanio == -1)
+        if (!tamanioAsignado())
             throw new IllegalStateException("El tamaño no ha sido asignado");
         return tamanio;
+    }
+
+    @Override
+    public boolean tamanioAsignado() {
+        return this.tamanio != -1;
     }
 }

@@ -24,7 +24,7 @@ public class Vinculacion extends Procesador {
         tablaSimbolos = new TablaSimbolos();
         vinculacionDecs1 = new VinculacionDecs1(err, tablaSimbolos);
         vinculacionDecs2 = new VinculacionDecs2(err, tablaSimbolos);
-        vinculacionProcs = new VinculacionProcs(err, tablaSimbolos, this, vinculacionDecs1, vinculacionDecs2);
+        vinculacionProcs = new VinculacionProcs(tablaSimbolos, this, vinculacionDecs1, vinculacionDecs2);
     }
 
     @Override

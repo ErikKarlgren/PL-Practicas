@@ -3,19 +3,16 @@ package tiny1.procesamientos.vinculacion;
 import java.util.Objects;
 
 import tiny1.asint.nodos.declaraciones.*;
-import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
 class VinculacionProcs extends Procesador {
-    private final GestionErroresTiny err;
     private final TablaSimbolos tablaSimbolos;
     private final Vinculacion vinculacion;
     private final VinculacionDecs1 vinculacionDecs1;
     private final VinculacionDecs2 vinculacionDecs2;
 
-    public VinculacionProcs(GestionErroresTiny err, TablaSimbolos tablaSimbolos,
+    public VinculacionProcs(TablaSimbolos tablaSimbolos,
             Vinculacion vinculacion, VinculacionDecs1 vinculacionDecs1, VinculacionDecs2 vinculacionDecs2) {
-        this.err = Objects.requireNonNull(err);
         this.tablaSimbolos = Objects.requireNonNull(tablaSimbolos);
         this.vinculacion = Objects.requireNonNull(vinculacion);
         this.vinculacionDecs1 = Objects.requireNonNull(vinculacionDecs1);

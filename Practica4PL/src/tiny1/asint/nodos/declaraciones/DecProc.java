@@ -3,11 +3,12 @@ package tiny1.asint.nodos.declaraciones;
 import java.util.Objects;
 
 import tiny1.asint.StringLocalizado;
+import tiny1.asint.nodos.TieneTamanio;
 import tiny1.asint.nodos.bloques.Bloque;
 import tiny1.asint.nodos.parametros.ListaParams;
 import tiny1.procesamientos.Procesador;
 
-public class DecProc extends Declaracion {
+public class DecProc extends Declaracion implements TieneTamanio {
 
     private final StringLocalizado string;
     private final ListaParams listaParametros;
@@ -43,7 +44,7 @@ public class DecProc extends Declaracion {
     }
 
     public void setNivel(int nivel) {
-        if (nivel == -1) {
+        if (this.nivel == -1) {
             this.nivel = nivel;
         } else {
             throw new IllegalStateException("El nivel ya ha sido asignado");
@@ -51,22 +52,29 @@ public class DecProc extends Declaracion {
     }
 
     public int nivel() {
-        if (nivel == -1)
+        if (this.nivel == -1)
             throw new IllegalStateException("El nivel no ha sido asignado");
         return nivel;
     }
 
+    @Override
     public void setTamanio(int tamanio) {
-        if (tamanio == -1) {
+        if (!tamanioAsignado()) {
             this.tamanio = tamanio;
         } else {
-            throw new IllegalStateException("El tamanio ya ha sido asignado");
+            throw new IllegalStateException("El tamaño ya ha sido asignado");
         }
     }
 
+    @Override
     public int tamanio() {
-        if (tamanio == -1)
+        if (!tamanioAsignado())
             throw new IllegalStateException("El tamaño no ha sido asignado");
         return tamanio;
+    }
+
+    @Override
+    public boolean tamanioAsignado(){
+        return tamanio != -1;
     }
 }

@@ -1,5 +1,7 @@
 package tiny1.procesamientos;
 
+import tiny1.asint.nodos.Nodo;
+import tiny1.asint.nodos.TieneTamanio;
 import tiny1.asint.nodos.bloques.*;
 import tiny1.asint.nodos.campos.*;
 import tiny1.asint.nodos.declaraciones.*;
@@ -15,12 +17,19 @@ import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
 
 public class AsignaEspacio extends Procesador {
+
     private int direccion;
     private int nivel;
 
     public AsignaEspacio() {
         this.direccion = 0;
         this.nivel = 0;
+    }
+
+    private <T extends Nodo & TieneTamanio> void asignaTamanio(T tipo) {
+        if (!tipo.tamanioAsignado()) {
+            tipo.procesa(this);
+        }
     }
 
     @Override
@@ -47,14 +56,14 @@ public class AsignaEspacio extends Procesador {
 
     @Override
     public void procesa(DecType decType) {
-        decType.tipo().procesa(this);
+        asignaTamanio(decType.tipo());
     }
 
     @Override
     public void procesa(DecVar decVar) {
         decVar.setDireccion(direccion);
         decVar.setNivel(nivel);
-        decVar.tipo().procesa(this);
+        asignaTamanio(decVar.tipo());
         direccion += decVar.tipo().tamanio();
     }
 
@@ -82,7 +91,7 @@ public class AsignaEspacio extends Procesador {
     public void procesa(ParamValor parametro) {
         parametro.setDireccion(direccion);
         parametro.setNivel(nivel);
-        parametro.tipo().procesa(this);
+        asignaTamanio(parametro.tipo());
         direccion += parametro.tipo().tamanio();
     }
 
@@ -90,7 +99,7 @@ public class AsignaEspacio extends Procesador {
     public void procesa(ParamRef parametro) {
         parametro.setDireccion(direccion);
         parametro.setNivel(nivel);
-        parametro.tipo().procesa(this);
+        asignaTamanio(parametro.tipo());
         direccion += parametro.tipo().tamanio();
     }
 
@@ -127,19 +136,20 @@ public class AsignaEspacio extends Procesador {
 
     @Override
     public void procesa(TipoArray tipo) {
-        tipo.tipoBase().procesa(this);
+        asignaTamanio(tipo.tipoBase());
         tipo.setTamanio(tipo.tipoBase().tamanio() * tipo.longitud());
     }
 
     @Override
     public void procesa(TipoPointer tipo) {
-        tipo.tipoBase().procesa(this);
+        // TODO: ¿?
+        // asignaTamanio(tipo.tipoBase());
         tipo.setTamanio(1);
     }
 
     @Override
     public void procesa(TipoRecord tipo) {
-        tipo.campos().procesa(this);
+        asignaTamanio(tipo.campos());
         tipo.setTamanio(tipo.campos().tamanio());
     }
 
@@ -157,20 +167,20 @@ public class AsignaEspacio extends Procesador {
 
     @Override
     public void procesa(Campo campo) {
-        campo.tipo().procesa(this);
+        asignaTamanio(campo.tipo());
         campo.setTamanio(campo.tipo().tamanio());
     }
 
     @Override
     public void procesa(CamposUno campos) {
-        campos.campo().procesa(this);
+        asignaTamanio(campos.campo());
         campos.setTamanio(campos.campo().tamanio());
     }
 
     @Override
     public void procesa(CamposMuchos campos) {
-        campos.campos().procesa(this);
-        campos.campo().procesa(this);
+        asignaTamanio(campos.campos());
+        asignaTamanio(campos.campo());
         campos.setTamanio(campos.campos().tamanio() + campos.campo().tamanio());
     }
 

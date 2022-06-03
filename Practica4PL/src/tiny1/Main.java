@@ -8,6 +8,7 @@ import java.io.Reader;
 import tiny1.alex.AnalizadorLexicoTiny;
 import tiny1.asint.nodos.programa.Programa;
 import tiny1.ast_descendente.ParseException;
+import tiny1.procesamientos.AsignaEspacio;
 import tiny1.procesamientos.Impresion;
 import tiny1.procesamientos.Procesador;
 import tiny1.procesamientos.chequeo_tipos.ChequeoTipos;
@@ -23,6 +24,8 @@ public class Main {
 			procesar(prog, new Vinculacion());
 			System.out.println("Chequeando tipos...");
 			procesar(prog, new ChequeoTipos());
+			System.out.println("Asignando espacio...");
+			procesar(prog, new AsignaEspacio());
 
 		} catch (Exception e) {
 			//System.err.println("Error: " + e.getMessage());

@@ -36,7 +36,7 @@ public class DecVar extends Declaracion {
     }
 
     public void setDireccion(int direccion) {
-        if (direccion == -1) {
+        if (this.direccion == -1) {
             this.direccion = direccion;
         } else {
             throw new IllegalStateException("La direccion ya ha sido asignada");
@@ -44,13 +44,13 @@ public class DecVar extends Declaracion {
     }
 
     public int direccion() {
-        if(direccion == -1)
+        if (this.direccion == -1)
             throw new IllegalStateException("La direccion no ha sido asignada");
         return direccion;
     }
 
     public void setNivel(int nivel) {
-        if (nivel == -1) {
+        if (this.nivel == -1) {
             this.nivel = nivel;
         } else {
             throw new IllegalStateException("El nivel ya ha sido asignado");
@@ -58,7 +58,7 @@ public class DecVar extends Declaracion {
     }
 
     public int nivel() {
-        if (nivel == -1)
+        if (this.nivel == -1)
             throw new IllegalStateException("El nivel no ha sido asignado");
         return nivel;
     }

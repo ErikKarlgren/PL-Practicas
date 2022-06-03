@@ -2,12 +2,13 @@ package tiny1.asint.nodos.campos;
 
 import tiny1.asint.StringLocalizado;
 import tiny1.asint.nodos.Nodo;
+import tiny1.asint.nodos.TieneTamanio;
 import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Procesador;
 
 import java.util.Objects;
 
-public class Campo extends Nodo {
+public class Campo extends Nodo implements TieneTamanio {
 
     private final StringLocalizado nombre;
     private final Tipo tipo;
@@ -34,17 +35,24 @@ public class Campo extends Nodo {
         p.procesa(this);
     }
 
+    @Override
     public void setTamanio(int tamanio) {
-        if (tamanio == -1) {
+        if (!tamanioAsignado()) {
             this.tamanio = tamanio;
         } else {
             throw new IllegalStateException("El tamaño ya ha sido asignado");
         }
     }
 
+    @Override
     public int tamanio() {
-        if (tamanio == -1)
+        if (!tamanioAsignado())
             throw new IllegalStateException("El tamaño no ha sido asignado");
         return tamanio;
+    }
+
+    @Override
+    public boolean tamanioAsignado() {
+        return tamanio != -1;
     }
 }
