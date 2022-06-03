@@ -11,6 +11,7 @@ import tiny1.procesamientos.Impresion;
 import tiny1.procesamientos.Procesador;
 
 public abstract class Nodo {
+    // Comprobación de tipos
     private Tipo tipoNodo;
 
     public abstract void procesa(Procesador p);

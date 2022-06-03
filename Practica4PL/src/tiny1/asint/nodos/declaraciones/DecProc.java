@@ -13,10 +13,16 @@ public class DecProc extends Declaracion {
     private final ListaParams listaParametros;
     private final Bloque bloque;
 
+    // Asignación de espacio
+    private int nivel;
+    private int tamanio;
+
     public DecProc(StringLocalizado string, ListaParams lp, Bloque bloque) {
         this.string = Objects.requireNonNull(string);
         this.listaParametros = Objects.requireNonNull(lp);
         this.bloque = Objects.requireNonNull(bloque);
+        this.nivel = -1;
+        this.tamanio = -1;
     }
 
     public StringLocalizado id() {
@@ -34,5 +40,33 @@ public class DecProc extends Declaracion {
     @Override
     public void procesa(Procesador p) {
         p.procesa(this);
+    }
+
+    public void setNivel(int nivel) {
+        if (nivel == -1) {
+            this.nivel = nivel;
+        } else {
+            throw new IllegalStateException("El nivel ya ha sido asignado");
+        }
+    }
+
+    public int nivel() {
+        if (nivel == -1)
+            throw new IllegalStateException("El nivel no ha sido asignado");
+        return nivel;
+    }
+
+    public void setTamanio(int tamanio) {
+        if (tamanio == -1) {
+            this.tamanio = tamanio;
+        } else {
+            throw new IllegalStateException("El tamanio ya ha sido asignado");
+        }
+    }
+
+    public int tamanio() {
+        if (tamanio == -1)
+            throw new IllegalStateException("El tamaño no ha sido asignado");
+        return tamanio;
     }
 }

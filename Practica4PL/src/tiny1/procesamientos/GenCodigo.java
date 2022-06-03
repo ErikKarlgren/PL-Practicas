@@ -117,6 +117,11 @@ public class GenCodigo extends Procesador {
     }
 
     @Override
+    public void procesa(TNull tNull) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void procesa(Campo campo) {
         throw new UnsupportedOperationException();
     }

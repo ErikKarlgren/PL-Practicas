@@ -15,349 +15,400 @@ import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
 
 public class AsignaEspacio extends Procesador {
+    private int direccion;
+    private int nivel;
+
+    public AsignaEspacio() {
+        this.direccion = 0;
+        this.nivel = 0;
+    }
 
     @Override
     public void procesa(ProgramaConDecs programa) {
-        throw new UnsupportedOperationException();
+        programa.declaraciones().procesa(this);
+        programa.instrucciones().procesa(this);
     }
 
     @Override
     public void procesa(ProgramaSinDecs programa) {
-        throw new UnsupportedOperationException();
+        programa.instrucciones().procesa(this);
     }
 
     @Override
     public void procesa(DecsUna declaraciones) {
-        throw new UnsupportedOperationException();
+        declaraciones.declaracion().procesa(this);
     }
 
     @Override
     public void procesa(DecsMuchas declaraciones) {
-        throw new UnsupportedOperationException();
+        declaraciones.declaraciones().procesa(this);
+        declaraciones.declaracion().procesa(this);
     }
 
     @Override
     public void procesa(DecType decType) {
-        throw new UnsupportedOperationException();
+        decType.tipo().procesa(this);
     }
 
     @Override
     public void procesa(DecVar decVar) {
-        throw new UnsupportedOperationException();
+        decVar.setDireccion(direccion);
+        decVar.setNivel(nivel);
+        decVar.tipo().procesa(this);
+        direccion += decVar.tipo().tamanio();
     }
 
     @Override
     public void procesa(DecProc decProc) {
-        throw new UnsupportedOperationException();
+        int antiguaDir = direccion;
+
+        nivel++;
+        decProc.setNivel(nivel);
+        direccion = 0;
+        decProc.listaParams().procesa(this);
+        decProc.bloque().procesa(this);
+        decProc.setTamanio(direccion);
+
+        direccion = antiguaDir;
+        nivel--;
     }
 
     @Override
     public void procesa(ParamsSin parametros) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(ParamValor parametro) {
-        throw new UnsupportedOperationException();
+        parametro.setDireccion(direccion);
+        parametro.setNivel(nivel);
+        parametro.tipo().procesa(this);
+        direccion += parametro.tipo().tamanio();
     }
 
     @Override
     public void procesa(ParamRef parametro) {
-        throw new UnsupportedOperationException();
+        parametro.setDireccion(direccion);
+        parametro.setNivel(nivel);
+        parametro.tipo().procesa(this);
+        direccion += parametro.tipo().tamanio();
     }
 
     @Override
     public void procesa(ListaParamsUno listaParametros) {
-        throw new UnsupportedOperationException();
+        listaParametros.parametro().procesa(this);
     }
 
     @Override
     public void procesa(ListaParamsMuchos listaParametros) {
-        throw new UnsupportedOperationException();
+        listaParametros.listaParametros().procesa(this);
+        listaParametros.parametro().procesa(this);
     }
 
     @Override
     public void procesa(TInt tipo) {
-        throw new UnsupportedOperationException();
+        tipo.setTamanio(1);
     }
 
     @Override
     public void procesa(TReal tipo) {
-        throw new UnsupportedOperationException();
+        tipo.setTamanio(1);
     }
 
     @Override
     public void procesa(TString tipo) {
-        throw new UnsupportedOperationException();
+        tipo.setTamanio(1); // TODO: ¿?
     }
 
     @Override
     public void procesa(TBool tipo) {
-        throw new UnsupportedOperationException();
+        tipo.setTamanio(1);
     }
 
     @Override
     public void procesa(TipoArray tipo) {
-        throw new UnsupportedOperationException();
+        tipo.tipoBase().procesa(this);
+        tipo.setTamanio(tipo.tipoBase().tamanio() * tipo.longitud());
     }
 
     @Override
     public void procesa(TipoPointer tipo) {
-        throw new UnsupportedOperationException();
+        tipo.tipoBase().procesa(this);
+        tipo.setTamanio(1);
     }
 
     @Override
     public void procesa(TipoRecord tipo) {
-        throw new UnsupportedOperationException();
+        tipo.campos().procesa(this);
+        tipo.setTamanio(tipo.campos().tamanio());
     }
 
     @Override
     public void procesa(TipoNuevo tipoNuevo) {
-        throw new UnsupportedOperationException();
+        tipoNuevo.vinculo().procesa(this);
+        DecType decType = (DecType) tipoNuevo.vinculo();
+        tipoNuevo.setTamanio(decType.tipo().tamanio());
+    }
+
+    @Override
+    public void procesa(TNull tNull) {
+        tNull.setTamanio(0); // TODO: ¿?
     }
 
     @Override
     public void procesa(Campo campo) {
-        throw new UnsupportedOperationException();
+        campo.tipo().procesa(this);
+        campo.setTamanio(campo.tipo().tamanio());
     }
 
     @Override
     public void procesa(CamposUno campos) {
-        throw new UnsupportedOperationException();
+        campos.campo().procesa(this);
+        campos.setTamanio(campos.campo().tamanio());
     }
 
     @Override
     public void procesa(CamposMuchos campos) {
-        throw new UnsupportedOperationException();
+        campos.campos().procesa(this);
+        campos.campo().procesa(this);
+        campos.setTamanio(campos.campos().tamanio() + campos.campo().tamanio());
     }
 
     @Override
     public void procesa(InstrUna instrucciones) {
-        throw new UnsupportedOperationException();
+        instrucciones.instruccion().procesa(this);
     }
 
     @Override
     public void procesa(InstrMuchas instrucciones) {
-        throw new UnsupportedOperationException();
+        instrucciones.instrucciones().procesa(this);
+        instrucciones.instruccion().procesa(this);
     }
 
     @Override
     public void procesa(InstrAsignacion instruccion) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(InstrOptNinguna instruccionOpt) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(InstrOptMuchas instruccionesOpt) {
-        throw new UnsupportedOperationException();
+        instruccionesOpt.instrucciones().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionIf instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.instruccionesOpt().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionIfElse instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.instruccionesOptIf().procesa(this);
+        instruccion.instruccionesOptElse().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionWhile instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.instruccionesOpt().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionRead instruccion) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(InstruccionWrite instruccion) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(InstruccionNL instruccion) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(InstruccionNew instruccion) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(InstruccionDelete instruccion) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(InstruccionCall instruccion) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(InstruccionBloque instrucciones) {
-        throw new UnsupportedOperationException();
+        int antiguaDir = direccion;
+        nivel++;
+        direccion = 0;
+        instrucciones.bloque().procesa(this);
+        instrucciones.setTamanio(direccion);
+        direccion = antiguaDir;
+        nivel--;
     }
 
     @Override
     public void procesa(BloqueVacio bloque) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(BloqueLleno bloques) {
-        throw new UnsupportedOperationException();
+        bloques.programa().procesa(this);
     }
 
     @Override
     public void procesa(ExpresionesNinguna expresiones) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(ExpresionesUna expresiones) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(ExpresionesMuchas expresiones) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Suma suma) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Resta resta) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Multiplicacion multiplicacion) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Division division) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(PorCiento porCiento) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Menos menos) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(NumeroEntero numero) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(NumeroReal numero) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Identificador identificador) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(True booleanoTrue) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(False booleanoFalse) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Null nulo) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Cadena cadena) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(And and) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Or or) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Not not) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Menor menor) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(MenorIgual menorIgual) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Mayor mayor) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(MayorIgual mayorIgual) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Igual igual) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Distinto distinto) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(AccesoArray accesoArray) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Punto punto) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Flecha flecha) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(ValorPuntero valorPuntero) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 }
