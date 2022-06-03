@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.instrucciones;
 
+import java.util.Objects;
+
 import tiny1.asint.StringLocalizado;
 import tiny1.asint.nodos.Nodo;
 import tiny1.asint.nodos.expresiones.Expresiones;
@@ -12,8 +14,8 @@ public class InstruccionCall extends Instruccion {
     private Nodo vinculo;
 
     public InstruccionCall(StringLocalizado funcion, Expresiones parametros) {
-        this.funcion = funcion;
-        this.parametros = parametros;
+        this.funcion = Objects.requireNonNull(funcion);
+        this.parametros = Objects.requireNonNull(parametros);
     }
 
     public StringLocalizado funcion() {
@@ -36,6 +38,6 @@ public class InstruccionCall extends Instruccion {
 
     @Override
     public void setVinculo(Nodo vinculo) {
-        this.vinculo = vinculo;
+        this.vinculo = Objects.requireNonNull(vinculo);
     }
 }

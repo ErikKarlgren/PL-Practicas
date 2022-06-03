@@ -14,7 +14,7 @@ import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
 
-public class GenCodigo implements Procesador {
+public class GenCodigo extends Procesador {
 
     @Override
     public void procesa(ProgramaConDecs programa) {

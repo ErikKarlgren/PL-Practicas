@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.instrucciones;
 
+import java.util.Objects;
+
 import tiny1.asint.nodos.expresiones.Expresion;
 import tiny1.procesamientos.Procesador;
 
@@ -9,8 +11,8 @@ public class InstrAsignacion extends Instruccion {
     private final Expresion expresionDerecha;
 
     public InstrAsignacion(Expresion expresionIzquierda, Expresion expresionDerecha) {
-        this.expresionIzquierda = expresionIzquierda;
-        this.expresionDerecha = expresionDerecha;
+        this.expresionIzquierda = Objects.requireNonNull(expresionIzquierda);
+        this.expresionDerecha = Objects.requireNonNull(expresionDerecha);
     }
 
     public Expresion expresionIzquierda() {

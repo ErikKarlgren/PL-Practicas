@@ -14,4 +14,9 @@ public class ValorPuntero extends ExpresionUnaria {
     public void procesa(Procesador p) {
         p.procesa(this);
     }
+
+    @Override
+    public boolean esDesignador() {
+        return true;
+    }
 }

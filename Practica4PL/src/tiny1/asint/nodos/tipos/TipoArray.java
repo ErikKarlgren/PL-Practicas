@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.tipos;
 
+import java.util.Objects;
+
 import tiny1.asint.StringLocalizado;
 import tiny1.procesamientos.Procesador;
 
@@ -8,13 +10,13 @@ public class TipoArray extends Tipo {
     private int longitud;
 
     public TipoArray(StringLocalizado longitud, Tipo tipo) {
-        this.tipoBase = tipo;
+        this.tipoBase = Objects.requireNonNull(tipo);
         this.longitud = Integer.parseInt(longitud.toString());
     }
 
     public TipoArray(int longitud, Tipo tipo) {
-        this.tipoBase = tipo;
-        this.longitud = longitud;
+        this.tipoBase = Objects.requireNonNull(tipo);
+        this.longitud = Objects.requireNonNull(longitud);
     }
 
     public Tipo tipoBase() { return tipoBase; }

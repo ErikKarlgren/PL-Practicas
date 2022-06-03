@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.expresiones.acceso_campo;
 
+import java.util.Objects;
+
 import tiny1.asint.nodos.expresiones.Expresion;
 import tiny1.procesamientos.Procesador;
 
@@ -10,8 +12,8 @@ public class Punto extends Expresion {
 
     public Punto(Expresion arg0, String arg1) {
         super(5);
-        this.arg0 = arg0;
-        this.arg1 = arg1;
+        this.arg0 = Objects.requireNonNull(arg0);
+        this.arg1 = Objects.requireNonNull(arg1);
     }
 
     public Expresion arg0() {

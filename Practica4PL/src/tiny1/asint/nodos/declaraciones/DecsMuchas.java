@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.declaraciones;
 
+import java.util.Objects;
+
 import tiny1.procesamientos.Procesador;
 
 public class DecsMuchas extends Declaraciones {
@@ -8,8 +10,8 @@ public class DecsMuchas extends Declaraciones {
     private final Declaracion declaracion;
 
     public DecsMuchas(Declaraciones declaraciones, Declaracion declaracion) {
-        this.declaraciones = declaraciones;
-        this.declaracion = declaracion;
+        this.declaraciones = Objects.requireNonNull(declaraciones);
+        this.declaracion = Objects.requireNonNull(declaracion);
     }
 
     public Declaraciones declaraciones() {

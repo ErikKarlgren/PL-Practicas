@@ -14,306 +14,313 @@ import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
 
-public interface Procesador {
-    static final RuntimeException NO_IMPLEMENTADA = new UnsupportedOperationException("Procesamiento no implementado");
+public abstract class Procesador {
 
-    default void procesa(ProgramaConDecs programa) {
-        throw NO_IMPLEMENTADA;
+    public boolean foundErrors() {
+        return false;
     }
 
-    default void procesa(ProgramaSinDecs programa) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(ProgramaConDecs programa) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ProgramaConDecs");
+    }
+
+    public void procesa(ProgramaSinDecs programa) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ProgramaSinDecs");
     }
 
     // Declaraciones
 
-    default void procesa(DecsUna declaraciones) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(DecsUna declaraciones) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para DecsUna");
     }
 
-    default void procesa(DecsMuchas declaraciones) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(DecsMuchas declaraciones) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para DecsMuchas");
     }
 
-    default void procesa(DecType decType) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(DecType decType) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para DecType");
     }
 
-    default void procesa(DecVar decVar) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(DecVar decVar) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para DecVar");
     }
 
-    default void procesa(DecProc decProc) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(DecProc decProc) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para DecProc");
     }
 
     // Parametros
 
-    default void procesa(ParamsSin parametros) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(ParamsSin parametros) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ParamsSin");
     }
 
-    default void procesa(ParamValor parametro) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(ParamValor parametro) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ParamValor");
     }
 
-    default void procesa(ParamRef parametro) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(ParamRef parametro) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ParamRef");
     }
 
-    default void procesa(ListaParamsUno listaParametros) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(ListaParamsUno listaParametros) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ListaParamsUno");
     }
 
-    default void procesa(ListaParamsMuchos listaParametros) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(ListaParamsMuchos listaParametros) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ListaParamsMuchos");
     }
 
     // Tipos
 
-    default void procesa(TInt tipo) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(TInt tipo) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para TInt");
     }
 
-    default void procesa(TReal tipo) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(TReal tipo) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para TReal");
     }
 
-    default void procesa(TString tipo) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(TString tipo) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para TString");
     }
 
-    default void procesa(TBool tipo) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(TBool tipo) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para TBool");
     }
 
-    default void procesa(TipoArray tipo) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(TipoArray tipo) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para TipoArray");
     }
 
-    default void procesa(TipoPointer tipo) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(TipoPointer tipo) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para TipoPointer");
     }
 
-    default void procesa(TipoRecord tipo) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(TipoRecord tipo) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para TipoRecord");
     }
 
-    default void procesa(TipoNuevo tipoNuevo) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(TipoNuevo tipoNuevo) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para TipoNuevo");
+    }
+
+    public void procesa(TNull tNull) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para TNull");
     }
 
     // Campos
 
-    default void procesa(Campo campo) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Campo campo) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Campo");
     }
 
-    default void procesa(CamposUno campos) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(CamposUno campos) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para CamposUno");
     }
 
-    default void procesa(CamposMuchos campos) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(CamposMuchos campos) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para CamposMuchos");
     }
 
     // instrucciones
 
-    default void procesa(InstrUna instrucciones) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstrUna instrucciones) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstrUna");
     }
 
-    default void procesa(InstrMuchas instrucciones) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstrMuchas instrucciones) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstrMuchas");
     }
 
-    default void procesa(InstrAsignacion instruccion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstrAsignacion instruccion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstrAsignacion");
     }
 
-    default void procesa(InstrOptNinguna instruccionOpt) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstrOptNinguna instruccionOpt) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstrOptNinguna");
     }
 
-    default void procesa(InstrOptMuchas instruccionesOpt) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstrOptMuchas instruccionesOpt) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstrOptMuchas");
     }
 
-    default void procesa(InstruccionIf instruccion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstruccionIf instruccion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstruccionIf");
     }
 
-    default void procesa(InstruccionIfElse instruccion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstruccionIfElse instruccion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstruccionIfElse");
     }
 
-    default void procesa(InstruccionWhile instruccion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstruccionWhile instruccion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstruccionWhile");
     }
 
-    default void procesa(InstruccionRead instruccion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstruccionRead instruccion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstruccionRead");
     }
 
-    default void procesa(InstruccionWrite instruccion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstruccionWrite instruccion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstruccionWrite");
     }
 
-    default void procesa(InstruccionNL instruccion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstruccionNL instruccion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstruccionNL");
     }
 
-    default void procesa(InstruccionNew instruccion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstruccionNew instruccion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstruccionNew");
     }
 
-    default void procesa(InstruccionDelete instruccion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstruccionDelete instruccion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstruccionDelete");
     }
 
-    default void procesa(InstruccionCall instruccion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstruccionCall instruccion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstruccionCall");
     }
 
-    default void procesa(InstruccionBloque instrucciones) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(InstruccionBloque instrucciones) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para InstruccionBloque");
     }
 
     // Bloques
 
-    default void procesa(BloqueVacio bloque) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(BloqueVacio bloque) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para BloqueVacio");
     }
 
-    default void procesa(BloqueLleno bloques) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(BloqueLleno bloques) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para BloqueLleno");
     }
 
     // Expresiones
 
-    default void procesa(ExpresionesNinguna expresiones) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(ExpresionesNinguna expresiones) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ExpresionesNinguna");
     }
 
-    default void procesa(ExpresionesUna expresiones) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(ExpresionesUna expresiones) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ExpresionesUna");
     }
 
-    default void procesa(ExpresionesMuchas expresiones) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(ExpresionesMuchas expresiones) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ExpresionesMuchas");
     }
 
     // Expresiones aritméticas
 
-    default void procesa(Suma suma) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Suma suma) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Suma");
     }
 
-    default void procesa(Resta resta) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Resta resta) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Resta");
     }
 
-    default void procesa(Multiplicacion multiplicacion) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Multiplicacion multiplicacion) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Multiplicacion");
     }
 
-    default void procesa(Division division) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Division division) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Division");
     }
 
-    default void procesa(PorCiento porCiento) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(PorCiento porCiento) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para PorCiento");
     }
 
-    default void procesa(Menos menos) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Menos menos) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Menos");
     }
 
     // Expresiones básicas
 
-    default void procesa(NumeroEntero numero) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(NumeroEntero numero) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para NumeroEntero");
     }
 
-    default void procesa(NumeroReal numero) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(NumeroReal numero) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para NumeroReal");
     }
 
-    default void procesa(Identificador identificador) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Identificador identificador) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Identificador");
     }
 
-    default void procesa(True booleanoTrue) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(True booleanoTrue) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para True");
     }
 
-    default void procesa(False booleanoFalse) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(False booleanoFalse) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para False");
     }
 
-    default void procesa(Null nulo) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Null nulo) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Null");
     }
 
-    default void procesa(Cadena cadena) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Cadena cadena) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Cadena");
     }
 
     // Expresiones lógicas
 
-    default void procesa(And and) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(And and) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para And");
     }
 
-    default void procesa(Or or) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Or or) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Or");
     }
 
-    default void procesa(Not not) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Not not) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Not");
     }
 
     // Expresiones comparativas
 
-    default void procesa(Menor menor) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Menor menor) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Menor");
     }
 
-    default void procesa(MenorIgual menorIgual) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(MenorIgual menorIgual) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para MenorIgual");
     }
 
-    default void procesa(Mayor mayor) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Mayor mayor) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Mayor");
     }
 
-    default void procesa(MayorIgual mayorIgual) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(MayorIgual mayorIgual) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para MayorIgual");
     }
 
-    default void procesa(Igual igual) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Igual igual) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Igual");
     }
 
-    default void procesa(Distinto distinto) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Distinto distinto) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Distinto");
     }
 
     // Expresiones de acceso a campos
 
-    default void procesa(AccesoArray accesoArray) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(AccesoArray accesoArray) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para AccesoArray");
     }
 
-    default void procesa(Punto punto) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Punto punto) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Punto");
     }
 
-    default void procesa(Flecha flecha) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(Flecha flecha) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para Flecha");
     }
 
-    default void procesa(ValorPuntero valorPuntero) {
-        throw NO_IMPLEMENTADA;
+    public void procesa(ValorPuntero valorPuntero) {
+        throw new UnsupportedOperationException("Procesamiento no implementado para ValorPuntero");
     }
 }

@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.expresiones;
 
+import java.util.Objects;
+
 public abstract class ExpresionBinaria extends Expresion {
     private final Expresion arg0;
     private final Expresion arg1;
@@ -14,7 +16,7 @@ public abstract class ExpresionBinaria extends Expresion {
 
     protected ExpresionBinaria(int prioridad, Expresion arg0, Expresion arg1) {
         super(prioridad);
-        this.arg0 = arg0;
-        this.arg1 = arg1;
+        this.arg0 = Objects.requireNonNull(arg0);
+        this.arg1 = Objects.requireNonNull(arg1);
     }
 }

@@ -1,5 +1,7 @@
 package tiny1.procesamientos.vinculacion;
 
+import java.util.Objects;
+
 import tiny1.asint.nodos.Nodo;
 import tiny1.asint.nodos.campos.*;
 import tiny1.asint.nodos.declaraciones.*;
@@ -8,13 +10,14 @@ import tiny1.asint.nodos.tipos.*;
 import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
-public class VinculacionDecs1 implements Procesador {
+class VinculacionDecs1 extends Procesador {
+
     private final GestionErroresTiny err;
     private final TablaSimbolos tablaSimbolos;
 
     public VinculacionDecs1(GestionErroresTiny err, TablaSimbolos tablaSimbolos) {
-        this.err = err;
-        this.tablaSimbolos = tablaSimbolos;
+        this.err = Objects.requireNonNull(err);
+        this.tablaSimbolos = Objects.requireNonNull(tablaSimbolos);
     }
 
     private void recolecta(String id, Nodo nodo) {
@@ -65,6 +68,7 @@ public class VinculacionDecs1 implements Procesador {
 
     @Override
     public void procesa(ParamRef parametro) {
+        parametro.tipo().procesa(this);
         recolecta(parametro.nombre(), parametro);
     }
 
@@ -106,7 +110,7 @@ public class VinculacionDecs1 implements Procesador {
 
     @Override
     public void procesa(TipoPointer tipo) {
-        // todo: CAMBIAR
+        // TODO: CAMBIAR el instanceof
         if (!(tipo.tipoBase() instanceof TipoNuevo)) {
             tipo.tipoBase().procesa(this);
         }
@@ -119,13 +123,17 @@ public class VinculacionDecs1 implements Procesador {
 
     @Override
     public void procesa(TipoNuevo tipoNuevo) {
-        if (tablaSimbolos.containsKey(tipoNuevo.nombre().toString())) {
+        if (tablaSimbolos.existeId(tipoNuevo.nombre().toString())) {
             Nodo nodo = tablaSimbolos.get(tipoNuevo.nombre().toString());
             tipoNuevo.setVinculo(nodo);
-            // TODO: comprobar que nodo es un tipo
         } else {
             err.errorProcesamiento(String.format("El tipo %s no está definido\n", tipoNuevo.nombre()));
         }
+    }
+
+    @Override
+    public void procesa(TNull tipo) {
+        // No hacer nada
     }
 
     @Override

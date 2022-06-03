@@ -7,6 +7,11 @@ class TipoError extends Tipo {
 
     @Override
     public void procesa(Procesador p) {
-        throw new UnsupportedOperationException("No procesable");
+        throw new UnsupportedOperationException("TipoError no procesable. Solo para comprobación de tipos.");
+    }
+
+    @Override
+    public boolean isOk() {
+        return false;
     }
 }

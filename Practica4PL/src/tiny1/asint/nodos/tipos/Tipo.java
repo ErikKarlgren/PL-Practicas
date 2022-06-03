@@ -4,13 +4,8 @@ import tiny1.asint.nodos.Nodo;
 
 public abstract class Tipo extends Nodo {
 
-    protected Tipo() {
-        super.setTipo(this);
-    }
-
-    @Override
-    public void setTipo(Tipo tipo) {
-        throw new UnsupportedOperationException("No se puede cambiar el tipo de un tipo");
+    public boolean isOk() {
+        return true;
     }
 
     @Override

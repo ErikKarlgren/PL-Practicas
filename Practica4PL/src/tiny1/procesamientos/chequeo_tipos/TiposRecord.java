@@ -1,28 +1,30 @@
 package tiny1.procesamientos.chequeo_tipos;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 import tiny1.asint.nodos.campos.Campo;
 import tiny1.asint.nodos.campos.CamposMuchos;
 import tiny1.asint.nodos.campos.CamposUno;
+import tiny1.asint.nodos.tipos.Tipo;
+import tiny1.asint.nodos.tipos.TipoRecord;
 import tiny1.procesamientos.ProcesadorConRetorno;
 
-class ExisteCampo extends ProcesadorConRetorno<Boolean> {
-    private final String nombreCampo;
-    private boolean existe;
+class TiposRecord extends ProcesadorConRetorno<List<Class<? extends Tipo>>> {
+    private final List<Class<? extends Tipo>> tipos;
 
-    ExisteCampo(String nombreCampo) {
-        this.nombreCampo = Objects.requireNonNull(nombreCampo);
+    TiposRecord() {
+        this.tipos = new ArrayList<>();
     }
 
     @Override
-    public Boolean resultado() {
-        return existe;
+    public List<Class<? extends Tipo>> resultado() {
+        return tipos;
     }
 
     @Override
     public void procesa(Campo campo) {
-        existe |= campo.nombre().toString().equals(nombreCampo);
+        tipos.add(campo.tipo().getClass());
     }
 
     @Override
@@ -34,5 +36,10 @@ class ExisteCampo extends ProcesadorConRetorno<Boolean> {
     public void procesa(CamposMuchos campos) {
         campos.campos().procesa(this);
         campos.campo().procesa(this);
+    }
+
+    @Override
+    public void procesa(TipoRecord tipo) {
+        tipo.campos().procesa(this);
     }
 }

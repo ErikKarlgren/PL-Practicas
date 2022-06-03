@@ -14,7 +14,7 @@ import tiny1.asint.nodos.parametros.ListaParamsUno;
 import tiny1.asint.nodos.parametros.ParamsSin;
 import tiny1.procesamientos.ProcesadorConRetorno;
 
-class ContarElementos implements ProcesadorConRetorno<Integer> {
+class ContarElementos extends ProcesadorConRetorno<Integer> {
     private int contador;
 
     public ContarElementos() {

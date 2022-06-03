@@ -1,5 +1,7 @@
 package tiny1.procesamientos.chequeo_tipos;
 
+import java.util.List;
+
 import tiny1.asint.nodos.Nodo;
 import tiny1.asint.nodos.bloques.*;
 import tiny1.asint.nodos.campos.*;
@@ -17,13 +19,14 @@ import tiny1.asint.nodos.tipos.*;
 import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
-public class ChequeoTipos implements Procesador {
+public class ChequeoTipos extends Procesador {
     private final GestionErroresTiny err;
 
-    public ChequeoTipos(GestionErroresTiny err) {
-        this.err = err;
+    public ChequeoTipos() {
+        this.err = new GestionErroresTiny();
     }
 
+    @Override
     public boolean foundErrors() {
         return err.foundError();
     }
@@ -31,7 +34,12 @@ public class ChequeoTipos implements Procesador {
     /* Métodos privados */
 
     private Tipo refExc(Tipo tipo) {
-        return new RefExc().procesar(tipo);
+        // TipoOk y TipoError no se pueden procesar, porque solo se usan
+        // para comprobar tipos.
+        if (tipo instanceof TipoOk || tipo instanceof TipoError)
+            return tipo;
+        else
+            return new RefExc().procesar(tipo);
     }
 
     private int numElementos(Nodo nodo) {
@@ -47,17 +55,54 @@ public class ChequeoTipos implements Procesador {
     }
 
     private Tipo ambosOk(Tipo tipo1, Tipo tipo2) {
-        if (tipo1 instanceof TipoOk && tipo2 instanceof TipoOk)
+        if (tipo1.isOk() && tipo2.isOk())
             return new TipoOk();
         else {
-            err.errorProcesamiento("Ambos tipos no son OK " +
-                    String.format("(tipo1: %s, tipo2: %s)", tipo1, tipo2));
+            err.errorProcesamiento("Ambos tipos no son OK ", tipo1, tipo2);
             return new TipoError();
         }
     }
 
     private boolean sonCompatibles(Tipo tipo1, Tipo tipo2) {
-        throw new UnsupportedOperationException("son compatibles");
+        Tipo ref1 = refExc(tipo1);
+        Tipo ref2 = refExc(tipo2);
+
+        if (ref1 instanceof TInt)
+            return ref2 instanceof TInt;
+        if (ref1 instanceof TBool)
+            return ref2 instanceof TBool;
+        if (ref1 instanceof TReal)
+            return ref2 instanceof TReal || ref2 instanceof TInt;
+        if (ref1 instanceof TString)
+            return ref2 instanceof TString;
+        if (ref1 instanceof TipoArray && ref2 instanceof TipoArray) {
+            TipoArray arr1 = (TipoArray) ref1;
+            TipoArray arr2 = (TipoArray) ref2;
+            return arr1.longitud() == arr2.longitud()
+                    && sonCompatibles(arr1.tipoBase(), arr2.tipoBase());
+        }
+        if (ref1 instanceof TipoRecord && ref2 instanceof TipoRecord) {
+            TipoRecord rec1 = (TipoRecord) ref1;
+            TipoRecord rec2 = (TipoRecord) ref2;
+            if (numElementos(rec1.campos()) != numElementos(rec2.campos()))
+                return false;
+            List<Class<? extends Tipo>> tipos1 = new TiposRecord().procesar(rec1);
+            List<Class<? extends Tipo>> tipos2 = new TiposRecord().procesar(rec2);
+
+            for (int i = 0; i < tipos1.size(); i++)
+                if (!tipos1.get(i).equals(tipos2.get(i)))
+                    return false;
+            return true;
+        }
+        if (ref1 instanceof TipoPointer && ref2 instanceof TNull) {
+            return true;
+        }
+        if (ref1 instanceof TipoPointer && ref2 instanceof TipoPointer) {
+            TipoPointer ptr1 = (TipoPointer) ref1;
+            TipoPointer ptr2 = (TipoPointer) ref2;
+            return sonCompatibles(ptr1.tipoBase(), ptr2.tipoBase());
+        }
+        return false;
     }
 
     /* Métodos del procesador */
@@ -66,214 +111,220 @@ public class ChequeoTipos implements Procesador {
     public void procesa(ProgramaConDecs programa) {
         programa.declaraciones().procesa(this);
         programa.instrucciones().procesa(this);
-        programa.setTipo(ambosOk(
-                programa.declaraciones().getTipo(),
-                programa.instrucciones().getTipo()));
+        programa.setTipoNodo(ambosOk(
+                programa.declaraciones().tipoNodo(),
+                programa.instrucciones().tipoNodo()));
     }
 
     @Override
     public void procesa(ProgramaSinDecs programa) {
         programa.instrucciones().procesa(this);
-        programa.setTipo(programa.instrucciones().getTipo());
+        programa.setTipoNodo(programa.instrucciones().tipoNodo());
     }
 
     @Override
     public void procesa(DecsUna declaraciones) {
         declaraciones.declaracion().procesa(this);
-        declaraciones.setTipo(declaraciones.declaracion().getTipo());
+        declaraciones.setTipoNodo(declaraciones.declaracion().tipoNodo());
     }
 
     @Override
     public void procesa(DecsMuchas declaraciones) {
         declaraciones.declaraciones().procesa(this);
         declaraciones.declaracion().procesa(this);
-        declaraciones.setTipo(ambosOk(
-                declaraciones.declaraciones().getTipo(),
-                declaraciones.declaracion().getTipo()));
+        declaraciones.setTipoNodo(ambosOk(
+                declaraciones.declaraciones().tipoNodo(),
+                declaraciones.declaracion().tipoNodo()));
     }
 
     @Override
     public void procesa(DecType decType) {
         decType.tipo().procesa(this);
-        decType.setTipo(decType.tipo().getTipo());
+        decType.setTipoNodo(decType.tipo().tipoNodo());
     }
 
     @Override
     public void procesa(DecVar decVar) {
         decVar.tipo().procesa(this);
-        decVar.setTipo(decVar.tipo().getTipo());
+        decVar.setTipoNodo(decVar.tipo().tipoNodo());
     }
 
     @Override
     public void procesa(DecProc decProc) {
         decProc.listaParams().procesa(this);
         decProc.bloque().procesa(this);
-        decProc.setTipo(ambosOk(
-                decProc.listaParams().getTipo(),
-                decProc.bloque().getTipo()));
+        decProc.setTipoNodo(ambosOk(
+                decProc.listaParams().tipoNodo(),
+                decProc.bloque().tipoNodo()));
     }
 
     @Override
     public void procesa(ParamsSin parametros) {
-        parametros.setTipo(new TipoOk());
+        parametros.setTipoNodo(new TipoOk());
     }
 
     @Override
     public void procesa(ParamValor parametro) {
         parametro.tipo().procesa(this);
-        parametro.setTipo(parametro.tipo().getTipo());
+        parametro.setTipoNodo(parametro.tipo().tipoNodo());
     }
 
     @Override
     public void procesa(ParamRef parametro) {
         parametro.tipo().procesa(this);
-        parametro.setTipo(parametro.tipo().getTipo());
+        parametro.setTipoNodo(parametro.tipo().tipoNodo());
     }
 
     @Override
     public void procesa(ListaParamsUno listaParametros) {
         listaParametros.parametro().procesa(this);
-        listaParametros.setTipo(listaParametros.parametro().getTipo());
+        listaParametros.setTipoNodo(listaParametros.parametro().tipoNodo());
     }
 
     @Override
     public void procesa(ListaParamsMuchos listaParametros) {
         listaParametros.listaParametros().procesa(this);
         listaParametros.parametro().procesa(this);
-        listaParametros.setTipo(ambosOk(
-                listaParametros.listaParametros().getTipo(),
-                listaParametros.parametro().getTipo()));
+        listaParametros.setTipoNodo(ambosOk(
+                listaParametros.listaParametros().tipoNodo(),
+                listaParametros.parametro().tipoNodo()));
     }
 
     @Override
     public void procesa(TInt tipo) {
-        tipo.setTipo(new TInt());
+        tipo.setTipoNodo(new TInt());
     }
 
     @Override
     public void procesa(TReal tipo) {
-        tipo.setTipo(new TReal());
+        tipo.setTipoNodo(new TReal());
     }
 
     @Override
     public void procesa(TString tipo) {
-        tipo.setTipo(new TString());
+        tipo.setTipoNodo(new TString());
     }
 
     @Override
     public void procesa(TBool tipo) {
-        tipo.setTipo(new TBool());
+        tipo.setTipoNodo(new TBool());
     }
 
     @Override
     public void procesa(TipoArray tipo) {
         tipo.tipoBase().procesa(this);
         if (tipo.longitud() < 0) {
-            err.errorProcesamiento("Longitud negativa para tipo array = " + tipo.longitud());
-            tipo.setTipo(new TipoError());
+            err.errorProcesamiento("Longitud negativa para tipo array", tipo);
+            tipo.setTipoNodo(new TipoError());
         } else
-            tipo.setTipo(new TipoArray(tipo.longitud(), tipo.tipoBase()));
+            tipo.setTipoNodo(new TipoArray(tipo.longitud(), tipo.tipoBase()));
     }
 
     @Override
     public void procesa(TipoPointer tipo) {
         tipo.tipoBase().procesa(this);
-        tipo.setTipo(tipo.tipoBase());
+        tipo.setTipoNodo(tipo.tipoBase());
     }
 
     @Override
     public void procesa(TipoRecord tipo) {
         tipo.campos().procesa(this);
-        tipo.setTipo(tipo.campos().getTipo());
+        tipo.setTipoNodo(tipo.campos().tipoNodo());
     }
 
     @Override
     public void procesa(TipoNuevo tipoNuevo) {
-        if (tipoNuevo.vinculo() instanceof DecType)
-            tipoNuevo.setTipo(new TipoOk());
-        else {
-            err.errorProcesamiento("Tipo nuevo no está vinculado a un tipo");
-            tipoNuevo.setTipo(new TipoError());
+        if (tipoNuevo.vinculo() instanceof DecType) {
+            DecType dec = (DecType) tipoNuevo.vinculo();
+            tipoNuevo.setTipoNodo(dec.tipo());
+        } else {
+            err.errorProcesamiento("Tipo nuevo no está vinculado a un tipo", tipoNuevo);
+            tipoNuevo.setTipoNodo(new TipoError());
         }
+    }
+
+    @Override
+    public void procesa(TNull tipo) {
+        tipo.setTipoNodo(new TNull());
     }
 
     @Override
     public void procesa(Campo campo) {
         campo.tipo().procesa(this);
-        campo.setTipo(campo.tipo().getTipo());
+        campo.setTipoNodo(campo.tipo().tipoNodo());
     }
 
     @Override
     public void procesa(CamposUno campos) {
         campos.campo().procesa(this);
-        campos.setTipo(campos.campo().getTipo());
+        campos.setTipoNodo(campos.campo().tipoNodo());
     }
 
     @Override
     public void procesa(CamposMuchos campos) {
         campos.campos().procesa(this);
         campos.campo().procesa(this);
-        campos.setTipo(ambosOk(
-                campos.campos().getTipo(),
-                campos.campo().getTipo()));
+        campos.setTipoNodo(ambosOk(
+                campos.campos().tipoNodo(),
+                campos.campo().tipoNodo()));
     }
 
     @Override
     public void procesa(InstrUna instrucciones) {
         instrucciones.instruccion().procesa(this);
-        instrucciones.setTipo(instrucciones.instruccion().getTipo());
+        instrucciones.setTipoNodo(instrucciones.instruccion().tipoNodo());
     }
 
     @Override
     public void procesa(InstrMuchas instrucciones) {
         instrucciones.instrucciones().procesa(this);
         instrucciones.instruccion().procesa(this);
-        instrucciones.setTipo(ambosOk(
-                instrucciones.instrucciones().getTipo(),
-                instrucciones.instruccion().getTipo()));
+        instrucciones.setTipoNodo(ambosOk(
+                instrucciones.instrucciones().tipoNodo(),
+                instrucciones.instruccion().tipoNodo()));
     }
 
     @Override
     public void procesa(InstrAsignacion instruccion) {
         instruccion.expresionIzquierda().procesa(this);
         instruccion.expresionDerecha().procesa(this);
-        if (sonCompatibles(instruccion.expresionIzquierda().getTipo(), instruccion.expresionDerecha().getTipo()))
-            instruccion.setTipo(new TipoOk());
+        if (sonCompatibles(instruccion.expresionIzquierda().tipoNodo(), instruccion.expresionDerecha().tipoNodo()))
+            instruccion.setTipoNodo(new TipoOk());
         else {
             err.errorProcesamiento("No se puede asignar una expresión de tipo "
-                    + instruccion.expresionDerecha().getTipo()
+                    + instruccion.expresionDerecha().tipoNodo()
                     + " a una expresión de tipo "
-                    + instruccion.expresionIzquierda().getTipo());
-            instruccion.setTipo(new TipoError());
+                    + instruccion.expresionIzquierda().tipoNodo());
+            instruccion.setTipoNodo(new TipoError());
         }
     }
 
     @Override
     public void procesa(InstrOptNinguna instruccionOpt) {
-        instruccionOpt.setTipo(new TipoOk());
+        instruccionOpt.setTipoNodo(new TipoOk());
     }
 
     @Override
     public void procesa(InstrOptMuchas instruccionesOpt) {
         instruccionesOpt.instrucciones().procesa(this);
-        instruccionesOpt.setTipo(instruccionesOpt.instrucciones().getTipo());
+        instruccionesOpt.setTipoNodo(instruccionesOpt.instrucciones().tipoNodo());
     }
 
     @Override
     public void procesa(InstruccionIf instruccion) {
         instruccion.expresion().procesa(this);
         instruccion.instruccionesOpt().procesa(this);
-        Tipo t = refExc(instruccion.expresion().getTipo());
+        Tipo t = refExc(instruccion.expresion().tipoNodo());
 
-        if (t instanceof TBool && instruccion.instruccionesOpt().getTipo() instanceof TipoOk) {
-            instruccion.setTipo(new TipoOk());
+        if (t instanceof TBool && instruccion.instruccionesOpt().tipoNodo().isOk()) {
+            instruccion.setTipoNodo(new TipoOk());
             return;
         } else if (!(t instanceof TBool)) {
-            err.errorProcesamiento("Tipo de expresión de if no es booleana");
+            err.errorProcesamiento("Tipo de expresión de if no es booleana", instruccion);
         } else {
-            err.errorProcesamiento("Tipo de instrucciones if no es correcto");
+            err.errorProcesamiento("Tipo de instrucciones if no es correcto", instruccion);
         }
-        instruccion.setTipo(new TipoError());
+        instruccion.setTipoNodo(new TipoError());
     }
 
     @Override
@@ -281,97 +332,97 @@ public class ChequeoTipos implements Procesador {
         instruccion.expresion().procesa(this);
         instruccion.instruccionesOptIf().procesa(this);
         instruccion.instruccionesOptElse().procesa(this);
-        Tipo t = refExc(instruccion.expresion().getTipo());
+        Tipo t = refExc(instruccion.expresion().tipoNodo());
 
         if (t instanceof TBool
-                && instruccion.instruccionesOptIf().getTipo() instanceof TipoOk
-                && instruccion.instruccionesOptElse().getTipo() instanceof TipoOk) {
-            instruccion.setTipo(new TipoOk());
+                && instruccion.instruccionesOptIf().tipoNodo().isOk()
+                && instruccion.instruccionesOptElse().tipoNodo().isOk()) {
+            instruccion.setTipoNodo(new TipoOk());
             return;
         } else if (!(t instanceof TBool)) {
-            err.errorProcesamiento("Tipo de expresión de if no es booleana");
-        } else if (!(instruccion.instruccionesOptIf().getTipo() instanceof TipoOk)) {
-            err.errorProcesamiento("Tipo de instrucciones if no es correcto");
-        } else if (!(instruccion.instruccionesOptElse().getTipo() instanceof TipoOk)) {
-            err.errorProcesamiento("Tipo de instrucciones else no es correcto");
+            err.errorProcesamiento("Tipo de expresión de if no es booleana", instruccion);
+        } else if (!(instruccion.instruccionesOptIf().tipoNodo().isOk())) {
+            err.errorProcesamiento("Tipo de instrucciones if no es correcto", instruccion);
+        } else if (!(instruccion.instruccionesOptElse().tipoNodo().isOk())) {
+            err.errorProcesamiento("Tipo de instrucciones else no es correcto", instruccion);
         }
-        instruccion.setTipo(new TipoError());
+        instruccion.setTipoNodo(new TipoError());
     }
 
     @Override
     public void procesa(InstruccionWhile instruccion) {
         instruccion.expresion().procesa(this);
         instruccion.instruccionesOpt().procesa(this);
-        Tipo t = refExc(instruccion.expresion().getTipo());
+        Tipo t = refExc(instruccion.expresion().tipoNodo());
 
-        if (t instanceof TBool && instruccion.instruccionesOpt().getTipo() instanceof TipoOk) {
-            instruccion.setTipo(new TipoOk());
+        if (t instanceof TBool && instruccion.instruccionesOpt().tipoNodo().isOk()) {
+            instruccion.setTipoNodo(new TipoOk());
             return;
         } else if (!(t instanceof TBool)) {
-            err.errorProcesamiento("Tipo de expresión de while no es booleana");
+            err.errorProcesamiento("Tipo de expresión de while no es booleana", instruccion);
         } else {
-            err.errorProcesamiento("Tipo de instrucciones while no es correcto");
+            err.errorProcesamiento("Tipo de instrucciones while no es correcto", instruccion);
         }
-        instruccion.setTipo(new TipoError());
+        instruccion.setTipoNodo(new TipoError());
     }
 
     @Override
     public void procesa(InstruccionRead instruccion) {
         instruccion.expresion().procesa(this);
-        Tipo t = refExc(instruccion.expresion().getTipo());
+        Tipo t = refExc(instruccion.expresion().tipoNodo());
 
         if (instruccion.expresion().esDesignador()
-                && (t instanceof TInt || t instanceof TReal || t instanceof TBool)) {
-            instruccion.setTipo(new TipoOk());
+                && (t instanceof TInt || t instanceof TReal || t instanceof TString)) {
+            instruccion.setTipoNodo(new TipoOk());
             return;
         } else if (!instruccion.expresion().esDesignador()) {
-            err.errorProcesamiento("La expresión de read no es un designador");
+            err.errorProcesamiento("La expresión de read no es un designador", instruccion);
         } else {
-            err.errorProcesamiento("La expresión de read no es de un tipo válido. Tipo = " + t);
+            err.errorProcesamiento("La expresión de read no es de un tipo válido. Tipo = " + t, instruccion);
         }
-        instruccion.setTipo(new TipoError());
+        instruccion.setTipoNodo(new TipoError());
     }
 
     @Override
     public void procesa(InstruccionWrite instruccion) {
         instruccion.expresion().procesa(this);
-        Tipo t = refExc(instruccion.expresion().getTipo());
+        Tipo t = refExc(instruccion.expresion().tipoNodo());
         if (t instanceof TInt || t instanceof TReal || t instanceof TString || t instanceof TBool) {
-            instruccion.setTipo(new TipoOk());
+            instruccion.setTipoNodo(new TipoOk());
         } else {
-            err.errorProcesamiento("La expresión de write no es de un tipo válido. Tipo = " + t);
-            instruccion.setTipo(new TipoError());
+            err.errorProcesamiento("La expresión de write no es de un tipo válido. Tipo = " + t, instruccion);
+            instruccion.setTipoNodo(new TipoError());
         }
     }
 
     @Override
     public void procesa(InstruccionNL instruccion) {
-        instruccion.setTipo(new TipoOk());
+        instruccion.setTipoNodo(new TipoOk());
     }
 
     @Override
     public void procesa(InstruccionNew instruccion) {
         instruccion.expresion().procesa(this);
-        Tipo t = refExc(instruccion.expresion().getTipo());
+        Tipo t = refExc(instruccion.expresion().tipoNodo());
 
         if (t instanceof TipoPointer)
-            instruccion.setTipo(new TipoOk());
+            instruccion.setTipoNodo(new TipoOk());
         else {
-            err.errorProcesamiento("La expresión de new no es de un tipo pointer. Tipo = " + t);
-            instruccion.setTipo(new TipoError());
+            err.errorProcesamiento("La expresión de new no es de un tipo pointer. Tipo = " + t, instruccion);
+            instruccion.setTipoNodo(new TipoError());
         }
     }
 
     @Override
     public void procesa(InstruccionDelete instruccion) {
         instruccion.expresion().procesa(this);
-        Tipo t = refExc(instruccion.expresion().getTipo());
+        Tipo t = refExc(instruccion.expresion().tipoNodo());
 
         if (t instanceof TipoPointer)
-            instruccion.setTipo(new TipoOk());
+            instruccion.setTipoNodo(new TipoOk());
         else {
-            err.errorProcesamiento("La expresión de delete no es de un tipo pointer. Tipo = " + t);
-            instruccion.setTipo(new TipoError());
+            err.errorProcesamiento("La expresión de delete no es de un tipo pointer. Tipo = " + t, instruccion);
+            instruccion.setTipoNodo(new TipoError());
         }
     }
 
@@ -380,14 +431,14 @@ public class ChequeoTipos implements Procesador {
         if (instruccion.vinculo() instanceof DecProc) {
             DecProc proc = (DecProc) (instruccion.vinculo());
             if (numElementos(instruccion.parametros()) == numElementos(proc.listaParams())) {
-                instruccion.setTipo(chequeoParametros(instruccion.parametros(), proc.listaParams()));
+                instruccion.setTipoNodo(chequeoParametros(instruccion.parametros(), proc.listaParams()));
             } else {
-                err.errorProcesamiento("El número de parámetros de la llamada no es correcto");
-                instruccion.setTipo(new TipoError());
+                err.errorProcesamiento("El número de parámetros de la llamada no es correcto", instruccion);
+                instruccion.setTipoNodo(new TipoError());
             }
         } else {
-            err.errorProcesamiento("El vínculo de la llamada no es un procedimiento");
-            instruccion.setTipo(new TipoError());
+            err.errorProcesamiento("El vínculo de la llamada no es un procedimiento", instruccion);
+            instruccion.setTipoNodo(new TipoError());
         }
     }
 
@@ -399,7 +450,7 @@ public class ChequeoTipos implements Procesador {
         else if (exps instanceof ExpresionesNinguna && params instanceof ParamsSin)
             return chequeoParametros((ExpresionesNinguna) exps, (ParamsSin) params);
         else {
-            err.errorProcesamiento("El número de parámetros de la llamada no es correcto");
+            err.errorProcesamiento("El número de parámetros de la llamada no es correcto", exps, params);
             return new TipoError();
         }
     }
@@ -424,7 +475,7 @@ public class ChequeoTipos implements Procesador {
         else if (exps1 instanceof ExpresionesNinguna && params1 instanceof ParamsSin)
             tipoMuchos = chequeoParametros((ExpresionesNinguna) exps1, (ParamsSin) params1);
         else {
-            err.errorProcesamiento("El número de parámetros de la llamada no es correcto");
+            err.errorProcesamiento("El número de parámetros de la llamada no es correcto", exps, params);
             return new TipoError();
         }
         return ambosOk(tipoMuchos, chequeoParametro(exps.expresion(), params.parametro()));
@@ -439,31 +490,34 @@ public class ChequeoTipos implements Procesador {
 
     private Tipo chequeoParametro(Expresion exp, ParamValor param) {
         exp.procesa(this);
-        if (sonCompatibles(param.getTipo(), exp.getTipo()))
+        if (sonCompatibles(param.tipoNodo(), exp.tipoNodo()))
             return new TipoOk();
         else {
             err.errorProcesamiento(
                     String.format("El tipo %s del parámetro %s no es compatible con el tipo %s de la expresión",
                             param.nombre(),
-                            param.getTipo(),
-                            exp.getTipo()));
+                            param.tipoNodo(),
+                            exp.tipoNodo()),
+                    exp, param);
             return new TipoError();
         }
     }
 
     private Tipo chequeoParametro(Expresion exp, ParamRef param) {
         exp.procesa(this);
-        if (exp.esDesignador() && sonCompatibles(param.getTipo(), exp.getTipo())) {
+        if (exp.esDesignador() && sonCompatibles(param.tipoNodo(), exp.tipoNodo())) {
             return new TipoOk();
         } else if (!exp.esDesignador()) {
             err.errorProcesamiento(
                     String.format("La expresión para el parámetro %s no es un designador",
-                            param.nombre()));
+                            param.nombre()),
+                    exp, param);
         } else {
             err.errorProcesamiento(
                     String.format("El tipo de parámetro %s no es compatible con el tipo %s de la expresión",
-                            param.getTipo(),
-                            exp.getTipo()));
+                            param.tipoNodo(),
+                            exp.tipoNodo()),
+                    exp, param);
         }
         return new TipoError();
     }
@@ -471,56 +525,56 @@ public class ChequeoTipos implements Procesador {
     @Override
     public void procesa(InstruccionBloque instrucciones) {
         instrucciones.bloque().procesa(this);
-        instrucciones.setTipo(instrucciones.bloque().getTipo());
+        instrucciones.setTipoNodo(instrucciones.bloque().tipoNodo());
     }
 
     @Override
     public void procesa(BloqueVacio bloque) {
-        bloque.setTipo(new TipoOk());
+        bloque.setTipoNodo(new TipoOk());
     }
 
     @Override
     public void procesa(BloqueLleno bloques) {
         bloques.programa().procesa(this);
-        bloques.setTipo(bloques.programa().getTipo());
+        bloques.setTipoNodo(bloques.programa().tipoNodo());
     }
 
     @Override
     public void procesa(ExpresionesNinguna expresiones) {
-        expresiones.setTipo(new TipoOk());
+        expresiones.setTipoNodo(new TipoOk());
     }
 
     @Override
     public void procesa(ExpresionesUna expresiones) {
         expresiones.expresion().procesa(this);
-        expresiones.setTipo(expresiones.expresion().getTipo());
+        expresiones.setTipoNodo(expresiones.expresion().tipoNodo());
     }
 
     @Override
     public void procesa(ExpresionesMuchas expresiones) {
         expresiones.expresiones().procesa(this);
         expresiones.expresion().procesa(this);
-        expresiones.setTipo(ambosOk(
-                expresiones.expresiones().getTipo(),
-                expresiones.expresion().getTipo()));
+        expresiones.setTipoNodo(ambosOk(
+                expresiones.expresiones().tipoNodo(),
+                expresiones.expresion().tipoNodo()));
     }
 
     @Override
     public void procesa(Suma suma) {
         suma.arg0().procesa(this);
         suma.arg1().procesa(this);
-        Tipo t1 = refExc(suma.arg0().getTipo());
-        Tipo t2 = refExc(suma.arg1().getTipo());
+        Tipo t1 = refExc(suma.arg0().tipoNodo());
+        Tipo t2 = refExc(suma.arg1().tipoNodo());
 
         if (t1 instanceof TInt && t2 instanceof TInt)
-            suma.setTipo(new TInt());
+            suma.setTipoNodo(new TInt());
         else if (t1 instanceof TReal && (t2 instanceof TReal || t2 instanceof TInt))
-            suma.setTipo(new TReal());
+            suma.setTipoNodo(new TReal());
         else if (t2 instanceof TReal && (t1 instanceof TReal || t1 instanceof TInt))
-            suma.setTipo(new TReal());
+            suma.setTipoNodo(new TReal());
         else {
             err.errorProcesamiento(String.format("No se puede sumar %s con %s", t1, t2));
-            suma.setTipo(new TipoError());
+            suma.setTipoNodo(new TipoError());
         }
     }
 
@@ -528,18 +582,18 @@ public class ChequeoTipos implements Procesador {
     public void procesa(Resta resta) {
         resta.arg0().procesa(this);
         resta.arg1().procesa(this);
-        Tipo t1 = refExc(resta.arg0().getTipo());
-        Tipo t2 = refExc(resta.arg1().getTipo());
+        Tipo t1 = refExc(resta.arg0().tipoNodo());
+        Tipo t2 = refExc(resta.arg1().tipoNodo());
 
         if (t1 instanceof TInt && t2 instanceof TInt)
-            resta.setTipo(new TInt());
+            resta.setTipoNodo(new TInt());
         else if (t1 instanceof TReal && (t2 instanceof TReal || t2 instanceof TInt))
-            resta.setTipo(new TReal());
+            resta.setTipoNodo(new TReal());
         else if (t2 instanceof TReal && (t1 instanceof TReal || t1 instanceof TInt))
-            resta.setTipo(new TReal());
+            resta.setTipoNodo(new TReal());
         else {
             err.errorProcesamiento(String.format("No se puede restar %s con %s", t1, t2));
-            resta.setTipo(new TipoError());
+            resta.setTipoNodo(new TipoError());
         }
     }
 
@@ -547,18 +601,18 @@ public class ChequeoTipos implements Procesador {
     public void procesa(Multiplicacion multiplicacion) {
         multiplicacion.arg0().procesa(this);
         multiplicacion.arg1().procesa(this);
-        Tipo t1 = refExc(multiplicacion.arg0().getTipo());
-        Tipo t2 = refExc(multiplicacion.arg1().getTipo());
+        Tipo t1 = refExc(multiplicacion.arg0().tipoNodo());
+        Tipo t2 = refExc(multiplicacion.arg1().tipoNodo());
 
         if (t1 instanceof TInt && t2 instanceof TInt)
-            multiplicacion.setTipo(new TInt());
+            multiplicacion.setTipoNodo(new TInt());
         else if (t1 instanceof TReal && (t2 instanceof TReal || t2 instanceof TInt))
-            multiplicacion.setTipo(new TReal());
+            multiplicacion.setTipoNodo(new TReal());
         else if (t2 instanceof TReal && (t1 instanceof TReal || t1 instanceof TInt))
-            multiplicacion.setTipo(new TReal());
+            multiplicacion.setTipoNodo(new TReal());
         else {
             err.errorProcesamiento(String.format("No se puede multiplicar %s con %s", t1, t2));
-            multiplicacion.setTipo(new TipoError());
+            multiplicacion.setTipoNodo(new TipoError());
         }
     }
 
@@ -566,18 +620,18 @@ public class ChequeoTipos implements Procesador {
     public void procesa(Division division) {
         division.arg0().procesa(this);
         division.arg1().procesa(this);
-        Tipo t1 = refExc(division.arg0().getTipo());
-        Tipo t2 = refExc(division.arg1().getTipo());
+        Tipo t1 = refExc(division.arg0().tipoNodo());
+        Tipo t2 = refExc(division.arg1().tipoNodo());
 
         if (t1 instanceof TInt && t2 instanceof TInt)
-            division.setTipo(new TInt());
+            division.setTipoNodo(new TInt());
         else if (t1 instanceof TReal && (t2 instanceof TReal || t2 instanceof TInt))
-            division.setTipo(new TReal());
+            division.setTipoNodo(new TReal());
         else if (t2 instanceof TReal && (t1 instanceof TReal || t1 instanceof TInt))
-            division.setTipo(new TReal());
+            division.setTipoNodo(new TReal());
         else {
             err.errorProcesamiento(String.format("No se puede dividir %s con %s", t1, t2));
-            division.setTipo(new TipoError());
+            division.setTipoNodo(new TipoError());
         }
     }
 
@@ -585,84 +639,84 @@ public class ChequeoTipos implements Procesador {
     public void procesa(PorCiento porciento) {
         porciento.arg0().procesa(this);
         porciento.arg1().procesa(this);
-        Tipo t1 = refExc(porciento.arg0().getTipo());
-        Tipo t2 = refExc(porciento.arg1().getTipo());
+        Tipo t1 = refExc(porciento.arg0().tipoNodo());
+        Tipo t2 = refExc(porciento.arg1().tipoNodo());
 
         if (t1 instanceof TInt && t2 instanceof TInt)
-            porciento.setTipo(new TInt());
+            porciento.setTipoNodo(new TInt());
         else {
             err.errorProcesamiento(String.format("No se puede calcular el módulo de %s con %s", t1, t2));
-            porciento.setTipo(new TipoError());
+            porciento.setTipoNodo(new TipoError());
         }
     }
 
     @Override
     public void procesa(Menos menos) {
         menos.arg().procesa(this);
-        Tipo t = refExc(menos.arg().getTipo());
+        Tipo t = refExc(menos.arg().tipoNodo());
         if (t instanceof TInt || t instanceof TReal)
-            menos.setTipo(t);
+            menos.setTipoNodo(t);
         else {
             err.errorProcesamiento(String.format("No se puede calcular el negativo de %s", t));
-            menos.setTipo(new TipoError());
+            menos.setTipoNodo(new TipoError());
         }
     }
 
     @Override
     public void procesa(NumeroEntero numero) {
-        numero.setTipo(new TInt());
+        numero.setTipoNodo(new TInt());
     }
 
     @Override
     public void procesa(NumeroReal numero) {
-        numero.setTipo(new TReal());
+        numero.setTipoNodo(new TReal());
     }
 
     @Override
     public void procesa(Identificador identificador) {
         if (identificador.vinculo() instanceof DecVar) {
             DecVar dec = (DecVar) (identificador.vinculo());
-            identificador.setTipo(dec.getTipo());
+            identificador.setTipoNodo(dec.tipoNodo());
         } else {
             err.errorProcesamiento(
                     String.format("El identificador %s no se corresponde con una variable",
                             identificador.id()));
-            identificador.setTipo(new TipoError());
+            identificador.setTipoNodo(new TipoError());
         }
     }
 
     @Override
     public void procesa(True booleanoTrue) {
-        booleanoTrue.setTipo(new TBool());
+        booleanoTrue.setTipoNodo(new TBool());
     }
 
     @Override
     public void procesa(False booleanoFalse) {
-        booleanoFalse.setTipo(new TBool());
+        booleanoFalse.setTipoNodo(new TBool());
     }
 
     @Override
     public void procesa(Null nulo) {
-        nulo.setTipo(new TNull());
+        nulo.setTipoNodo(new TNull());
     }
 
     @Override
     public void procesa(Cadena cadena) {
-        cadena.setTipo(new TString());
+        cadena.setTipoNodo(new TString());
     }
 
     @Override
     public void procesa(And and) {
         and.arg0().procesa(this);
         and.arg1().procesa(this);
-        Tipo t1 = refExc(and.arg0().getTipo());
-        Tipo t2 = refExc(and.arg1().getTipo());
+        Tipo t1 = refExc(and.arg0().tipoNodo());
+        Tipo t2 = refExc(and.arg1().tipoNodo());
 
         if (t1 instanceof TBool && t2 instanceof TBool)
-            and.setTipo(new TBool());
+            and.setTipoNodo(new TBool());
         else {
             err.errorProcesamiento(String.format("No se puede operar '%s and %s'", t1, t2));
-            and.setTipo(new TipoError());
+            and.setTipoNodo(new TipoError());
         }
     }
 
@@ -670,26 +724,26 @@ public class ChequeoTipos implements Procesador {
     public void procesa(Or or) {
         or.arg0().procesa(this);
         or.arg1().procesa(this);
-        Tipo t1 = refExc(or.arg0().getTipo());
-        Tipo t2 = refExc(or.arg1().getTipo());
+        Tipo t1 = refExc(or.arg0().tipoNodo());
+        Tipo t2 = refExc(or.arg1().tipoNodo());
 
         if (t1 instanceof TBool && t2 instanceof TBool)
-            or.setTipo(new TBool());
+            or.setTipoNodo(new TBool());
         else {
             err.errorProcesamiento(String.format("No se puede operar '%s or %s'", t1, t2));
-            or.setTipo(new TipoError());
+            or.setTipoNodo(new TipoError());
         }
     }
 
     @Override
     public void procesa(Not or) {
         or.arg().procesa(this);
-        Tipo t = refExc(or.arg().getTipo());
+        Tipo t = refExc(or.arg().tipoNodo());
         if (t instanceof TBool)
-            or.setTipo(t);
+            or.setTipoNodo(t);
         else {
             err.errorProcesamiento(String.format("No se puede operar 'not %s'", t));
-            or.setTipo(new TipoError());
+            or.setTipoNodo(new TipoError());
         }
     }
 
@@ -697,18 +751,18 @@ public class ChequeoTipos implements Procesador {
     public void procesa(Menor menor) {
         menor.arg0().procesa(this);
         menor.arg1().procesa(this);
-        Tipo t1 = refExc(menor.arg0().getTipo());
-        Tipo t2 = refExc(menor.arg1().getTipo());
+        Tipo t1 = refExc(menor.arg0().tipoNodo());
+        Tipo t2 = refExc(menor.arg1().tipoNodo());
 
         if (t1 instanceof TBool && t2 instanceof TBool)
-            menor.setTipo(new TBool());
+            menor.setTipoNodo(new TBool());
         else if ((t1 instanceof TReal || t1 instanceof TInt) && (t2 instanceof TReal || t2 instanceof TInt))
-            menor.setTipo(new TBool());
+            menor.setTipoNodo(new TBool());
         else if (t1 instanceof TString && t2 instanceof TString)
-            menor.setTipo(new TBool());
+            menor.setTipoNodo(new TBool());
         else {
             err.errorProcesamiento(String.format("No se puede operar '%s < %s'", t1, t2));
-            menor.setTipo(new TipoError());
+            menor.setTipoNodo(new TipoError());
         }
     }
 
@@ -716,18 +770,18 @@ public class ChequeoTipos implements Procesador {
     public void procesa(MenorIgual menorIgual) {
         menorIgual.arg0().procesa(this);
         menorIgual.arg1().procesa(this);
-        Tipo t1 = refExc(menorIgual.arg0().getTipo());
-        Tipo t2 = refExc(menorIgual.arg1().getTipo());
+        Tipo t1 = refExc(menorIgual.arg0().tipoNodo());
+        Tipo t2 = refExc(menorIgual.arg1().tipoNodo());
 
         if (t1 instanceof TBool && t2 instanceof TBool)
-            menorIgual.setTipo(new TBool());
+            menorIgual.setTipoNodo(new TBool());
         else if ((t1 instanceof TReal || t1 instanceof TInt) && (t2 instanceof TReal || t2 instanceof TInt))
-            menorIgual.setTipo(new TBool());
+            menorIgual.setTipoNodo(new TBool());
         else if (t1 instanceof TString && t2 instanceof TString)
-            menorIgual.setTipo(new TBool());
+            menorIgual.setTipoNodo(new TBool());
         else {
             err.errorProcesamiento(String.format("No se puede operar '%s <= %s'", t1, t2));
-            menorIgual.setTipo(new TipoError());
+            menorIgual.setTipoNodo(new TipoError());
         }
     }
 
@@ -735,18 +789,18 @@ public class ChequeoTipos implements Procesador {
     public void procesa(Mayor mayor) {
         mayor.arg0().procesa(this);
         mayor.arg1().procesa(this);
-        Tipo t1 = refExc(mayor.arg0().getTipo());
-        Tipo t2 = refExc(mayor.arg1().getTipo());
+        Tipo t1 = refExc(mayor.arg0().tipoNodo());
+        Tipo t2 = refExc(mayor.arg1().tipoNodo());
 
         if (t1 instanceof TBool && t2 instanceof TBool)
-            mayor.setTipo(new TBool());
+            mayor.setTipoNodo(new TBool());
         else if ((t1 instanceof TReal || t1 instanceof TInt) && (t2 instanceof TReal || t2 instanceof TInt))
-            mayor.setTipo(new TBool());
+            mayor.setTipoNodo(new TBool());
         else if (t1 instanceof TString && t2 instanceof TString)
-            mayor.setTipo(new TBool());
+            mayor.setTipoNodo(new TBool());
         else {
             err.errorProcesamiento(String.format("No se puede operar '%s > %s'", t1, t2));
-            mayor.setTipo(new TipoError());
+            mayor.setTipoNodo(new TipoError());
         }
     }
 
@@ -754,18 +808,18 @@ public class ChequeoTipos implements Procesador {
     public void procesa(MayorIgual mayorIgual) {
         mayorIgual.arg0().procesa(this);
         mayorIgual.arg1().procesa(this);
-        Tipo t1 = refExc(mayorIgual.arg0().getTipo());
-        Tipo t2 = refExc(mayorIgual.arg1().getTipo());
+        Tipo t1 = refExc(mayorIgual.arg0().tipoNodo());
+        Tipo t2 = refExc(mayorIgual.arg1().tipoNodo());
 
         if (t1 instanceof TBool && t2 instanceof TBool)
-            mayorIgual.setTipo(new TBool());
+            mayorIgual.setTipoNodo(new TBool());
         else if ((t1 instanceof TReal || t1 instanceof TInt) && (t2 instanceof TReal || t2 instanceof TInt))
-            mayorIgual.setTipo(new TBool());
+            mayorIgual.setTipoNodo(new TBool());
         else if (t1 instanceof TString && t2 instanceof TString)
-            mayorIgual.setTipo(new TBool());
+            mayorIgual.setTipoNodo(new TBool());
         else {
             err.errorProcesamiento(String.format("No se puede operar '%s >= %s'", t1, t2));
-            mayorIgual.setTipo(new TipoError());
+            mayorIgual.setTipoNodo(new TipoError());
         }
     }
 
@@ -773,22 +827,22 @@ public class ChequeoTipos implements Procesador {
     public void procesa(Igual igual) {
         igual.arg0().procesa(this);
         igual.arg1().procesa(this);
-        Tipo t1 = refExc(igual.arg0().getTipo());
-        Tipo t2 = refExc(igual.arg1().getTipo());
+        Tipo t1 = refExc(igual.arg0().tipoNodo());
+        Tipo t2 = refExc(igual.arg1().tipoNodo());
 
         if (t1 instanceof TBool && t2 instanceof TBool) {
-            igual.setTipo(new TBool());
+            igual.setTipoNodo(new TBool());
         } else if ((t1 instanceof TReal || t1 instanceof TInt)
                 && (t2 instanceof TReal || t2 instanceof TInt)) {
-            igual.setTipo(new TBool());
+            igual.setTipoNodo(new TBool());
         } else if (t1 instanceof TString && t2 instanceof TString) {
-            igual.setTipo(new TBool());
+            igual.setTipoNodo(new TBool());
         } else if ((t1 instanceof TNull || t1 instanceof TipoPointer)
                 && (t2 instanceof TNull || t2 instanceof TipoPointer)) {
-            igual.setTipo(new TBool());
+            igual.setTipoNodo(new TBool());
         } else {
             err.errorProcesamiento(String.format("No se puede operar '%s == %s'", t1, t2));
-            igual.setTipo(new TipoError());
+            igual.setTipoNodo(new TipoError());
         }
     }
 
@@ -796,22 +850,22 @@ public class ChequeoTipos implements Procesador {
     public void procesa(Distinto distinto) {
         distinto.arg0().procesa(this);
         distinto.arg1().procesa(this);
-        Tipo t1 = refExc(distinto.arg0().getTipo());
-        Tipo t2 = refExc(distinto.arg1().getTipo());
+        Tipo t1 = refExc(distinto.arg0().tipoNodo());
+        Tipo t2 = refExc(distinto.arg1().tipoNodo());
 
         if (t1 instanceof TBool && t2 instanceof TBool) {
-            distinto.setTipo(new TBool());
+            distinto.setTipoNodo(new TBool());
         } else if ((t1 instanceof TReal || t1 instanceof TInt)
                 && (t2 instanceof TReal || t2 instanceof TInt)) {
-            distinto.setTipo(new TBool());
+            distinto.setTipoNodo(new TBool());
         } else if (t1 instanceof TString && t2 instanceof TString) {
-            distinto.setTipo(new TBool());
+            distinto.setTipoNodo(new TBool());
         } else if ((t1 instanceof TNull || t1 instanceof TipoPointer)
                 && (t2 instanceof TNull || t2 instanceof TipoPointer)) {
-            distinto.setTipo(new TBool());
+            distinto.setTipoNodo(new TBool());
         } else {
             err.errorProcesamiento(String.format("No se puede operar '%s != %s'", t1, t2));
-            distinto.setTipo(new TipoError());
+            distinto.setTipoNodo(new TipoError());
         }
     }
 
@@ -819,18 +873,20 @@ public class ChequeoTipos implements Procesador {
     public void procesa(AccesoArray accesoArray) {
         accesoArray.arg0().procesa(this);
         accesoArray.arg1().procesa(this);
-        Tipo t1 = refExc(accesoArray.arg0().getTipo());
-        Tipo t2 = refExc(accesoArray.arg1().getTipo());
+        Tipo t1 = refExc(accesoArray.arg0().tipoNodo());
+        Tipo t2 = refExc(accesoArray.arg1().tipoNodo());
 
         if (t1 instanceof TipoArray && t2 instanceof TInt) {
-            accesoArray.setTipo(((TipoArray) t1).getTipo());
+            accesoArray.setTipoNodo(((TipoArray) t1).tipoBase());
         } else if (!(t1 instanceof TipoArray)) {
             err.errorProcesamiento(String
-                    .format("No se puede acceder a un elemento de una variable que no es un array '%s[%s]'", t1, t2));
-            accesoArray.setTipo(new TipoError());
+                    .format("No se puede acceder a un elemento de una variable que no es un array '%s[%s]'", t1, t2),
+                    accesoArray);
+            accesoArray.setTipoNodo(new TipoError());
         } else {
-            err.errorProcesamiento(String.format("No se puede acceder a un elemento de un array '%s[%s]'", t1, t2));
-            accesoArray.setTipo(new TipoError());
+            err.errorProcesamiento(String.format("No se puede acceder a un elemento de un array '%s[%s]'", t1, t2),
+                    accesoArray);
+            accesoArray.setTipoNodo(new TipoError());
         }
     }
 
@@ -838,24 +894,25 @@ public class ChequeoTipos implements Procesador {
     public void procesa(Punto punto) {
         punto.arg0().procesa(this);
         String campo = punto.arg1();
-        Tipo t = refExc(punto.arg0().getTipo());
+        Tipo t = refExc(punto.arg0().tipoNodo());
 
         if (!(t instanceof TipoRecord)) {
             err.errorProcesamiento(
-                    String.format("No se puede acceder a un campo de una variable que no es un record '%s.%s'",
-                            t, campo));
-            punto.setTipo(new TipoError());
+                    String.format("No se puede acceder a un campo de una variable que no es un record"),
+                    punto);
+            punto.setTipoNodo(new TipoError());
             return;
         }
 
         TipoRecord tr = (TipoRecord) t;
         if (existeCampo(tr.campos(), campo)) {
-            punto.setTipo(tipoDeCampo(tr.campos(), campo));
+            punto.setTipoNodo(tipoDeCampo(tr.campos(), campo));
         } else {
             err.errorProcesamiento(
                     String.format("No se puede acceder a un campo que no existe en un record '%s.%s'",
-                            t, campo));
-            punto.setTipo(new TipoError());
+                            t, campo),
+                    punto);
+            punto.setTipoNodo(new TipoError());
         }
     }
 
@@ -863,50 +920,54 @@ public class ChequeoTipos implements Procesador {
     public void procesa(Flecha flecha) {
         flecha.arg0().procesa(this);
         String campo = flecha.arg1();
-        Tipo refT = refExc(flecha.arg0().getTipo());
+        Tipo refT = refExc(flecha.arg0().tipoNodo());
 
         if (!(refT instanceof TipoPointer)) {
-            flecha.setTipo(new TipoError());
+            flecha.setTipoNodo(new TipoError());
             err.errorProcesamiento(
                     String.format("No se puede acceder a un campo de una variable que no es un puntero '%s->%s'",
-                            refT, campo));
+                            refT, campo),
+                    flecha);
             return;
         }
 
         TipoPointer tp = (TipoPointer) refT;
         Tipo refPointer = refExc(tp.tipoBase());
         if (!(refPointer instanceof TipoRecord)) {
-            flecha.setTipo(new TipoError());
+            flecha.setTipoNodo(new TipoError());
             err.errorProcesamiento(
                     String.format(
                             "No se puede acceder a un campo de una variable que no es un puntero a un record '%s->%s'",
-                            refPointer, campo));
+                            refPointer, campo),
+                    flecha);
             return;
         }
 
         TipoRecord tr = (TipoRecord) refPointer;
         if (existeCampo(tr.campos(), campo)) {
-            flecha.setTipo(tipoDeCampo(tr.campos(), campo));
+            flecha.setTipoNodo(tipoDeCampo(tr.campos(), campo));
         } else {
-            flecha.setTipo(new TipoError());
+            flecha.setTipoNodo(new TipoError());
             err.errorProcesamiento(
                     String.format("No se puede acceder a un campo que no existe en un record '%s->%s'",
-                            refPointer, campo));
+                            refPointer, campo),
+                    flecha);
         }
     }
 
     @Override
     public void procesa(ValorPuntero valorPuntero) {
         valorPuntero.arg().procesa(this);
-        Tipo t = refExc(valorPuntero.arg().getTipo());
+        Tipo t = refExc(valorPuntero.arg().tipoNodo());
 
         if (t instanceof TipoPointer) {
-            valorPuntero.setTipo(((TipoPointer) t).tipoBase());
+            valorPuntero.setTipoNodo(((TipoPointer) t).tipoBase());
         } else {
-            valorPuntero.setTipo(new TipoError());
+            valorPuntero.setTipoNodo(new TipoError());
             err.errorProcesamiento(
                     String.format("No se puede acceder al valor apuntado por una variable que no sea un puntero '%s'",
-                            t));
+                            t),
+                    valorPuntero);
         }
     }
 }

@@ -7,6 +7,6 @@ class TipoOk extends Tipo {
 
     @Override
     public void procesa(Procesador p) {
-        throw new UnsupportedOperationException("No procesable");
+        throw new UnsupportedOperationException("TipoOK no procesable. Solo para comprobación de tipos.");
     }
 }

@@ -3,14 +3,16 @@ package tiny1.asint.nodos.instrucciones;
 import tiny1.asint.nodos.expresiones.Expresion;
 import tiny1.procesamientos.Procesador;
 
+import java.util.Objects;
+
 public class InstruccionIf extends Instruccion {
 
     private final Expresion expresion;
     private final InstruccionesOpt instruccionesOpt;
 
     public InstruccionIf(Expresion expresion, InstruccionesOpt instruccionesOpt) {
-        this.expresion = expresion;
-        this.instruccionesOpt = instruccionesOpt;
+        this.expresion = Objects.requireNonNull(expresion);
+        this.instruccionesOpt = Objects.requireNonNull(instruccionesOpt);
     }
 
     public Expresion expresion() {

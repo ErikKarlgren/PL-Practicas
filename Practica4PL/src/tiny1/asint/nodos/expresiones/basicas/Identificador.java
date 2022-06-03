@@ -4,12 +4,14 @@ import tiny1.asint.StringLocalizado;
 import tiny1.asint.nodos.Nodo;
 import tiny1.procesamientos.Procesador;
 
+import java.util.Objects;
+
 public class Identificador extends ExpresionBasica {
     private final StringLocalizado id;
     private Nodo vinculo;
 
     public Identificador(StringLocalizado id) {
-        this.id = id;
+        this.id = Objects.requireNonNull(id);
     }
 
     public StringLocalizado id() {
@@ -28,6 +30,11 @@ public class Identificador extends ExpresionBasica {
 
     @Override
     public void setVinculo(Nodo vinculo) {
-        this.vinculo = vinculo;
+        this.vinculo = Objects.requireNonNull(vinculo);
+    }
+
+    @Override
+    public boolean esDesignador() {
+        return true;
     }
 }

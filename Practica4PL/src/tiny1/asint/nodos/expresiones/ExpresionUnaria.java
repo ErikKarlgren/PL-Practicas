@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.expresiones;
 
+import java.util.Objects;
+
 public abstract class ExpresionUnaria extends Expresion {
     private final Expresion arg;
 
@@ -7,6 +9,6 @@ public abstract class ExpresionUnaria extends Expresion {
 
     protected ExpresionUnaria(int prioridad, Expresion arg) {
         super(prioridad);
-        this.arg = arg;
+        this.arg = Objects.requireNonNull(arg);
     }
 }

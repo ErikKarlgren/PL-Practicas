@@ -1,7 +1,9 @@
 package tiny1.procesamientos.chequeo_tipos;
 
+import tiny1.asint.nodos.declaraciones.DecType;
 import tiny1.asint.nodos.tipos.TBool;
 import tiny1.asint.nodos.tipos.TInt;
+import tiny1.asint.nodos.tipos.TNull;
 import tiny1.asint.nodos.tipos.TReal;
 import tiny1.asint.nodos.tipos.TString;
 import tiny1.asint.nodos.tipos.Tipo;
@@ -11,7 +13,7 @@ import tiny1.asint.nodos.tipos.TipoPointer;
 import tiny1.asint.nodos.tipos.TipoRecord;
 import tiny1.procesamientos.ProcesadorConRetorno;
 
-class RefExc implements ProcesadorConRetorno<Tipo> {
+class RefExc extends ProcesadorConRetorno<Tipo> {
     private Tipo tipoReferido;
 
     @Override
@@ -57,5 +59,15 @@ class RefExc implements ProcesadorConRetorno<Tipo> {
     @Override
     public void procesa(TipoNuevo tipoNuevo) {
         tipoNuevo.vinculo().procesa(this);
+    }
+
+    @Override
+    public void procesa(TNull tNull) {
+        tipoReferido = tNull;
+    }
+
+    @Override
+    public void procesa(DecType decType) {
+        tipoReferido = decType.tipo();
     }
 }

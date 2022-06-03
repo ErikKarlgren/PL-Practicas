@@ -1,5 +1,7 @@
 package tiny1.procesamientos.vinculacion;
 
+import java.util.Objects;
+
 import tiny1.asint.nodos.campos.*;
 import tiny1.asint.nodos.declaraciones.*;
 import tiny1.asint.nodos.parametros.*;
@@ -7,13 +9,13 @@ import tiny1.asint.nodos.tipos.*;
 import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
-public class VinculacionDecs2 implements Procesador {
+class VinculacionDecs2 extends Procesador {
     private final GestionErroresTiny err;
     private final TablaSimbolos tablaSimbolos;
 
     public VinculacionDecs2(GestionErroresTiny err, TablaSimbolos tablaSimbolos) {
-        this.err = err;
-        this.tablaSimbolos = tablaSimbolos;
+        this.err = Objects.requireNonNull(err);
+        this.tablaSimbolos = Objects.requireNonNull(tablaSimbolos);
     }
 
     @Override
@@ -98,7 +100,7 @@ public class VinculacionDecs2 implements Procesador {
         if (tipo.tipoBase() instanceof TipoNuevo) {
             TipoNuevo tipoNuevo = (TipoNuevo) tipo.tipoBase();
             String nombreTipo = tipoNuevo.nombre().toString();
-            if (tablaSimbolos.containsKey(nombreTipo)) {
+            if (tablaSimbolos.existeId(nombreTipo)) {
                 tipoNuevo.setVinculo(tablaSimbolos.get(nombreTipo));
             } else {
                 err.errorProcesamiento(String.format("El tipo %s no está definido", nombreTipo));
@@ -115,6 +117,11 @@ public class VinculacionDecs2 implements Procesador {
 
     @Override
     public void procesa(TipoNuevo tipoNuevo) {
+        // No hacer nada
+    }
+
+    @Override
+    public void procesa(TNull tipo) {
         // No hacer nada
     }
 

@@ -1,17 +1,19 @@
 package tiny1.procesamientos.chequeo_tipos;
 
+import java.util.Objects;
+
 import tiny1.asint.nodos.campos.Campo;
 import tiny1.asint.nodos.campos.CamposMuchos;
 import tiny1.asint.nodos.campos.CamposUno;
 import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.ProcesadorConRetorno;
 
-class TipoDeCampo implements ProcesadorConRetorno<Tipo> {
+class TipoDeCampo extends ProcesadorConRetorno<Tipo> {
     private final String nombreCampo;
     private Tipo tipoDeCampo;
 
     TipoDeCampo(String nombreCampo) {
-        this.nombreCampo = nombreCampo;
+        this.nombreCampo = Objects.requireNonNull(nombreCampo);
     }
 
     @Override

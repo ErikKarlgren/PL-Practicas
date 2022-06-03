@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.campos;
 
+import java.util.Objects;
+
 import tiny1.procesamientos.Procesador;
 
 public class CamposMuchos extends Campos {
@@ -8,8 +10,8 @@ public class CamposMuchos extends Campos {
     private final Campo campo;
 
     public CamposMuchos(Campos campos, Campo campo) {
-        this.campos = campos;
-        this.campo = campo;
+        this.campos = Objects.requireNonNull(campos);
+        this.campo = Objects.requireNonNull(campo);
     }
 
     public Campos campos() {

@@ -1,6 +1,7 @@
 package tiny1.errors;
 
 import tiny1.alex.UnidadLexica;
+import tiny1.asint.nodos.Nodo;
 
 public class GestionErroresTiny {
 
@@ -27,9 +28,19 @@ public class GestionErroresTiny {
         System.exit(1);
     }
 
-    public void errorProcesamiento(String mensaje) {
+    public void errorProcesamiento(String mensaje, Nodo... nodos) {
         foundError = true;
-        new Throwable(mensaje).printStackTrace();
+        StringBuilder msjError = new StringBuilder(mensaje + '\n');
+        for (Nodo n : nodos) {
+            msjError.append(n);
+        }
+        new ErrorProcesamiento(msjError.toString()).printStackTrace();
         System.out.println();
+    }
+
+    private class ErrorProcesamiento extends Throwable {
+        public ErrorProcesamiento(String mensaje) {
+            super(mensaje);
+        }
     }
 }

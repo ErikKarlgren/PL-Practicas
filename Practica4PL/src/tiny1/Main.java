@@ -9,16 +9,23 @@ import tiny1.alex.AnalizadorLexicoTiny;
 import tiny1.asint.nodos.programa.Programa;
 import tiny1.ast_descendente.ParseException;
 import tiny1.procesamientos.Impresion;
+import tiny1.procesamientos.Procesador;
+import tiny1.procesamientos.chequeo_tipos.ChequeoTipos;
 import tiny1.procesamientos.vinculacion.Vinculacion;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
 		try {
 			Programa prog = crearPrograma(args);
-			prog.procesa(new Impresion(System.out));
-			prog.procesa(new Vinculacion());
+
+			//procesar(prog, new Impresion(System.out));
+			System.out.println("Vinculando...");
+			procesar(prog, new Vinculacion());
+			System.out.println("Chequeando tipos...");
+			procesar(prog, new ChequeoTipos());
+
 		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
+			//System.err.println("Error: " + e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -48,5 +55,11 @@ public class Main {
 		Reader input = new InputStreamReader(new FileInputStream(in));
 		tiny1.ast_descendente.ConstructorAST constructorast = new tiny1.ast_descendente.ConstructorAST(input);
 		return constructorast.ProgramaP();
+	}
+
+	private static void procesar(Programa prog, Procesador proc) {
+		prog.procesa(proc);
+		if (proc.foundErrors())
+			System.exit(1);
 	}
 }

@@ -4,15 +4,12 @@ import tiny1.procesamientos.Procesador;
 
 public class TString extends Tipo {
     @Override
-    public void procesa(Procesador p) { p.procesa(this);}
-
-    @Override
-    public boolean equals(Object obj){
-        return this.getClass().equals(obj.getClass());
+    public void procesa(Procesador p) {
+        p.procesa(this);
     }
 
     @Override
-    public String toString() {
-        return this.getClass().getSimpleName();
+    public boolean equals(Object obj) {
+        return this.getClass().equals(obj.getClass());
     }
 }

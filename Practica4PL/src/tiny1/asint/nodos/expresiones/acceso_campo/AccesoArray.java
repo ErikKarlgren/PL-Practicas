@@ -14,4 +14,9 @@ public class AccesoArray extends ExpresionBinaria {
     public void procesa(Procesador p) {
         p.procesa(this);
     }
+
+    @Override
+    public boolean esDesignador() {
+        return true;
+    }
 }

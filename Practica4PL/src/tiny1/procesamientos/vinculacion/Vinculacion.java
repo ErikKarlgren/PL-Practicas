@@ -12,7 +12,7 @@ import tiny1.asint.nodos.programa.*;
 import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
-public class Vinculacion implements Procesador {
+public class Vinculacion extends Procesador {
     private final GestionErroresTiny err;
     private final TablaSimbolos tablaSimbolos;
     private final VinculacionDecs1 vinculacionDecs1;
@@ -27,6 +27,7 @@ public class Vinculacion implements Procesador {
         vinculacionProcs = new VinculacionProcs(err, tablaSimbolos, this, vinculacionDecs1, vinculacionDecs2);
     }
 
+    @Override
     public boolean foundErrors() {
         return err.foundError();
     }
@@ -118,7 +119,7 @@ public class Vinculacion implements Procesador {
     @Override
     public void procesa(InstruccionCall instruccion) {
         String nombreFuncion = instruccion.funcion().toString();
-        if (tablaSimbolos.containsKey(nombreFuncion)) {
+        if (tablaSimbolos.existeId(nombreFuncion)) {
             instruccion.setVinculo(tablaSimbolos.get(nombreFuncion));
         } else {
             int fila = instruccion.funcion().fila();
@@ -210,8 +211,10 @@ public class Vinculacion implements Procesador {
     @Override
     public void procesa(Identificador identificador) {
         String idString = identificador.id().toString();
-        if (tablaSimbolos.containsKey(idString)) {
+        if (tablaSimbolos.existeId(idString)) {
             identificador.setVinculo(tablaSimbolos.get(idString));
+        } else {
+            err.errorProcesamiento("No existe el identificador " + idString, identificador);
         }
     }
 

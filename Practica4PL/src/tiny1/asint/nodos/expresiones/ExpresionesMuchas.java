@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.expresiones;
 
+import java.util.Objects;
+
 import tiny1.procesamientos.Procesador;
 
 public class ExpresionesMuchas extends Expresiones {
@@ -7,8 +9,8 @@ public class ExpresionesMuchas extends Expresiones {
     private Expresion expresion;
 
     public ExpresionesMuchas(Expresiones expresiones, Expresion expresion) {
-        this.expresiones = expresiones;
-        this.expresion = expresion;
+        this.expresiones = Objects.requireNonNull(expresiones);
+        this.expresion = Objects.requireNonNull(expresion);
     }
 
     public Expresiones expresiones() {

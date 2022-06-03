@@ -1,6 +1,7 @@
 package tiny1.procesamientos;
 
 import java.io.PrintStream;
+import java.util.Objects;
 
 import tiny1.asint.nodos.bloques.*;
 import tiny1.asint.nodos.campos.*;
@@ -16,14 +17,14 @@ import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
 
-public class Impresion implements Procesador {
+public class Impresion extends Procesador {
 	private static final int INDENT_SIZE = 4;
 
 	private final PrintStream out;
 	private int indentLevel;
 
 	public Impresion(PrintStream out) {
-		this.out = out;
+		this.out = Objects.requireNonNull(out);
 		this.indentLevel = 0;
 	}
 

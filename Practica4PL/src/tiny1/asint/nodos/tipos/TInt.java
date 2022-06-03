@@ -9,9 +9,4 @@ public class TInt extends Tipo {
     public boolean equals(Object obj){
         return this.getClass().equals(obj.getClass());
     }
-
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName();
-    }
 }

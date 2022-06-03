@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.instrucciones;
 
+import java.util.Objects;
+
 import tiny1.procesamientos.Procesador;
 
 public class InstrMuchas extends Instrucciones {
@@ -8,8 +10,8 @@ public class InstrMuchas extends Instrucciones {
     private final Instruccion instruccion;
 
     public InstrMuchas(Instrucciones instrucciones, Instruccion instruccion) {
-        this.instrucciones = instrucciones;
-        this.instruccion = instruccion;
+        this.instrucciones = Objects.requireNonNull(instrucciones);
+        this.instruccion = Objects.requireNonNull(instruccion);
     }
 
     public Instrucciones instrucciones() {

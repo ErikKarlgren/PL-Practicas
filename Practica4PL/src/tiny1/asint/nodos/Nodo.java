@@ -4,33 +4,35 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Impresion;
 import tiny1.procesamientos.Procesador;
 
 public abstract class Nodo {
-    private Tipo tipo;
+    private Tipo tipoNodo;
 
     public abstract void procesa(Procesador p);
 
     public Nodo vinculo() {
-        throw new UnsupportedOperationException("Este nodo no puede tener un vínculo");
+        throw new UnsupportedOperationException("Este nodo no puede vincularse a otro");
     }
 
     public void setVinculo(Nodo nodo) {
-        throw new UnsupportedOperationException("Este nodo no puede tener un vínculo");
+        throw new UnsupportedOperationException("Este nodo no puede vincularse a otro");
     }
 
-    public void setTipo(Tipo tipo) {
-        if (tipo != null) {
-            throw new IllegalStateException("No se puede cambiar el tipo de un nodo que ya tiene tipo");
+    public void setTipoNodo(Tipo tipo) {
+        if (this.tipoNodo != null) {
+            throw new IllegalStateException("No se puede cambiar el tipo de un nodo que ya tiene tipo\n"
+                    + this);
         }
-        this.tipo = tipo;
+        this.tipoNodo = Objects.requireNonNull(tipo);
     }
 
-    final public Tipo getTipo() {
-        return tipo;
+    public Tipo tipoNodo() {
+        return tipoNodo;
     }
 
     public boolean esTipo() {
@@ -49,7 +51,7 @@ public abstract class Nodo {
 
         try (PrintStream ps = new PrintStream(baos, true, utf8)) {
             this.procesa(new Impresion(ps));
-            return baos.toString(utf8);
+            return String.format("Class: %s\nValue: %s\n", this.getClass(), baos.toString(utf8));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

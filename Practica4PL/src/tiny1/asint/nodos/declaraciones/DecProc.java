@@ -1,5 +1,7 @@
 package tiny1.asint.nodos.declaraciones;
 
+import java.util.Objects;
+
 import tiny1.asint.StringLocalizado;
 import tiny1.asint.nodos.bloques.Bloque;
 import tiny1.asint.nodos.parametros.ListaParams;
@@ -12,9 +14,9 @@ public class DecProc extends Declaracion {
     private final Bloque bloque;
 
     public DecProc(StringLocalizado string, ListaParams lp, Bloque bloque) {
-        this.string = string;
-        this.listaParametros = lp;
-        this.bloque = bloque;
+        this.string = Objects.requireNonNull(string);
+        this.listaParametros = Objects.requireNonNull(lp);
+        this.bloque = Objects.requireNonNull(bloque);
     }
 
     public StringLocalizado id() {

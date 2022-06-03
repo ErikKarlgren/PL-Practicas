@@ -2,12 +2,12 @@ package tiny1.procesamientos;
 
 import tiny1.asint.nodos.Nodo;
 
-public interface ProcesadorConRetorno<T> extends Procesador {
+public abstract class ProcesadorConRetorno<T> extends Procesador {
     
-    default public T procesar(Nodo nodo) {
+    public T procesar(Nodo nodo) {
         nodo.procesa(this);
         return resultado();
     }
 
-    T resultado();
+    protected abstract T resultado();
 }
