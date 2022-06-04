@@ -11,6 +11,7 @@ import tiny1.asint.nodos.tipos.TipoRecord;
 import tiny1.procesamientos.ProcesadorConRetorno;
 
 class TiposRecord extends ProcesadorConRetorno<List<Class<? extends Tipo>>> {
+
     private final List<Class<? extends Tipo>> tipos;
 
     TiposRecord() {

@@ -7,6 +7,7 @@ import tiny1.procesamientos.Procesador;
 import java.util.Objects;
 
 public class ProgramaConDecs extends Programa {
+
     private Declaraciones declaraciones;
 
     public ProgramaConDecs(Declaraciones declaraciones, Instrucciones instrucciones) {

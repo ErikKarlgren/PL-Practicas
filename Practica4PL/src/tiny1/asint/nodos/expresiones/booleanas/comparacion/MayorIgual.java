@@ -4,6 +4,7 @@ import tiny1.asint.nodos.expresiones.Expresion;
 import tiny1.procesamientos.Procesador;
 
 public class MayorIgual extends ExpresionComparativa {
+
     public MayorIgual(Expresion arg0, Expresion arg1) {
         super(arg0, arg1);
     }

@@ -7,6 +7,7 @@ import tiny1.procesamientos.Procesador;
 import java.util.Objects;
 
 public class Identificador extends ExpresionBasica {
+
     private final StringLocalizado id;
     private Nodo vinculo;
 

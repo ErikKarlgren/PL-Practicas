@@ -6,6 +6,7 @@ import tiny1.asint.StringLocalizado;
 import tiny1.procesamientos.Procesador;
 
 public class TipoArray extends Tipo {
+
     private Tipo tipoBase;
     private int longitud;
 

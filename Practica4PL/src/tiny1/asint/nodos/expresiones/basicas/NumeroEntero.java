@@ -6,6 +6,7 @@ import tiny1.asint.StringLocalizado;
 import tiny1.procesamientos.Procesador;
 
 public class NumeroEntero extends ExpresionBasica {
+
     private StringLocalizado num;
 
     public NumeroEntero(StringLocalizado num) {

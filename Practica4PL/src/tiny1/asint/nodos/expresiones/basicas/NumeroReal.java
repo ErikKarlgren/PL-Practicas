@@ -6,6 +6,7 @@ import tiny1.procesamientos.Procesador;
 import java.util.Objects;
 
 public class NumeroReal extends ExpresionBasica {
+
     private StringLocalizado num;
 
     public NumeroReal(StringLocalizado num) {

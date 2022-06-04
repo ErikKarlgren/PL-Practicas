@@ -9,6 +9,7 @@ import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.ProcesadorConRetorno;
 
 class TipoDeCampo extends ProcesadorConRetorno<Tipo> {
+
     private final String nombreCampo;
     private Tipo tipoDeCampo;
 

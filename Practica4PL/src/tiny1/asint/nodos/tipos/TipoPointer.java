@@ -5,6 +5,7 @@ import java.util.Objects;
 import tiny1.procesamientos.Procesador;
 
 public class TipoPointer extends Tipo {
+
     private Tipo tipoBase;
 
     public TipoPointer(Tipo tipo) {

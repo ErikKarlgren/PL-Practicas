@@ -6,6 +6,7 @@ import tiny1.asint.nodos.campos.Campos;
 import tiny1.procesamientos.Procesador;
 
 public class TipoRecord extends Tipo {
+
     private Campos campos;
 
     public TipoRecord(Campos campos) {

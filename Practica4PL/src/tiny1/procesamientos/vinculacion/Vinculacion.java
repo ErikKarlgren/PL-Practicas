@@ -13,6 +13,7 @@ import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
 public class Vinculacion extends Procesador {
+
     private final GestionErroresTiny err;
     private final TablaSimbolos tablaSimbolos;
     private final VinculacionDecs1 vinculacionDecs1;

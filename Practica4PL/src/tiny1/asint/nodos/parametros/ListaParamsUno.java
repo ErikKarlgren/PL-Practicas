@@ -5,6 +5,7 @@ import tiny1.procesamientos.Procesador;
 import java.util.Objects;
 
 public class ListaParamsUno extends ListaParams {
+
     private Parametro parametro;
 
     public ListaParamsUno(Parametro parametro) {

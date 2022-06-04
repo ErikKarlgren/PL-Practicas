@@ -3,6 +3,7 @@ package tiny1.asint;
 import java.util.Objects;
 
 public class StringLocalizado {
+
     private String s;
     private int fila;
     private int col;

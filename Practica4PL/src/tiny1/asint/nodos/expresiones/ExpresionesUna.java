@@ -5,6 +5,7 @@ import tiny1.procesamientos.Procesador;
 import java.util.Objects;
 
 public class ExpresionesUna extends Expresiones {
+
     private final Expresion exp;
 
     public ExpresionesUna(Expresion exp) {

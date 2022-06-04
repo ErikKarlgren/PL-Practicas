@@ -3,6 +3,7 @@ package tiny1.asint.nodos.expresiones;
 import java.util.Objects;
 
 public abstract class ExpresionBinaria extends Expresion {
+
     private final Expresion arg0;
     private final Expresion arg1;
 

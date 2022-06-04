@@ -14,6 +14,7 @@ import tiny1.asint.nodos.tipos.TipoRecord;
 import tiny1.procesamientos.ProcesadorConRetorno;
 
 class RefExc extends ProcesadorConRetorno<Tipo> {
+
     private Tipo tipoReferido;
 
     @Override

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import tiny1.asint.nodos.Nodo;
 
 class TablaSimbolos {
+
     private final Stack<HashMap<String, Nodo>> pila;
 
     public TablaSimbolos() {

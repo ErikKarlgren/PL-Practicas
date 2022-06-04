@@ -6,6 +6,7 @@ import tiny1.asint.nodos.declaraciones.*;
 import tiny1.procesamientos.Procesador;
 
 class VinculacionProcs extends Procesador {
+
     private final TablaSimbolos tablaSimbolos;
     private final Vinculacion vinculacion;
     private final VinculacionDecs1 vinculacionDecs1;

@@ -4,6 +4,7 @@ import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Procesador;
 
 public class ParamRef extends Parametro {
+
     public ParamRef(Tipo tipo, String nombre) {
         super(tipo, nombre);
     }

@@ -5,6 +5,7 @@ import java.util.Objects;
 import tiny1.procesamientos.Procesador;
 
 public class ExpresionesMuchas extends Expresiones {
+
     private Expresiones expresiones;
     private Expresion expresion;
 

@@ -8,6 +8,7 @@ import tiny1.asint.nodos.campos.CamposUno;
 import tiny1.procesamientos.ProcesadorConRetorno;
 
 class ExisteCampo extends ProcesadorConRetorno<Boolean> {
+
     private final String nombreCampo;
     private boolean existe;
 

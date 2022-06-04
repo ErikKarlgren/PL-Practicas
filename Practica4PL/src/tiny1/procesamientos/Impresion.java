@@ -18,6 +18,7 @@ import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
 
 public class Impresion extends Procesador {
+
 	private static final int INDENT_SIZE = 4;
 
 	private final PrintStream out;

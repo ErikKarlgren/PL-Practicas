@@ -20,6 +20,7 @@ import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
 public class ChequeoTipos extends Procesador {
+
     private final GestionErroresTiny err;
 
     public ChequeoTipos() {
