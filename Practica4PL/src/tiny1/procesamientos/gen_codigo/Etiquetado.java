@@ -1,4 +1,4 @@
-package tiny1.procesamientos;
+package tiny1.procesamientos.gen_codigo;
 
 import tiny1.asint.nodos.bloques.*;
 import tiny1.asint.nodos.campos.*;
@@ -13,8 +13,15 @@ import tiny1.asint.nodos.instrucciones.*;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
+import tiny1.procesamientos.Procesador;
 
-public class GenCodigo extends Procesador {
+public class Etiquetado extends Procesador {
+
+    private int etiqueta;
+
+    public Etiquetado() {
+        this.etiqueta = 0;
+    }
 
     @Override
     public void procesa(ProgramaConDecs programa) {

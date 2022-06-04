@@ -23,7 +23,7 @@ public class TipoRecord extends Tipo {
     }
 
     public boolean equals(Object obj) {
-        if (!this.getClass().equals(obj.getClass()))
+        if (!super.equals(obj))
             return false;
         TipoRecord otro = (TipoRecord) obj;
         return this.campos == otro.campos;

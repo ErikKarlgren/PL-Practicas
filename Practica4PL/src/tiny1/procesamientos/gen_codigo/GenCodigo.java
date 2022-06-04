@@ -1,4 +1,7 @@
-package tiny1.procesamientos;
+package tiny1.procesamientos.gen_codigo;
+
+import java.util.Objects;
+import java.util.Stack;
 
 import tiny1.asint.nodos.bloques.*;
 import tiny1.asint.nodos.campos.*;
@@ -13,17 +16,38 @@ import tiny1.asint.nodos.instrucciones.*;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
+import tiny1.maquinaP.MaquinaP;
+import tiny1.procesamientos.Procesador;
 
-public class Etiquetado extends Procesador {
+public class GenCodigo extends Procesador {
+
+    private final MaquinaP maquina;
+
+    public GenCodigo(MaquinaP maquinaP){
+        this.maquina = Objects.requireNonNull(maquinaP);
+    }
+
+    private void genIns(MaquinaP.Instruccion instruccion){
+        maquina.ponInstruccion(instruccion);
+    }
+
+    private Stack<DecProc> recolectaProcs(Declaraciones declaraciones) {
+        return new RecolectaProcs().procesar(declaraciones);
+    }
 
     @Override
     public void procesa(ProgramaConDecs programa) {
-        throw new UnsupportedOperationException();
+        programa.instrucciones().procesa(this);
+        Stack<DecProc> procs = recolectaProcs(programa.declaraciones());
+        while (!procs.isEmpty()) {
+            DecProc proc = procs.pop();
+            proc.procesa(this);
+        }
     }
 
     @Override
     public void procesa(ProgramaSinDecs programa) {
-        throw new UnsupportedOperationException();
+        programa.instrucciones().procesa(this);
     }
 
     @Override

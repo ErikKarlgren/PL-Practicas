@@ -36,7 +36,7 @@ public class TipoNuevo extends Tipo {
 
     @Override
     public boolean equals(Object obj) {
-        if (!this.getClass().equals(obj.getClass()))
+        if (!super.equals(obj))
             return false;
         TipoNuevo otro = (TipoNuevo) obj;
         return this.nombre.equals(otro.nombre) && this.vinculo == otro.vinculo;

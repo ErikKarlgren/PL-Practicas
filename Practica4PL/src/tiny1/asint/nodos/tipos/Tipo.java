@@ -1,15 +1,16 @@
 package tiny1.asint.nodos.tipos;
 
 import tiny1.asint.nodos.Nodo;
-import tiny1.asint.nodos.TieneTamanio;
+import tiny1.asint.nodos.interfaces.TieneTamanio;
+import tiny1.asint.nodos.otros.LazyFinalInt;
 
-public abstract class Tipo extends Nodo implements TieneTamanio{
+public abstract class Tipo extends Nodo implements TieneTamanio {
 
     // Asignación de espacio
-    private int tamanio;
+    private final LazyFinalInt tamanio;
 
     protected Tipo() {
-        tamanio = -1;
+        tamanio = new LazyFinalInt();
     }
 
     public boolean isOk() {
@@ -22,23 +23,12 @@ public abstract class Tipo extends Nodo implements TieneTamanio{
     }
 
     @Override
-    public void setTamanio(int tamanio) {
-        if (!tamanioAsignado()) {
-            this.tamanio = tamanio;
-        } else {
-            throw new IllegalStateException("El tamaño ya ha sido asignado");
-        }
-    }
-
-    @Override
-    public int tamanio() {
-        if (!tamanioAsignado())
-            throw new IllegalStateException("El tamaño no ha sido asignado");
+    public LazyFinalInt tamanio() {
         return tamanio;
     }
 
     @Override
-    public boolean tamanioAsignado(){
-        return tamanio != -1;
+    public boolean equals(Object obj){
+        return obj != null && this.getClass().equals(obj.getClass());
     }
 }

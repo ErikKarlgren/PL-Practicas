@@ -29,7 +29,7 @@ public class TipoArray extends Tipo {
 
     @Override
     public boolean equals(Object obj) {
-        if (!this.getClass().equals(obj.getClass()))
+        if (!super.equals(obj))
             return false;
         TipoArray otro = (TipoArray) obj;
         return this.tipoBase.equals(otro.tipoBase) && this.longitud == otro.longitud;

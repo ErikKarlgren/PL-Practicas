@@ -1,6 +1,7 @@
 package tiny1.asint.nodos.declaraciones;
 
 import tiny1.asint.StringLocalizado;
+import tiny1.asint.nodos.otros.LazyFinalInt;
 import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Procesador;
 
@@ -12,14 +13,14 @@ public class DecVar extends Declaracion {
     private final StringLocalizado string;
 
     // Asignación de espacio
-    private int direccion;
-    private int nivel;
+    private LazyFinalInt direccion;
+    private LazyFinalInt nivel;
 
     public DecVar(Tipo tipo, StringLocalizado string) {
         this.tipo = Objects.requireNonNull(tipo);
         this.string = Objects.requireNonNull(string);
-        this.direccion = -1;
-        this.nivel = -1;
+        this.direccion = new LazyFinalInt();
+        this.nivel = new LazyFinalInt();
     }
 
     public Tipo tipo() {
@@ -35,31 +36,11 @@ public class DecVar extends Declaracion {
         p.procesa(this);
     }
 
-    public void setDireccion(int direccion) {
-        if (this.direccion == -1) {
-            this.direccion = direccion;
-        } else {
-            throw new IllegalStateException("La direccion ya ha sido asignada");
-        }
-    }
-
-    public int direccion() {
-        if (this.direccion == -1)
-            throw new IllegalStateException("La direccion no ha sido asignada");
+    public LazyFinalInt direccion() {
         return direccion;
     }
 
-    public void setNivel(int nivel) {
-        if (this.nivel == -1) {
-            this.nivel = nivel;
-        } else {
-            throw new IllegalStateException("El nivel ya ha sido asignado");
-        }
-    }
-
-    public int nivel() {
-        if (this.nivel == -1)
-            throw new IllegalStateException("El nivel no ha sido asignado");
+    public LazyFinalInt nivel() {
         return nivel;
     }
 }

@@ -23,7 +23,7 @@ public class TipoPointer extends Tipo {
 
     @Override
     public boolean equals(Object obj) {
-        if (!this.getClass().equals(obj.getClass()))
+        if (!super.equals(obj))
             return false;
         TipoPointer otro = (TipoPointer) obj;
         return this.tipoBase.equals(otro.tipoBase);

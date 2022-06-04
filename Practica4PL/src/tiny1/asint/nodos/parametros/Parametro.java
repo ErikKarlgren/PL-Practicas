@@ -3,6 +3,7 @@ package tiny1.asint.nodos.parametros;
 import java.util.Objects;
 
 import tiny1.asint.nodos.Nodo;
+import tiny1.asint.nodos.otros.LazyFinalInt;
 import tiny1.asint.nodos.tipos.Tipo;
 
 public abstract class Parametro extends Nodo {
@@ -11,14 +12,14 @@ public abstract class Parametro extends Nodo {
     private final String nombre;
 
     // Asignación de espacio
-    private int direccion;
-    private int nivel;
+    private final LazyFinalInt direccion;
+    private final LazyFinalInt nivel;
 
     protected Parametro(Tipo tipo, String nombre) {
         this.tipo = Objects.requireNonNull(tipo);
         this.nombre = Objects.requireNonNull(nombre);
-        this.direccion = -1;
-        this.nivel = -1;
+        this.direccion = new LazyFinalInt();
+        this.nivel = new LazyFinalInt();
     }
 
     public Tipo tipo() {
@@ -29,31 +30,11 @@ public abstract class Parametro extends Nodo {
         return nombre;
     }
 
-    public void setDireccion(int direccion) {
-        if (this.direccion == -1) {
-            this.direccion = direccion;
-        } else {
-            throw new IllegalStateException("La direccion ya ha sido asignada");
-        }
-    }
-
-    public int direccion() {
-        if (this.direccion == -1)
-            throw new IllegalStateException("La direccion no ha sido asignada");
+    public LazyFinalInt direccion() {
         return direccion;
     }
 
-    public void setNivel(int nivel) {
-        if (this.nivel == -1) {
-            this.nivel = nivel;
-        } else {
-            throw new IllegalStateException("El nivel ya ha sido asignado");
-        }
-    }
-
-    public int nivel() {
-        if (this.nivel == -1)
-            throw new IllegalStateException("El nivel no ha sido asignado");
+    public LazyFinalInt nivel() {
         return nivel;
     }
 }

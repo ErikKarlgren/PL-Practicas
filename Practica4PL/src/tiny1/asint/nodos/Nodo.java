@@ -4,15 +4,27 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
+import tiny1.asint.nodos.otros.LazyFinalField;
+import tiny1.asint.nodos.otros.LazyFinalInt;
 import tiny1.asint.nodos.tipos.Tipo;
 import tiny1.procesamientos.Impresion;
 import tiny1.procesamientos.Procesador;
 
 public abstract class Nodo {
+
     // Comprobación de tipos
-    private Tipo tipoNodo;
+    private final LazyFinalField<Tipo> tipoNodo;
+
+    // Etiquetado
+    private final LazyFinalInt dirInicio;
+    private final LazyFinalInt dirSiguiente;
+
+    protected Nodo() {
+        this.tipoNodo = new LazyFinalField<>();
+        this.dirInicio = new LazyFinalInt();
+        this.dirSiguiente = new LazyFinalInt();
+    }
 
     public abstract void procesa(Procesador p);
 
@@ -25,15 +37,11 @@ public abstract class Nodo {
     }
 
     public void setTipoNodo(Tipo tipo) {
-        if (this.tipoNodo != null) {
-            throw new IllegalStateException("No se puede cambiar el tipo de un nodo que ya tiene tipo\n"
-                    + this);
-        }
-        this.tipoNodo = Objects.requireNonNull(tipo);
+        tipoNodo.set(tipo);
     }
 
     public Tipo tipoNodo() {
-        return tipoNodo;
+        return tipoNodo.get();
     }
 
     public boolean esTipo() {
