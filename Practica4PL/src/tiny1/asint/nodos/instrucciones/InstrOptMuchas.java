@@ -12,7 +12,7 @@ public class InstrOptMuchas extends InstruccionesOpt {
         this.instrucciones = Objects.requireNonNull(instrucciones);
     }
 
-    public Instrucciones instrucciones() {
+    public Instrucciones instrs() {
         return instrucciones;
     }
 

@@ -22,7 +22,7 @@ public class InstruccionCall extends Instruccion {
         return funcion;
     }
 
-    public Expresiones parametros() {
+    public Expresiones params() {
         return parametros;
     }
 

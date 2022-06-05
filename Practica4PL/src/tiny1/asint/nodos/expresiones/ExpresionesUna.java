@@ -12,7 +12,7 @@ public class ExpresionesUna extends Expresiones {
         this.exp = Objects.requireNonNull(exp);
     }
 
-    public Expresion expresion() {
+    public Expresion exp() {
         return exp;
     }
 

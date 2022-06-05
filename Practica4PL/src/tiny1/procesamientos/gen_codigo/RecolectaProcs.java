@@ -24,13 +24,13 @@ class RecolectaProcs extends ProcesadorConRetorno<Stack<DecProc>> {
 
     @Override
     public void procesa(DecsUna declaraciones) {
-        declaraciones.declaracion().procesa(this);
+        declaraciones.dec().procesa(this);
     }
 
     @Override
     public void procesa(DecsMuchas declaraciones) {
-        declaraciones.declaraciones().procesa(this);
-        declaraciones.declaracion().procesa(this);
+        declaraciones.decs().procesa(this);
+        declaraciones.dec().procesa(this);
     }
 
     @Override

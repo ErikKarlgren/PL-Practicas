@@ -12,7 +12,7 @@ public class DecsUna extends Declaraciones {
         this.declaracion = Objects.requireNonNull(declaracion);
     }
 
-    public Declaracion declaracion() {
+    public Declaracion dec() {
         return declaracion;
     }
 

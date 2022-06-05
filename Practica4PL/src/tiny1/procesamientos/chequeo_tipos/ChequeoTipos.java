@@ -18,6 +18,7 @@ import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
 import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
+import tiny1.procesamientos.RefExc;
 
 public class ChequeoTipos extends Procesador {
 
@@ -110,32 +111,32 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(ProgramaConDecs programa) {
-        programa.declaraciones().procesa(this);
-        programa.instrucciones().procesa(this);
+        programa.decs().procesa(this);
+        programa.instrs().procesa(this);
         programa.setTipoNodo(ambosOk(
-                programa.declaraciones().tipoNodo(),
-                programa.instrucciones().tipoNodo()));
+                programa.decs().tipoNodo(),
+                programa.instrs().tipoNodo()));
     }
 
     @Override
     public void procesa(ProgramaSinDecs programa) {
-        programa.instrucciones().procesa(this);
-        programa.setTipoNodo(programa.instrucciones().tipoNodo());
+        programa.instrs().procesa(this);
+        programa.setTipoNodo(programa.instrs().tipoNodo());
     }
 
     @Override
     public void procesa(DecsUna declaraciones) {
-        declaraciones.declaracion().procesa(this);
-        declaraciones.setTipoNodo(declaraciones.declaracion().tipoNodo());
+        declaraciones.dec().procesa(this);
+        declaraciones.setTipoNodo(declaraciones.dec().tipoNodo());
     }
 
     @Override
     public void procesa(DecsMuchas declaraciones) {
-        declaraciones.declaraciones().procesa(this);
-        declaraciones.declaracion().procesa(this);
+        declaraciones.decs().procesa(this);
+        declaraciones.dec().procesa(this);
         declaraciones.setTipoNodo(ambosOk(
-                declaraciones.declaraciones().tipoNodo(),
-                declaraciones.declaracion().tipoNodo()));
+                declaraciones.decs().tipoNodo(),
+                declaraciones.dec().tipoNodo()));
     }
 
     @Override
@@ -152,10 +153,10 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(DecProc decProc) {
-        decProc.listaParams().procesa(this);
+        decProc.params().procesa(this);
         decProc.bloque().procesa(this);
         decProc.setTipoNodo(ambosOk(
-                decProc.listaParams().tipoNodo(),
+                decProc.params().tipoNodo(),
                 decProc.bloque().tipoNodo()));
     }
 
@@ -178,17 +179,17 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(ListaParamsUno listaParametros) {
-        listaParametros.parametro().procesa(this);
-        listaParametros.setTipoNodo(listaParametros.parametro().tipoNodo());
+        listaParametros.param().procesa(this);
+        listaParametros.setTipoNodo(listaParametros.param().tipoNodo());
     }
 
     @Override
     public void procesa(ListaParamsMuchos listaParametros) {
-        listaParametros.listaParametros().procesa(this);
-        listaParametros.parametro().procesa(this);
+        listaParametros.params().procesa(this);
+        listaParametros.param().procesa(this);
         listaParametros.setTipoNodo(ambosOk(
-                listaParametros.listaParametros().tipoNodo(),
-                listaParametros.parametro().tipoNodo()));
+                listaParametros.params().tipoNodo(),
+                listaParametros.param().tipoNodo()));
     }
 
     @Override
@@ -272,30 +273,30 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(InstrUna instrucciones) {
-        instrucciones.instruccion().procesa(this);
-        instrucciones.setTipoNodo(instrucciones.instruccion().tipoNodo());
+        instrucciones.instr().procesa(this);
+        instrucciones.setTipoNodo(instrucciones.instr().tipoNodo());
     }
 
     @Override
     public void procesa(InstrMuchas instrucciones) {
-        instrucciones.instrucciones().procesa(this);
-        instrucciones.instruccion().procesa(this);
+        instrucciones.instrs().procesa(this);
+        instrucciones.instr().procesa(this);
         instrucciones.setTipoNodo(ambosOk(
-                instrucciones.instrucciones().tipoNodo(),
-                instrucciones.instruccion().tipoNodo()));
+                instrucciones.instrs().tipoNodo(),
+                instrucciones.instr().tipoNodo()));
     }
 
     @Override
     public void procesa(InstrAsignacion instruccion) {
-        instruccion.expresionIzquierda().procesa(this);
-        instruccion.expresionDerecha().procesa(this);
-        if (sonCompatibles(instruccion.expresionIzquierda().tipoNodo(), instruccion.expresionDerecha().tipoNodo()))
+        instruccion.expIzq().procesa(this);
+        instruccion.expDer().procesa(this);
+        if (sonCompatibles(instruccion.expIzq().tipoNodo(), instruccion.expDer().tipoNodo()))
             instruccion.setTipoNodo(new TipoOk());
         else {
             err.errorProcesamiento("No se puede asignar una expresión de tipo "
-                    + instruccion.expresionDerecha().tipoNodo()
+                    + instruccion.expDer().tipoNodo()
                     + " a una expresión de tipo "
-                    + instruccion.expresionIzquierda().tipoNodo());
+                    + instruccion.expIzq().tipoNodo());
             instruccion.setTipoNodo(new TipoError());
         }
     }
@@ -307,17 +308,17 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(InstrOptMuchas instruccionesOpt) {
-        instruccionesOpt.instrucciones().procesa(this);
-        instruccionesOpt.setTipoNodo(instruccionesOpt.instrucciones().tipoNodo());
+        instruccionesOpt.instrs().procesa(this);
+        instruccionesOpt.setTipoNodo(instruccionesOpt.instrs().tipoNodo());
     }
 
     @Override
     public void procesa(InstruccionIf instruccion) {
-        instruccion.expresion().procesa(this);
-        instruccion.instruccionesOpt().procesa(this);
-        Tipo t = refExc(instruccion.expresion().tipoNodo());
+        instruccion.exp().procesa(this);
+        instruccion.instrsOpt().procesa(this);
+        Tipo t = refExc(instruccion.exp().tipoNodo());
 
-        if (t instanceof TBool && instruccion.instruccionesOpt().tipoNodo().isOk()) {
+        if (t instanceof TBool && instruccion.instrsOpt().tipoNodo().isOk()) {
             instruccion.setTipoNodo(new TipoOk());
             return;
         } else if (!(t instanceof TBool)) {
@@ -330,21 +331,21 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(InstruccionIfElse instruccion) {
-        instruccion.expresion().procesa(this);
-        instruccion.instruccionesOptIf().procesa(this);
-        instruccion.instruccionesOptElse().procesa(this);
-        Tipo t = refExc(instruccion.expresion().tipoNodo());
+        instruccion.exp().procesa(this);
+        instruccion.instrsOptIf().procesa(this);
+        instruccion.instrsOptElse().procesa(this);
+        Tipo t = refExc(instruccion.exp().tipoNodo());
 
         if (t instanceof TBool
-                && instruccion.instruccionesOptIf().tipoNodo().isOk()
-                && instruccion.instruccionesOptElse().tipoNodo().isOk()) {
+                && instruccion.instrsOptIf().tipoNodo().isOk()
+                && instruccion.instrsOptElse().tipoNodo().isOk()) {
             instruccion.setTipoNodo(new TipoOk());
             return;
         } else if (!(t instanceof TBool)) {
             err.errorProcesamiento("Tipo de expresión de if no es booleana", instruccion);
-        } else if (!(instruccion.instruccionesOptIf().tipoNodo().isOk())) {
+        } else if (!(instruccion.instrsOptIf().tipoNodo().isOk())) {
             err.errorProcesamiento("Tipo de instrucciones if no es correcto", instruccion);
-        } else if (!(instruccion.instruccionesOptElse().tipoNodo().isOk())) {
+        } else if (!(instruccion.instrsOptElse().tipoNodo().isOk())) {
             err.errorProcesamiento("Tipo de instrucciones else no es correcto", instruccion);
         }
         instruccion.setTipoNodo(new TipoError());
@@ -352,11 +353,11 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(InstruccionWhile instruccion) {
-        instruccion.expresion().procesa(this);
-        instruccion.instruccionesOpt().procesa(this);
-        Tipo t = refExc(instruccion.expresion().tipoNodo());
+        instruccion.exp().procesa(this);
+        instruccion.instrsOpt().procesa(this);
+        Tipo t = refExc(instruccion.exp().tipoNodo());
 
-        if (t instanceof TBool && instruccion.instruccionesOpt().tipoNodo().isOk()) {
+        if (t instanceof TBool && instruccion.instrsOpt().tipoNodo().isOk()) {
             instruccion.setTipoNodo(new TipoOk());
             return;
         } else if (!(t instanceof TBool)) {
@@ -369,14 +370,14 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(InstruccionRead instruccion) {
-        instruccion.expresion().procesa(this);
-        Tipo t = refExc(instruccion.expresion().tipoNodo());
+        instruccion.exp().procesa(this);
+        Tipo t = refExc(instruccion.exp().tipoNodo());
 
-        if (instruccion.expresion().esDesignador()
+        if (instruccion.exp().esDesignador()
                 && (t instanceof TInt || t instanceof TReal || t instanceof TString)) {
             instruccion.setTipoNodo(new TipoOk());
             return;
-        } else if (!instruccion.expresion().esDesignador()) {
+        } else if (!instruccion.exp().esDesignador()) {
             err.errorProcesamiento("La expresión de read no es un designador", instruccion);
         } else {
             err.errorProcesamiento("La expresión de read no es de un tipo válido. Tipo = " + t, instruccion);
@@ -386,8 +387,8 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(InstruccionWrite instruccion) {
-        instruccion.expresion().procesa(this);
-        Tipo t = refExc(instruccion.expresion().tipoNodo());
+        instruccion.exp().procesa(this);
+        Tipo t = refExc(instruccion.exp().tipoNodo());
         if (t instanceof TInt || t instanceof TReal || t instanceof TString || t instanceof TBool) {
             instruccion.setTipoNodo(new TipoOk());
         } else {
@@ -403,8 +404,8 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(InstruccionNew instruccion) {
-        instruccion.expresion().procesa(this);
-        Tipo t = refExc(instruccion.expresion().tipoNodo());
+        instruccion.exp().procesa(this);
+        Tipo t = refExc(instruccion.exp().tipoNodo());
 
         if (t instanceof TipoPointer)
             instruccion.setTipoNodo(new TipoOk());
@@ -416,8 +417,8 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(InstruccionDelete instruccion) {
-        instruccion.expresion().procesa(this);
-        Tipo t = refExc(instruccion.expresion().tipoNodo());
+        instruccion.exp().procesa(this);
+        Tipo t = refExc(instruccion.exp().tipoNodo());
 
         if (t instanceof TipoPointer)
             instruccion.setTipoNodo(new TipoOk());
@@ -431,8 +432,8 @@ public class ChequeoTipos extends Procesador {
     public void procesa(InstruccionCall instruccion) {
         if (instruccion.vinculo() instanceof DecProc) {
             DecProc proc = (DecProc) (instruccion.vinculo());
-            if (numElementos(instruccion.parametros()) == numElementos(proc.listaParams())) {
-                instruccion.setTipoNodo(chequeoParametros(instruccion.parametros(), proc.listaParams()));
+            if (numElementos(instruccion.params()) == numElementos(proc.params())) {
+                instruccion.setTipoNodo(chequeoParametros(instruccion.params(), proc.params()));
             } else {
                 err.errorProcesamiento("El número de parámetros de la llamada no es correcto", instruccion);
                 instruccion.setTipoNodo(new TipoError());
@@ -461,13 +462,13 @@ public class ChequeoTipos extends Procesador {
     }
 
     private Tipo chequeoParametros(ExpresionesUna exp, ListaParamsUno param) {
-        return chequeoParametro(exp.expresion(), param.parametro());
+        return chequeoParametro(exp.exp(), param.param());
     }
 
     private Tipo chequeoParametros(ExpresionesMuchas exps, ListaParamsMuchos params) {
         Tipo tipoMuchos;
-        Expresiones exps1 = exps.expresiones();
-        ListaParams params1 = params.listaParametros();
+        Expresiones exps1 = exps.exps();
+        ListaParams params1 = params.params();
 
         if (exps1 instanceof ExpresionesMuchas && params1 instanceof ListaParamsMuchos)
             tipoMuchos = chequeoParametros((ExpresionesMuchas) exps, (ListaParamsMuchos) params1);
@@ -479,7 +480,7 @@ public class ChequeoTipos extends Procesador {
             err.errorProcesamiento("El número de parámetros de la llamada no es correcto", exps, params);
             return new TipoError();
         }
-        return ambosOk(tipoMuchos, chequeoParametro(exps.expresion(), params.parametro()));
+        return ambosOk(tipoMuchos, chequeoParametro(exps.exp(), params.param()));
     }
 
     private Tipo chequeoParametro(Expresion exp, Parametro param) {
@@ -547,17 +548,17 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(ExpresionesUna expresiones) {
-        expresiones.expresion().procesa(this);
-        expresiones.setTipoNodo(expresiones.expresion().tipoNodo());
+        expresiones.exp().procesa(this);
+        expresiones.setTipoNodo(expresiones.exp().tipoNodo());
     }
 
     @Override
     public void procesa(ExpresionesMuchas expresiones) {
-        expresiones.expresiones().procesa(this);
-        expresiones.expresion().procesa(this);
+        expresiones.exps().procesa(this);
+        expresiones.exp().procesa(this);
         expresiones.setTipoNodo(ambosOk(
-                expresiones.expresiones().tipoNodo(),
-                expresiones.expresion().tipoNodo()));
+                expresiones.exps().tipoNodo(),
+                expresiones.exp().tipoNodo()));
     }
 
     @Override
@@ -893,9 +894,9 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(Punto punto) {
-        punto.arg0().procesa(this);
-        String campo = punto.arg1();
-        Tipo t = refExc(punto.arg0().tipoNodo());
+        punto.exp().procesa(this);
+        String campo = punto.campo();
+        Tipo t = refExc(punto.exp().tipoNodo());
 
         if (!(t instanceof TipoRecord)) {
             err.errorProcesamiento(
@@ -919,9 +920,9 @@ public class ChequeoTipos extends Procesador {
 
     @Override
     public void procesa(Flecha flecha) {
-        flecha.arg0().procesa(this);
-        String campo = flecha.arg1();
-        Tipo refT = refExc(flecha.arg0().tipoNodo());
+        flecha.exp().procesa(this);
+        String campo = flecha.campo();
+        Tipo refT = refExc(flecha.exp().tipoNodo());
 
         if (!(refT instanceof TipoPointer)) {
             flecha.setTipoNodo(new TipoError());

@@ -23,6 +23,10 @@ public class NumeroReal extends ExpresionBasica {
         return num;
     }
 
+    public double numAsDouble() {
+        return Double.parseDouble(num.toString());
+    }
+
     @Override
     public void procesa(Procesador p) {
         p.procesa(this);

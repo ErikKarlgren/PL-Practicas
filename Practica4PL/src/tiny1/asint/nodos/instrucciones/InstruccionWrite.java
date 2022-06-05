@@ -13,7 +13,7 @@ public class InstruccionWrite extends Instruccion {
         this.expresion = Objects.requireNonNull(expresion);
     }
 
-    public Expresion expresion() {
+    public Expresion exp() {
         return expresion;
     }
 

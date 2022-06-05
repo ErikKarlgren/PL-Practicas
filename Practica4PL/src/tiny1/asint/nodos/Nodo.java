@@ -16,17 +16,29 @@ public abstract class Nodo {
     // Comprobación de tipos
     private final LazyFinalField<Tipo> tipoNodo;
 
+    // Asignación de espacio
+    private final LazyFinalInt direccion;
+    private final LazyFinalInt nivel;
+    private final LazyFinalInt tamanio;
+
     // Etiquetado
     private final LazyFinalInt dirInicio;
     private final LazyFinalInt dirSiguiente;
 
     protected Nodo() {
         this.tipoNodo = new LazyFinalField<>();
+        this.direccion = new LazyFinalInt();
+        this.nivel = new LazyFinalInt();
         this.dirInicio = new LazyFinalInt();
         this.dirSiguiente = new LazyFinalInt();
+        this.tamanio = new LazyFinalInt();
     }
 
     public abstract void procesa(Procesador p);
+
+    public boolean esTipo() {
+        return false;
+    }
 
     public Nodo vinculo() {
         throw new UnsupportedOperationException("Este nodo no puede vincularse a otro");
@@ -44,8 +56,24 @@ public abstract class Nodo {
         return tipoNodo.get();
     }
 
-    public boolean esTipo() {
-        return false;
+    public LazyFinalInt direccion() {
+        return direccion;
+    }
+
+    public LazyFinalInt nivel() {
+        return nivel;
+    }
+
+    public LazyFinalInt tam() {
+        return tamanio;
+    }
+
+    public LazyFinalInt dirInicio() {
+        return dirInicio;
+    }
+
+    public LazyFinalInt dirSiguiente() {
+        return dirSiguiente;
     }
 
     @Override

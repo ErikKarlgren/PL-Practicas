@@ -1,4 +1,4 @@
-package tiny1.procesamientos.chequeo_tipos;
+package tiny1.procesamientos;
 
 import tiny1.asint.nodos.declaraciones.DecType;
 import tiny1.asint.nodos.tipos.TBool;
@@ -11,9 +11,8 @@ import tiny1.asint.nodos.tipos.TipoArray;
 import tiny1.asint.nodos.tipos.TipoNuevo;
 import tiny1.asint.nodos.tipos.TipoPointer;
 import tiny1.asint.nodos.tipos.TipoRecord;
-import tiny1.procesamientos.ProcesadorConRetorno;
 
-class RefExc extends ProcesadorConRetorno<Tipo> {
+public class RefExc extends ProcesadorConRetorno<Tipo> {
 
     private Tipo tipoReferido;
 

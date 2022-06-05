@@ -34,7 +34,7 @@ class ContarElementos extends ProcesadorConRetorno<Integer> {
 
     @Override
     public void procesa(DecsMuchas declaraciones) {
-        declaraciones.declaraciones().procesa(this);
+        declaraciones.decs().procesa(this);
         contador++;
     }
 
@@ -50,7 +50,7 @@ class ContarElementos extends ProcesadorConRetorno<Integer> {
 
     @Override
     public void procesa(ListaParamsMuchos listaParametros) {
-        listaParametros.listaParametros().procesa(this);
+        listaParametros.params().procesa(this);
         contador++;
     }
 
@@ -72,7 +72,7 @@ class ContarElementos extends ProcesadorConRetorno<Integer> {
 
     @Override
     public void procesa(InstrMuchas instrucciones) {
-        instrucciones.instrucciones().procesa(this);
+        instrucciones.instrs().procesa(this);
         contador++;
     }
 
@@ -88,7 +88,7 @@ class ContarElementos extends ProcesadorConRetorno<Integer> {
 
     @Override
     public void procesa(ExpresionesMuchas expresiones) {
-        expresiones.expresiones().procesa(this);
+        expresiones.exps().procesa(this);
         contador++;
     }
 }

@@ -15,7 +15,7 @@ public class ProgramaConDecs extends Programa {
         this.declaraciones = Objects.requireNonNull(declaraciones);
     }
 
-    public Declaraciones declaraciones() {
+    public Declaraciones decs() {
         return declaraciones;
     }
 

@@ -1,4 +1,4 @@
-package tiny1.procesamientos;
+package tiny1.procesamientos.asigna_espacio;
 
 import tiny1.asint.nodos.Nodo;
 import tiny1.asint.nodos.bloques.*;
@@ -11,10 +11,11 @@ import tiny1.asint.nodos.expresiones.aritmeticas.*;
 import tiny1.asint.nodos.expresiones.booleanas.logicas.*;
 import tiny1.asint.nodos.expresiones.booleanas.comparacion.*;
 import tiny1.asint.nodos.instrucciones.*;
-import tiny1.asint.nodos.interfaces.TieneTamanio;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
+import tiny1.procesamientos.Procesador;
+import tiny1.procesamientos.RefExc;
 
 public class AsignaEspacio extends Procesador {
 
@@ -26,32 +27,36 @@ public class AsignaEspacio extends Procesador {
         this.nivel = 0;
     }
 
-    private <T extends Nodo & TieneTamanio> void asignaTamanio(T tipo) {
-        if (!tipo.tamanio().isInitialized()) {
+    private void asignaTamanio(Nodo tipo) {
+        if (!tipo.tam().isInitialized()) {
             tipo.procesa(this);
         }
     }
 
+    private Tipo refExc(Tipo tipo) {
+        return new RefExc().procesar(tipo);
+    }
+
     @Override
     public void procesa(ProgramaConDecs programa) {
-        programa.declaraciones().procesa(this);
-        programa.instrucciones().procesa(this);
+        programa.decs().procesa(this);
+        programa.instrs().procesa(this);
     }
 
     @Override
     public void procesa(ProgramaSinDecs programa) {
-        programa.instrucciones().procesa(this);
+        programa.instrs().procesa(this);
     }
 
     @Override
     public void procesa(DecsUna declaraciones) {
-        declaraciones.declaracion().procesa(this);
+        declaraciones.dec().procesa(this);
     }
 
     @Override
     public void procesa(DecsMuchas declaraciones) {
-        declaraciones.declaraciones().procesa(this);
-        declaraciones.declaracion().procesa(this);
+        declaraciones.decs().procesa(this);
+        declaraciones.dec().procesa(this);
     }
 
     @Override
@@ -64,7 +69,7 @@ public class AsignaEspacio extends Procesador {
         decVar.direccion().set(direccion);
         decVar.nivel().set(nivel);
         asignaTamanio(decVar.tipo());
-        direccion += decVar.tipo().tamanio().get();
+        direccion += decVar.tipo().tam().get();
     }
 
     @Override
@@ -74,9 +79,9 @@ public class AsignaEspacio extends Procesador {
         nivel++;
         decProc.nivel().set(nivel);
         direccion = 0;
-        decProc.listaParams().procesa(this);
+        decProc.params().procesa(this);
         decProc.bloque().procesa(this);
-        decProc.tamanio().set(direccion);
+        decProc.tam().set(direccion);
 
         direccion = antiguaDir;
         nivel--;
@@ -92,7 +97,7 @@ public class AsignaEspacio extends Procesador {
         parametro.direccion().set(direccion);
         parametro.nivel().set(nivel);
         asignaTamanio(parametro.tipo());
-        direccion += parametro.tipo().tamanio().get();
+        direccion += parametro.tipo().tam().get();
     }
 
     @Override
@@ -100,104 +105,107 @@ public class AsignaEspacio extends Procesador {
         parametro.direccion().set(direccion);
         parametro.nivel().set(nivel);
         asignaTamanio(parametro.tipo());
-        direccion += parametro.tipo().tamanio().get();
+        direccion += parametro.tipo().tam().get();
     }
 
     @Override
     public void procesa(ListaParamsUno listaParametros) {
-        listaParametros.parametro().procesa(this);
+        listaParametros.param().procesa(this);
     }
 
     @Override
     public void procesa(ListaParamsMuchos listaParametros) {
-        listaParametros.listaParametros().procesa(this);
-        listaParametros.parametro().procesa(this);
+        listaParametros.params().procesa(this);
+        listaParametros.param().procesa(this);
     }
 
     @Override
     public void procesa(TInt tipo) {
-        tipo.tamanio().set(1);
+        tipo.tam().set(1);
     }
 
     @Override
     public void procesa(TReal tipo) {
-        tipo.tamanio().set(1);
+        tipo.tam().set(1);
     }
 
     @Override
     public void procesa(TString tipo) {
-        tipo.tamanio().set(1); // TODO: ¿?
+        tipo.tam().set(1); // TODO: ¿?
     }
 
     @Override
     public void procesa(TBool tipo) {
-        tipo.tamanio().set(1);
+        tipo.tam().set(1);
     }
 
     @Override
     public void procesa(TipoArray tipo) {
         asignaTamanio(tipo.tipoBase());
-        tipo.tamanio().set(tipo.tipoBase().tamanio().get() * tipo.longitud());
+        tipo.tam().set(tipo.tipoBase().tam().get() * tipo.longitud());
     }
 
     @Override
     public void procesa(TipoPointer tipo) {
         // TODO: ¿?
         // asignaTamanio(tipo.tipoBase());
-        tipo.tamanio().set(1);
+        tipo.tam().set(1);
     }
 
     @Override
     public void procesa(TipoRecord tipo) {
         asignaTamanio(tipo.campos());
-        tipo.tamanio().set(tipo.campos().tamanio());
+        // if (!tipo.tam().isInitialized()) {
+        tipo.tam().set(tipo.campos().tam().get());
+        // }
     }
 
     @Override
     public void procesa(TipoNuevo tipoNuevo) {
         tipoNuevo.vinculo().procesa(this);
         DecType decType = (DecType) tipoNuevo.vinculo();
-        tipoNuevo.tamanio().set(decType.tipo().tamanio());
+        tipoNuevo.tam().set(decType.tipo().tam());
     }
 
     @Override
     public void procesa(TNull tNull) {
-        tNull.tamanio().set(0); // TODO: ¿?
+        tNull.tam().set(1); // TODO: ¿?
     }
 
     @Override
     public void procesa(Campo campo) {
         asignaTamanio(campo.tipo());
-        campo.tamanio().set(campo.tipo().tamanio());
+        campo.tam().set(campo.tipo().tam());
     }
 
     @Override
     public void procesa(CamposUno campos) {
         asignaTamanio(campos.campo());
-        campos.tamanio().set(campos.campo().tamanio());
+        campos.tam().set(campos.campo().tam());
     }
 
     @Override
     public void procesa(CamposMuchos campos) {
         asignaTamanio(campos.campos());
         asignaTamanio(campos.campo());
-        campos.tamanio().set(campos.campos().tamanio().get() + campos.campo().tamanio().get());
+        campos.tam().set(campos.campos().tam().get() + campos.campo().tam().get());
     }
 
     @Override
     public void procesa(InstrUna instrucciones) {
-        instrucciones.instruccion().procesa(this);
+        instrucciones.instr().procesa(this);
     }
 
     @Override
     public void procesa(InstrMuchas instrucciones) {
-        instrucciones.instrucciones().procesa(this);
-        instrucciones.instruccion().procesa(this);
+        instrucciones.instrs().procesa(this);
+        instrucciones.instr().procesa(this);
     }
 
     @Override
     public void procesa(InstrAsignacion instruccion) {
-        // No hacer nada
+        instruccion.expIzq().procesa(this);
+        instruccion.expDer().procesa(this);
     }
 
     @Override
@@ -207,33 +215,36 @@ public class AsignaEspacio extends Procesador {
 
     @Override
     public void procesa(InstrOptMuchas instruccionesOpt) {
-        instruccionesOpt.instrucciones().procesa(this);
+        instruccionesOpt.instrs().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionIf instruccion) {
-        instruccion.instruccionesOpt().procesa(this);
+        instruccion.exp().procesa(this);
+        instruccion.instrsOpt().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionIfElse instruccion) {
-        instruccion.instruccionesOptIf().procesa(this);
-        instruccion.instruccionesOptElse().procesa(this);
+        instruccion.exp().procesa(this);
+        instruccion.instrsOptIf().procesa(this);
+        instruccion.instrsOptElse().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionWhile instruccion) {
-        instruccion.instruccionesOpt().procesa(this);
+        instruccion.exp().procesa(this);
+        instruccion.instrsOpt().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionRead instruccion) {
-        // No hacer nada
+        instruccion.exp().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionWrite instruccion) {
-        // No hacer nada
+        instruccion.exp().procesa(this);
     }
 
     @Override
@@ -243,17 +254,17 @@ public class AsignaEspacio extends Procesador {
 
     @Override
     public void procesa(InstruccionNew instruccion) {
-        // No hacer nada
+        instruccion.exp().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionDelete instruccion) {
-        // No hacer nada
+        instruccion.exp().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionCall instruccion) {
-        // No hacer nada
+        instruccion.params().procesa(this);
     }
 
     @Override
@@ -262,7 +273,7 @@ public class AsignaEspacio extends Procesador {
         nivel++;
         direccion = 0;
         instrucciones.bloque().procesa(this);
-        instrucciones.tamanio().set(direccion);
+        instrucciones.tam().set(direccion);
         direccion = antiguaDir;
         nivel--;
     }
@@ -284,42 +295,48 @@ public class AsignaEspacio extends Procesador {
 
     @Override
     public void procesa(ExpresionesUna expresiones) {
-        // No hacer nada
+        expresiones.exp().procesa(this);
     }
 
     @Override
     public void procesa(ExpresionesMuchas expresiones) {
-        // No hacer nada
+        expresiones.exps().procesa(this);
+        expresiones.exp().procesa(this);
     }
 
     @Override
     public void procesa(Suma suma) {
-        // No hacer nada
+        suma.arg0().procesa(this);
+        suma.arg1().procesa(this);
     }
 
     @Override
     public void procesa(Resta resta) {
-        // No hacer nada
+        resta.arg0().procesa(this);
+        resta.arg1().procesa(this);
     }
 
     @Override
     public void procesa(Multiplicacion multiplicacion) {
-        // No hacer nada
+        multiplicacion.arg0().procesa(this);
+        multiplicacion.arg1().procesa(this);
     }
 
     @Override
     public void procesa(Division division) {
-        // No hacer nada
+        division.arg0().procesa(this);
+        division.arg1().procesa(this);
     }
 
     @Override
     public void procesa(PorCiento porCiento) {
-        // No hacer nada
+        porCiento.arg0().procesa(this);
+        porCiento.arg1().procesa(this);
     }
 
     @Override
     public void procesa(Menos menos) {
-        // No hacer nada
+        menos.arg().procesa(this);
     }
 
     @Override
@@ -359,62 +376,80 @@ public class AsignaEspacio extends Procesador {
 
     @Override
     public void procesa(And and) {
-        // No hacer nada
+        and.arg0().procesa(this);
+        and.arg1().procesa(this);
     }
 
     @Override
     public void procesa(Or or) {
-        // No hacer nada
+        or.arg0().procesa(this);
+        or.arg1().procesa(this);
     }
 
     @Override
     public void procesa(Not not) {
-        // No hacer nada
+        not.arg().procesa(this);
     }
 
     @Override
     public void procesa(Menor menor) {
-        // No hacer nada
+        menor.arg0().procesa(this);
+        menor.arg1().procesa(this);
     }
 
     @Override
     public void procesa(MenorIgual menorIgual) {
-        // No hacer nada
+        menorIgual.arg0().procesa(this);
+        menorIgual.arg1().procesa(this);
     }
 
     @Override
     public void procesa(Mayor mayor) {
-        // No hacer nada
+        mayor.arg0().procesa(this);
+        mayor.arg1().procesa(this);
     }
 
     @Override
     public void procesa(MayorIgual mayorIgual) {
-        // No hacer nada
+        mayorIgual.arg0().procesa(this);
+        mayorIgual.arg1().procesa(this);
     }
 
     @Override
     public void procesa(Igual igual) {
-        // No hacer nada
+        igual.arg0().procesa(this);
+        igual.arg1().procesa(this);
     }
 
     @Override
     public void procesa(Distinto distinto) {
-        // No hacer nada
+        distinto.arg0().procesa(this);
+        distinto.arg1().procesa(this);
     }
 
     @Override
     public void procesa(AccesoArray accesoArray) {
-        // No hacer nada
+        accesoArray.arg0().procesa(this);
+        accesoArray.arg1().procesa(this);
     }
 
     @Override
     public void procesa(Punto punto) {
-        // No hacer nada
+        asignaTamanio(punto.exp());
+        Tipo tipoRefExc = refExc(punto.exp().tipoNodo());
+        asignaTamanio(tipoRefExc);
+        int desp = new CalcDesplazamiento(punto.campo()).procesar(tipoRefExc);
+        punto.desplazamiento().set(desp);
     }
 
     @Override
     public void procesa(Flecha flecha) {
-        // No hacer nada
+        asignaTamanio(flecha.exp());
+        TipoPointer tipoRefExc = (TipoPointer) refExc(flecha.exp().tipoNodo());
+        asignaTamanio(tipoRefExc);
+        Tipo tipoBaseRefExc = refExc(tipoRefExc.tipoBase());
+        int desp = new CalcDesplazamiento(flecha.campo()).procesar(tipoBaseRefExc);
+        flecha.desplazamiento().set(desp);
     }
 
     @Override

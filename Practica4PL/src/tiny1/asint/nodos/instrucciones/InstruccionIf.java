@@ -15,11 +15,11 @@ public class InstruccionIf extends Instruccion {
         this.instruccionesOpt = Objects.requireNonNull(instruccionesOpt);
     }
 
-    public Expresion expresion() {
+    public Expresion exp() {
         return expresion;
     }
 
-    public InstruccionesOpt instruccionesOpt() {
+    public InstruccionesOpt instrsOpt() {
         return instruccionesOpt;
     }
 

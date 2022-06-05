@@ -19,15 +19,15 @@ public class InstruccionIfElse extends Instruccion {
         this.instruccionesOptElse = Objects.requireNonNull(instruccionesOptElse);
     }
 
-    public Expresion expresion() {
+    public Expresion exp() {
         return expresion;
     }
 
-    public InstruccionesOpt instruccionesOptIf() {
+    public InstruccionesOpt instrsOptIf() {
         return instruccionesOptIf;
     }
 
-    public InstruccionesOpt instruccionesOptElse() {
+    public InstruccionesOpt instrsOptElse() {
         return instruccionesOptElse;
     }
 

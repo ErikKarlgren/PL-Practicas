@@ -13,7 +13,7 @@ public abstract class Programa extends Nodo {
         this.instrucciones = Objects.requireNonNull(instrucciones);
     }
 
-    public Instrucciones instrucciones() {
+    public Instrucciones instrs() {
         return instrucciones;
     }
 }

@@ -12,7 +12,7 @@ public class InstrUna extends Instrucciones {
         this.instruccion = Objects.requireNonNull(instruccion);
     }
 
-    public Instruccion instruccion() {
+    public Instruccion instr() {
         return instruccion;
     }
 

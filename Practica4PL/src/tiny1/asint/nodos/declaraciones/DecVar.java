@@ -12,15 +12,9 @@ public class DecVar extends Declaracion {
     private final Tipo tipo;
     private final StringLocalizado string;
 
-    // Asignación de espacio
-    private LazyFinalInt direccion;
-    private LazyFinalInt nivel;
-
     public DecVar(Tipo tipo, StringLocalizado string) {
         this.tipo = Objects.requireNonNull(tipo);
         this.string = Objects.requireNonNull(string);
-        this.direccion = new LazyFinalInt();
-        this.nivel = new LazyFinalInt();
     }
 
     public Tipo tipo() {
@@ -34,13 +28,5 @@ public class DecVar extends Declaracion {
     @Override
     public void procesa(Procesador p) {
         p.procesa(this);
-    }
-
-    public LazyFinalInt direccion() {
-        return direccion;
-    }
-
-    public LazyFinalInt nivel() {
-        return nivel;
     }
 }

@@ -14,11 +14,11 @@ public class DecsMuchas extends Declaraciones {
         this.declaracion = Objects.requireNonNull(declaracion);
     }
 
-    public Declaraciones declaraciones() {
+    public Declaraciones decs() {
         return declaraciones;
     }
 
-    public Declaracion declaracion() {
+    public Declaracion dec() {
         return declaracion;
     }
 

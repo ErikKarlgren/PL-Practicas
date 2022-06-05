@@ -12,7 +12,7 @@ public class ListaParamsUno extends ListaParams {
         this.parametro = Objects.requireNonNull(parametro);
     }
 
-    public Parametro parametro() {
+    public Parametro param() {
         return parametro;
     }
 

@@ -15,11 +15,11 @@ public class InstrAsignacion extends Instruccion {
         this.expresionDerecha = Objects.requireNonNull(expresionDerecha);
     }
 
-    public Expresion expresionIzquierda() {
+    public Expresion expIzq() {
         return expresionIzquierda;
     }
 
-    public Expresion expresionDerecha() {
+    public Expresion expDer() {
         return expresionDerecha;
     }
 

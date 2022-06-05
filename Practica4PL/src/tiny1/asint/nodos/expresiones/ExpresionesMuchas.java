@@ -14,11 +14,11 @@ public class ExpresionesMuchas extends Expresiones {
         this.expresion = Objects.requireNonNull(expresion);
     }
 
-    public Expresiones expresiones() {
+    public Expresiones exps() {
         return expresiones;
     }
 
-    public Expresion expresion() {
+    public Expresion exp() {
         return expresion;
     }
 

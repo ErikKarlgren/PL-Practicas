@@ -21,13 +21,13 @@ class VinculacionDecs2 extends Procesador {
 
     @Override
     public void procesa(DecsUna declaraciones) {
-        declaraciones.declaracion().procesa(this);
+        declaraciones.dec().procesa(this);
     }
 
     @Override
     public void procesa(DecsMuchas declaraciones) {
-        declaraciones.declaraciones().procesa(this);
-        declaraciones.declaracion().procesa(this);
+        declaraciones.decs().procesa(this);
+        declaraciones.dec().procesa(this);
     }
 
     @Override
@@ -62,13 +62,13 @@ class VinculacionDecs2 extends Procesador {
 
     @Override
     public void procesa(ListaParamsUno listaParametros) {
-        listaParametros.parametro().procesa(this);
+        listaParametros.param().procesa(this);
     }
 
     @Override
     public void procesa(ListaParamsMuchos listaParametros) {
-        listaParametros.listaParametros().procesa(this);
-        listaParametros.parametro().procesa(this);
+        listaParametros.params().procesa(this);
+        listaParametros.param().procesa(this);
     }
 
     @Override

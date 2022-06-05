@@ -70,24 +70,31 @@ public class Impresion extends Procesador {
 
 	@Override
 	public void procesa(ProgramaConDecs programa) {
-		programa.declaraciones().procesa(this);
+		programa.decs().procesa(this);
 		println();
 		println("&&");
-		programa.instrucciones().procesa(this);
+		programa.instrs().procesa(this);
+		if (indentLevel == 0)
+			println();
+	}
+
+	@Override
+	public void procesa(ProgramaSinDecs programa) {
+		programa.instrs().procesa(this);
 		if (indentLevel == 0)
 			println();
 	}
 
 	@Override
 	public void procesa(DecsUna declaraciones) {
-		declaraciones.declaracion().procesa(this);
+		declaraciones.dec().procesa(this);
 	}
 
 	@Override
 	public void procesa(DecsMuchas declaraciones) {
-		declaraciones.declaraciones().procesa(this);
+		declaraciones.decs().procesa(this);
 		println(";");
-		declaraciones.declaracion().procesa(this);
+		declaraciones.dec().procesa(this);
 	}
 
 	@Override
@@ -108,7 +115,7 @@ public class Impresion extends Procesador {
 	public void procesa(DecProc decProc) {
 		println();
 		print("proc " + decProc.id() + " (");
-		decProc.listaParams().procesa(this);
+		decProc.params().procesa(this);
 		print(") ");
 		indentar();
 		decProc.bloque().procesa(this);
@@ -117,14 +124,14 @@ public class Impresion extends Procesador {
 
 	@Override
 	public void procesa(InstrUna instrucciones) {
-		instrucciones.instruccion().procesa(this);
+		instrucciones.instr().procesa(this);
 	}
 
 	@Override
 	public void procesa(InstrMuchas instrucciones) {
-		instrucciones.instrucciones().procesa(this);
+		instrucciones.instrs().procesa(this);
 		println(";");
-		instrucciones.instruccion().procesa(this);
+		instrucciones.instr().procesa(this);
 	}
 
 	@Override
@@ -249,13 +256,6 @@ public class Impresion extends Procesador {
 	}
 
 	@Override
-	public void procesa(ProgramaSinDecs programa) {
-		programa.instrucciones().procesa(this);
-		if (indentLevel == 0)
-			println();
-	}
-
-	@Override
 	public void procesa(ParamsSin parametros) {
 		// no hacer nada
 	}
@@ -275,14 +275,14 @@ public class Impresion extends Procesador {
 
 	@Override
 	public void procesa(ListaParamsUno listaParametros) {
-		listaParametros.parametro().procesa(this);
+		listaParametros.param().procesa(this);
 	}
 
 	@Override
 	public void procesa(ListaParamsMuchos listaParametros) {
-		listaParametros.listaParametros().procesa(this);
+		listaParametros.params().procesa(this);
 		print(", ");
-		listaParametros.parametro().procesa(this);
+		listaParametros.param().procesa(this);
 	}
 
 	@Override
@@ -352,9 +352,9 @@ public class Impresion extends Procesador {
 
 	@Override
 	public void procesa(InstrAsignacion instruccion) {
-		instruccion.expresionIzquierda().procesa(this);
+		instruccion.expIzq().procesa(this);
 		print(" = ");
-		instruccion.expresionDerecha().procesa(this);
+		instruccion.expDer().procesa(this);
 	}
 
 	@Override
@@ -364,16 +364,16 @@ public class Impresion extends Procesador {
 
 	@Override
 	public void procesa(InstrOptMuchas instruccionesOpt) {
-		instruccionesOpt.instrucciones().procesa(this);
+		instruccionesOpt.instrs().procesa(this);
 	}
 
 	@Override
 	public void procesa(InstruccionIf instruccion) {
 		print("if ");
-		instruccion.expresion().procesa(this);
+		instruccion.exp().procesa(this);
 		indentar();
 		println(" then");
-		instruccion.instruccionesOpt().procesa(this);
+		instruccion.instrsOpt().procesa(this);
 		desindentar();
 		println();
 		print("endif");
@@ -382,15 +382,15 @@ public class Impresion extends Procesador {
 	@Override
 	public void procesa(InstruccionIfElse instruccion) {
 		print("if ");
-		instruccion.expresion().procesa(this);
+		instruccion.exp().procesa(this);
 		indentar();
 		println(" then");
-		instruccion.instruccionesOptIf().procesa(this);
+		instruccion.instrsOptIf().procesa(this);
 		desindentar();
 		println();
 		print("else ");
 		indentar();
-		instruccion.instruccionesOptElse().procesa(this);
+		instruccion.instrsOptElse().procesa(this);
 		desindentar();
 		println();
 		print("endif");
@@ -400,10 +400,10 @@ public class Impresion extends Procesador {
 	public void procesa(InstruccionWhile instruccion) {
 		println();
 		print("while ");
-		instruccion.expresion().procesa(this);
+		instruccion.exp().procesa(this);
 		indentar();
 		println(" do");
-		instruccion.instruccionesOpt().procesa(this);
+		instruccion.instrsOpt().procesa(this);
 		desindentar();
 		println();
 		print("endwhile");
@@ -412,13 +412,13 @@ public class Impresion extends Procesador {
 	@Override
 	public void procesa(InstruccionRead instruccion) {
 		print("read ");
-		instruccion.expresion().procesa(this);
+		instruccion.exp().procesa(this);
 	}
 
 	@Override
 	public void procesa(InstruccionWrite instruccion) {
 		print("write ");
-		instruccion.expresion().procesa(this);
+		instruccion.exp().procesa(this);
 	}
 
 	@Override
@@ -429,19 +429,19 @@ public class Impresion extends Procesador {
 	@Override
 	public void procesa(InstruccionNew instruccion) {
 		print("new ");
-		instruccion.expresion().procesa(this);
+		instruccion.exp().procesa(this);
 	}
 
 	@Override
 	public void procesa(InstruccionDelete instruccion) {
 		print("delete ");
-		instruccion.expresion().procesa(this);
+		instruccion.exp().procesa(this);
 	}
 
 	@Override
 	public void procesa(InstruccionCall instruccion) {
 		print("call " + instruccion.funcion() + "(");
-		instruccion.parametros().procesa(this);
+		instruccion.params().procesa(this);
 		print(")");
 	}
 
@@ -472,14 +472,14 @@ public class Impresion extends Procesador {
 
 	@Override
 	public void procesa(ExpresionesUna expresiones) {
-		expresiones.expresion().procesa(this);
+		expresiones.exp().procesa(this);
 	}
 
 	@Override
 	public void procesa(ExpresionesMuchas expresiones) {
-		expresiones.expresiones().procesa(this);
+		expresiones.exps().procesa(this);
 		print(" , ");
-		expresiones.expresion().procesa(this);
+		expresiones.exp().procesa(this);
 	}
 
 	@Override
@@ -504,16 +504,16 @@ public class Impresion extends Procesador {
 
 	@Override
 	public void procesa(Punto punto) {
-		imprimeArgumento(punto.arg0(), 5);
+		imprimeArgumento(punto.exp(), 5);
 		print(".");
-		print(punto.arg1());
+		print(punto.campo());
 	}
 
 	@Override
 	public void procesa(Flecha flecha) {
-		imprimeArgumento(flecha.arg0(), 5);
+		imprimeArgumento(flecha.exp(), 5);
 		print("->");
-		print(flecha.arg1());
+		print(flecha.campo());
 	}
 
 	@Override

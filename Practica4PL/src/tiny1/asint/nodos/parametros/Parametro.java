@@ -11,15 +11,9 @@ public abstract class Parametro extends Nodo {
     private final Tipo tipo;
     private final String nombre;
 
-    // Asignación de espacio
-    private final LazyFinalInt direccion;
-    private final LazyFinalInt nivel;
-
     protected Parametro(Tipo tipo, String nombre) {
         this.tipo = Objects.requireNonNull(tipo);
         this.nombre = Objects.requireNonNull(nombre);
-        this.direccion = new LazyFinalInt();
-        this.nivel = new LazyFinalInt();
     }
 
     public Tipo tipo() {
@@ -28,13 +22,5 @@ public abstract class Parametro extends Nodo {
 
     public String nombre() {
         return nombre;
-    }
-
-    public LazyFinalInt direccion() {
-        return direccion;
-    }
-
-    public LazyFinalInt nivel() {
-        return nivel;
     }
 }

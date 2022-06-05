@@ -1,5 +1,8 @@
 package tiny1.procesamientos.gen_codigo;
 
+import java.util.Stack;
+
+import tiny1.asint.nodos.Nodo;
 import tiny1.asint.nodos.bloques.*;
 import tiny1.asint.nodos.campos.*;
 import tiny1.asint.nodos.declaraciones.*;
@@ -13,363 +16,561 @@ import tiny1.asint.nodos.instrucciones.*;
 import tiny1.asint.nodos.parametros.*;
 import tiny1.asint.nodos.programa.*;
 import tiny1.asint.nodos.tipos.*;
+import tiny1.errors.GestionErroresTiny;
 import tiny1.procesamientos.Procesador;
 
 public class Etiquetado extends Procesador {
 
     private int etiqueta;
+    private final Stack<DecProc> procs;
+    private final GestionErroresTiny err;
 
     public Etiquetado() {
-        this.etiqueta = 0;
+        etiqueta = 0;
+        procs = new Stack<>();
+        err = new GestionErroresTiny();
+    }
+
+    private void recolectaProcs(Declaraciones declaraciones) {
+        procs.addAll(new RecolectaProcs().procesar(declaraciones));
+    }
+
+    private void etiquetaComprobarNull() {
+        etiqueta += 4;
     }
 
     @Override
     public void procesa(ProgramaConDecs programa) {
-        throw new UnsupportedOperationException();
+        programa.instrs().procesa(this);
+        recolectaProcs(programa.decs());
+        while (!procs.isEmpty()) {
+            DecProc proc = procs.pop();
+            proc.procesa(this);
+        }
     }
 
     @Override
     public void procesa(ProgramaSinDecs programa) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(DecsUna declaraciones) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(DecsMuchas declaraciones) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(DecType decType) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void procesa(DecVar decVar) {
-        throw new UnsupportedOperationException();
+        programa.instrs().procesa(this);
     }
 
     @Override
     public void procesa(DecProc decProc) {
-        throw new UnsupportedOperationException();
+        decProc.dirInicio().set(etiqueta);
+        decProc.bloque().procesa(this);
+        etiqueta += 2;
+        decProc.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(ParamsSin parametros) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(ParamValor parametro) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(ParamRef parametro) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(ListaParamsUno listaParametros) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(ListaParamsMuchos listaParametros) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(TInt tipo) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(TReal tipo) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(TString tipo) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(TBool tipo) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(TipoArray tipo) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(TipoPointer tipo) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(TipoRecord tipo) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(TipoNuevo tipoNuevo) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(TNull tNull) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(Campo campo) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(CamposUno campos) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(CamposMuchos campos) {
-        throw new UnsupportedOperationException();
+        // No hacer nada
     }
 
     @Override
     public void procesa(InstrUna instrucciones) {
-        throw new UnsupportedOperationException();
+        instrucciones.instr().procesa(this);
     }
 
     @Override
     public void procesa(InstrMuchas instrucciones) {
-        throw new UnsupportedOperationException();
+        instrucciones.instrs().procesa(this);
+        instrucciones.instr().procesa(this);
     }
 
     @Override
     public void procesa(InstrAsignacion instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.dirInicio().set(etiqueta);
+        instruccion.expIzq().procesa(this);
+        instruccion.expDer().procesa(this);
+        etiqueta++;
+        instruccion.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstrOptNinguna instruccionOpt) {
-        throw new UnsupportedOperationException();
+        instruccionOpt.dirInicio().set(etiqueta);
+        instruccionOpt.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstrOptMuchas instruccionesOpt) {
-        throw new UnsupportedOperationException();
+        instruccionesOpt.dirInicio().set(etiqueta);
+        instruccionesOpt.instrs().procesa(this);
+        instruccionesOpt.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstruccionIf instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.dirInicio().set(etiqueta);
+        instruccion.exp().procesa(this);
+        etiqueta++;
+        instruccion.instrsOpt().procesa(this);
+        instruccion.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstruccionIfElse instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.dirInicio().set(etiqueta);
+        instruccion.exp().procesa(this);
+        etiqueta++;
+        instruccion.instrsOptIf().procesa(this);
+        etiqueta++;
+        instruccion.instrsOptElse().procesa(this);
+        instruccion.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstruccionWhile instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.dirInicio().set(etiqueta);
+        instruccion.exp().procesa(this);
+        etiqueta++;
+        instruccion.instrsOpt().procesa(this);
+        etiqueta++;
+        instruccion.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstruccionRead instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.dirInicio().set(etiqueta);
+        instruccion.exp().procesa(this);
+        etiqueta += 2;
+        instruccion.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstruccionWrite instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.dirInicio().set(etiqueta);
+        instruccion.exp().procesa(this);
+        etiqueta++;
+        instruccion.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstruccionNL instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.dirInicio().set(etiqueta);
+        etiqueta++;
+        instruccion.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstruccionNew instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.dirInicio().set(etiqueta);
+        instruccion.exp().procesa(this);
+        etiqueta += 2;
+        instruccion.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstruccionDelete instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.dirInicio().set(etiqueta);
+        instruccion.exp().procesa(this);
+        etiqueta++;
+        etiquetaComprobarNull();
+        etiqueta++;
+        instruccion.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(InstruccionCall instruccion) {
-        throw new UnsupportedOperationException();
+        instruccion.dirInicio().set(etiqueta);
+        DecProc vinculo = (DecProc) instruccion.vinculo();
+        etiqueta++;
+        etiquetaParams(instruccion.params(), vinculo.params());
+        etiqueta += 2;
+        instruccion.dirSiguiente().set(etiqueta);
+    }
+
+    private void etiquetaParams(Expresiones exps, ListaParams params) {
+        if (exps instanceof ExpresionesMuchas && params instanceof ListaParamsMuchos)
+            etiquetaParams((ExpresionesMuchas) exps, (ListaParamsMuchos) params);
+        else if (exps instanceof ExpresionesUna && params instanceof ListaParamsUno)
+            etiquetaParams((ExpresionesUna) exps, (ListaParamsUno) params);
+        else if (exps instanceof ExpresionesNinguna && params instanceof ParamsSin)
+            etiquetaParams((ExpresionesNinguna) exps, (ParamsSin) params);
+        else {
+            err.errorProcesamiento("El número de parámetros de la llamada no es correcto", exps, params);
+        }
+    }
+
+    private void etiquetaParams(ExpresionesNinguna exps, ParamsSin params) {
+        // No hacer nada
+    }
+
+    private void etiquetaParams(ExpresionesUna exp, ListaParamsUno param) {
+        etiquetaPaso(exp.exp(), param.param());
+    }
+
+    private void etiquetaParams(ExpresionesMuchas exps, ListaParamsMuchos params) {
+        Expresiones exps1 = exps.exps();
+        ListaParams params1 = params.params();
+
+        if (exps1 instanceof ExpresionesMuchas && params1 instanceof ListaParamsMuchos)
+            etiquetaParams((ExpresionesMuchas) exps, (ListaParamsMuchos) params1);
+        else if (exps1 instanceof ExpresionesUna && params1 instanceof ListaParamsUno)
+            etiquetaParams((ExpresionesUna) exps1, (ListaParamsUno) params1);
+        else if (exps1 instanceof ExpresionesNinguna && params1 instanceof ParamsSin)
+            etiquetaParams((ExpresionesNinguna) exps1, (ParamsSin) params1);
+        else {
+            err.errorProcesamiento("El número de parámetros de la llamada no es correcto", exps, params);
+        }
+    }
+
+    private void etiquetaPaso(Expresion exp, Parametro param) {
+        etiqueta += 3;
+        exp.procesa(this);
+        etiqueta++;
     }
 
     @Override
     public void procesa(InstruccionBloque instrucciones) {
-        throw new UnsupportedOperationException();
+        instrucciones.dirInicio().set(etiqueta);
+        instrucciones.bloque().procesa(this);
+        instrucciones.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(BloqueVacio bloque) {
-        throw new UnsupportedOperationException();
+        bloque.dirInicio().set(etiqueta);
+        bloque.dirSiguiente().set(etiqueta);
     }
 
     @Override
-    public void procesa(BloqueLleno bloques) {
-        throw new UnsupportedOperationException();
+    public void procesa(BloqueLleno bloque) {
+        bloque.dirInicio().set(etiqueta);
+        bloque.programa().procesa(this);
+        bloque.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(ExpresionesNinguna expresiones) {
-        throw new UnsupportedOperationException();
+        expresiones.dirInicio().set(etiqueta);
+        expresiones.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(ExpresionesUna expresiones) {
-        throw new UnsupportedOperationException();
+        expresiones.dirInicio().set(etiqueta);
+        expresiones.exp().procesa(this);
+        expresiones.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(ExpresionesMuchas expresiones) {
-        throw new UnsupportedOperationException();
+        expresiones.dirInicio().set(etiqueta);
+        expresiones.exps().procesa(this);
+        expresiones.exp().procesa(this);
+        expresiones.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Suma suma) {
-        throw new UnsupportedOperationException();
+        suma.dirInicio().set(etiqueta);
+        etiquetaExpBin(suma);
+        etiqueta++;
+        suma.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Resta resta) {
-        throw new UnsupportedOperationException();
+        resta.dirInicio().set(etiqueta);
+        etiquetaExpBin(resta);
+        etiqueta++;
+        resta.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Multiplicacion multiplicacion) {
-        throw new UnsupportedOperationException();
+        multiplicacion.dirInicio().set(etiqueta);
+        etiquetaExpBin(multiplicacion);
+        etiqueta++;
+        multiplicacion.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Division division) {
-        throw new UnsupportedOperationException();
+        division.dirInicio().set(etiqueta);
+        etiquetaExpBin(division);
+        etiqueta++;
+        division.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(PorCiento porCiento) {
-        throw new UnsupportedOperationException();
+        porCiento.dirInicio().set(etiqueta);
+        etiquetaExpBin(porCiento);
+        etiqueta++;
+        porCiento.dirSiguiente().set(etiqueta);
+    }
+
+    public void etiquetaExpBin(ExpresionBinaria exp) {
+        exp.arg0().procesa(this);
+        if (exp.arg0().esDesignador()) {
+            etiqueta++;
+        }
+        exp.arg1().procesa(this);
+        if (exp.arg1().esDesignador()) {
+            etiqueta++;
+        }
     }
 
     @Override
     public void procesa(Menos menos) {
-        throw new UnsupportedOperationException();
+        menos.dirInicio().set(etiqueta);
+        menos.arg().procesa(this);
+        if (menos.arg().esDesignador()) {
+            etiqueta++;
+        }
+        etiqueta++;
+        menos.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(NumeroEntero numero) {
-        throw new UnsupportedOperationException();
+        numero.dirInicio().set(etiqueta);
+        etiqueta++;
+        numero.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(NumeroReal numero) {
-        throw new UnsupportedOperationException();
+        numero.dirInicio().set(etiqueta);
+        etiqueta++;
+        numero.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Identificador identificador) {
-        throw new UnsupportedOperationException();
+        identificador.dirInicio().set(etiqueta);
+        Nodo vinculo = identificador.vinculo();
+        if (vinculo.nivel().get() == 0) {
+            etiqueta++;
+        } else {
+            etiqueta += 3;
+            if (vinculo instanceof ParamRef) {
+                etiqueta++;
+            }
+        }
+        identificador.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(True booleanoTrue) {
-        throw new UnsupportedOperationException();
+        booleanoTrue.dirInicio().set(etiqueta);
+        etiqueta++;
+        booleanoTrue.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(False booleanoFalse) {
-        throw new UnsupportedOperationException();
+        booleanoFalse.dirInicio().set(etiqueta);
+        etiqueta++;
+        booleanoFalse.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Null nulo) {
-        throw new UnsupportedOperationException();
+        nulo.dirInicio().set(etiqueta);
+        etiqueta++;
+        nulo.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Cadena cadena) {
-        throw new UnsupportedOperationException();
+        cadena.dirInicio().set(etiqueta);
+        etiqueta++;
+        cadena.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(And and) {
-        throw new UnsupportedOperationException();
+        and.dirInicio().set(etiqueta);
+        etiquetaExpBin(and);
+        etiqueta++;
+        and.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Or or) {
-        throw new UnsupportedOperationException();
+        or.dirInicio().set(etiqueta);
+        etiquetaExpBin(or);
+        etiqueta++;
+        or.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Not not) {
-        throw new UnsupportedOperationException();
+        not.dirInicio().set(etiqueta);
+        not.arg().procesa(this);
+        if (not.arg().esDesignador()) {
+            etiqueta++;
+        }
+        not.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Menor menor) {
-        throw new UnsupportedOperationException();
+        menor.dirInicio().set(etiqueta);
+        etiquetaExpBin(menor);
+        etiqueta++;
+        menor.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(MenorIgual menorIgual) {
-        throw new UnsupportedOperationException();
+        menorIgual.dirInicio().set(etiqueta);
+        etiquetaExpBin(menorIgual);
+        etiqueta++;
+        menorIgual.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Mayor mayor) {
-        throw new UnsupportedOperationException();
+        mayor.dirInicio().set(etiqueta);
+        etiquetaExpBin(mayor);
+        etiqueta++;
+        mayor.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(MayorIgual mayorIgual) {
-        throw new UnsupportedOperationException();
+        mayorIgual.dirInicio().set(etiqueta);
+        etiquetaExpBin(mayorIgual);
+        etiqueta++;
+        mayorIgual.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Igual igual) {
-        throw new UnsupportedOperationException();
+        igual.dirInicio().set(etiqueta);
+        etiquetaExpBin(igual);
+        etiqueta++;
+        igual.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Distinto distinto) {
-        throw new UnsupportedOperationException();
+        distinto.dirInicio().set(etiqueta);
+        etiquetaExpBin(distinto);
+        etiqueta++;
+        distinto.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(AccesoArray accesoArray) {
-        throw new UnsupportedOperationException();
+        accesoArray.dirInicio().set(etiqueta);
+        accesoArray.arg0().procesa(this);
+        accesoArray.arg1().procesa(this);
+        if (accesoArray.arg1().esDesignador()) {
+            etiqueta++;
+        }
+        etiqueta += 3;
+        accesoArray.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Punto punto) {
-        throw new UnsupportedOperationException();
+        punto.dirInicio().set(etiqueta);
+        punto.exp().procesa(this);
+        etiqueta += 2;
+        punto.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(Flecha flecha) {
-        throw new UnsupportedOperationException();
+        flecha.dirInicio().set(etiqueta);
+        flecha.exp().procesa(this);
+        etiquetaComprobarNull();
+        etiqueta += 3;
+        flecha.dirSiguiente().set(etiqueta);
     }
 
     @Override
     public void procesa(ValorPuntero valorPuntero) {
-        throw new UnsupportedOperationException();
+        valorPuntero.dirInicio().set(etiqueta);
+        valorPuntero.arg().procesa(this);
+        etiquetaComprobarNull();
+        etiqueta++;
+        valorPuntero.dirSiguiente().set(etiqueta);
     }
 }

@@ -23,6 +23,10 @@ public class NumeroEntero extends ExpresionBasica {
         return num;
     }
 
+    public int numAsInt() {
+        return Integer.parseInt(num.toString());
+    }
+
     @Override
     public void procesa(Procesador p) {
         p.procesa(this);

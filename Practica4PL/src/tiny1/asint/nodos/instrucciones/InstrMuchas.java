@@ -14,11 +14,11 @@ public class InstrMuchas extends Instrucciones {
         this.instruccion = Objects.requireNonNull(instruccion);
     }
 
-    public Instrucciones instrucciones() {
+    public Instrucciones instrs() {
         return instrucciones;
     }
 
-    public Instruccion instruccion() {
+    public Instruccion instr() {
         return instruccion;
     }
 

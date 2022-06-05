@@ -14,11 +14,11 @@ public class ListaParamsMuchos extends ListaParams {
         this.parametro = Objects.requireNonNull(parametro);
     }
 
-    public ListaParams listaParametros() {
+    public ListaParams params() {
         return listaParametros;
     }
 
-    public Parametro parametro() {
+    public Parametro param() {
         return parametro;
     }
 

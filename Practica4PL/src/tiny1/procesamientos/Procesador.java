@@ -192,7 +192,7 @@ public abstract class Procesador {
         throw new UnsupportedOperationException("Procesamiento no implementado para BloqueVacio");
     }
 
-    public void procesa(BloqueLleno bloques) {
+    public void procesa(BloqueLleno bloque) {
         throw new UnsupportedOperationException("Procesamiento no implementado para BloqueLleno");
     }
 

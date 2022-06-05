@@ -22,13 +22,13 @@ class VinculacionProcs extends Procesador {
 
     @Override
     public void procesa(DecsUna declaraciones) {
-        declaraciones.declaracion().procesa(this);
+        declaraciones.dec().procesa(this);
     }
 
     @Override
     public void procesa(DecsMuchas declaraciones) {
-        declaraciones.declaraciones().procesa(this);
-        declaraciones.declaracion().procesa(this);
+        declaraciones.decs().procesa(this);
+        declaraciones.dec().procesa(this);
     }
 
     @Override
@@ -45,8 +45,8 @@ class VinculacionProcs extends Procesador {
     public void procesa(DecProc decProc) {
         tablaSimbolos.abrirNivel();
 
-        decProc.listaParams().procesa(vinculacionDecs1);
-        decProc.listaParams().procesa(vinculacionDecs2);
+        decProc.params().procesa(vinculacionDecs1);
+        decProc.params().procesa(vinculacionDecs2);
 
         decProc.bloque().procesa(vinculacion);
 

@@ -35,32 +35,32 @@ public class Vinculacion extends Procesador {
 
     @Override
     public void procesa(ProgramaConDecs programa) {
-        programa.declaraciones().procesa(vinculacionDecs1);
-        programa.declaraciones().procesa(vinculacionDecs2);
-        programa.declaraciones().procesa(vinculacionProcs);
-        programa.instrucciones().procesa(this);
+        programa.decs().procesa(vinculacionDecs1);
+        programa.decs().procesa(vinculacionDecs2);
+        programa.decs().procesa(vinculacionProcs);
+        programa.instrs().procesa(this);
     }
 
     @Override
     public void procesa(ProgramaSinDecs programa) {
-        programa.instrucciones().procesa(this);
+        programa.instrs().procesa(this);
     }
 
     @Override
     public void procesa(InstrUna instrucciones) {
-        instrucciones.instruccion().procesa(this);
+        instrucciones.instr().procesa(this);
     }
 
     @Override
     public void procesa(InstrMuchas instrucciones) {
-        instrucciones.instrucciones().procesa(this);
-        instrucciones.instruccion().procesa(this);
+        instrucciones.instrs().procesa(this);
+        instrucciones.instr().procesa(this);
     }
 
     @Override
     public void procesa(InstrAsignacion instruccion) {
-        instruccion.expresionIzquierda().procesa(this);
-        instruccion.expresionDerecha().procesa(this);
+        instruccion.expIzq().procesa(this);
+        instruccion.expDer().procesa(this);
     }
 
     @Override
@@ -70,36 +70,36 @@ public class Vinculacion extends Procesador {
 
     @Override
     public void procesa(InstrOptMuchas instruccionesOpt) {
-        instruccionesOpt.instrucciones().procesa(this);
+        instruccionesOpt.instrs().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionIf instruccion) {
-        instruccion.expresion().procesa(this);
-        instruccion.instruccionesOpt().procesa(this);
+        instruccion.exp().procesa(this);
+        instruccion.instrsOpt().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionIfElse instruccion) {
-        instruccion.expresion().procesa(this);
-        instruccion.instruccionesOptIf().procesa(this);
-        instruccion.instruccionesOptElse().procesa(this);
+        instruccion.exp().procesa(this);
+        instruccion.instrsOptIf().procesa(this);
+        instruccion.instrsOptElse().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionWhile instruccion) {
-        instruccion.expresion().procesa(this);
-        instruccion.instruccionesOpt().procesa(this);
+        instruccion.exp().procesa(this);
+        instruccion.instrsOpt().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionRead instruccion) {
-        instruccion.expresion().procesa(this);
+        instruccion.exp().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionWrite instruccion) {
-        instruccion.expresion().procesa(this);
+        instruccion.exp().procesa(this);
     }
 
     @Override
@@ -109,12 +109,12 @@ public class Vinculacion extends Procesador {
 
     @Override
     public void procesa(InstruccionNew instruccion) {
-        instruccion.expresion().procesa(this);
+        instruccion.exp().procesa(this);
     }
 
     @Override
     public void procesa(InstruccionDelete instruccion) {
-        instruccion.expresion().procesa(this);
+        instruccion.exp().procesa(this);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class Vinculacion extends Procesador {
             err.errorProcesamiento(
                     String.format("(Fila %d, Col %d) La función %s no está definida\n", fila, col, nombreFuncion));
         }
-        instruccion.parametros().procesa(this);
+        instruccion.params().procesa(this);
     }
 
     @Override
@@ -155,13 +155,13 @@ public class Vinculacion extends Procesador {
 
     @Override
     public void procesa(ExpresionesUna expresiones) {
-        expresiones.expresion().procesa(this);
+        expresiones.exp().procesa(this);
     }
 
     @Override
     public void procesa(ExpresionesMuchas expresiones) {
-        expresiones.expresiones().procesa(this);
-        expresiones.expresion().procesa(this);
+        expresiones.exps().procesa(this);
+        expresiones.exp().procesa(this);
     }
 
     @Override
@@ -300,12 +300,12 @@ public class Vinculacion extends Procesador {
 
     @Override
     public void procesa(Punto punto) {
-        punto.arg0().procesa(this);
+        punto.exp().procesa(this);
     }
 
     @Override
     public void procesa(Flecha flecha) {
-        flecha.arg0().procesa(this);
+        flecha.exp().procesa(this);
     }
 
     @Override
